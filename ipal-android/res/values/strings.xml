@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="hello">Hello World, IpalAndroidActivity!</string>
     <string name="app_name">ipal-Android</string>
+    <string name="login_header_text">Account Setup</string>
+    <string name="login_username_text">Username</string>
+    <string name="login_url_text">Moodle URL</string>
+    <string name="login_confirm_button_text">Confirm</string>
+    <string name="login_save_info_text">Save info</string>
+    <string name="login_discard_button_text">Discard</string>
+    <string name="invalid_username_message">Invalid username</string>
+    <string name="invalid_url_message">Invalid URL</string>
 
 </resources>

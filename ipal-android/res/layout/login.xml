@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+    <include android:id="@+id/header"
+        layout="@layout/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/userNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_username_text" />
+
+    <EditText
+        android:id="@+id/userNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/urlTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_url_text" />
+
+    <EditText
+        android:id="@+id/urlEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" />
+
+    <CheckBox
+        android:id="@+id/saveInfoCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_save_info_text" />
+
+    <Button
+        android:id="@+id/confirmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_confirm_button_text" />
+
+    <Button
+        android:id="@+id/discardButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_discard_button_text" />
+
+</LinearLayout>
