@@ -5,6 +5,10 @@ import android.content.SharedPreferences.Editor;
 import android.view.View;
 import android.widget.TextView;
 
+/**
+ * This class defines some static methods and constants.
+ * @author Tao Qian, DePauw Open Source Development Team
+ */
 public class Utilities {
 
 	interface SharedPreferenceKeys {
@@ -74,5 +78,29 @@ public class Utilities {
 		editor.putString(SharedPreferenceKeys.USERNAME, username);
 		editor.putString(SharedPreferenceKeys.URL, url);
 		editor.commit();
+	}
+
+	/**
+	 * This method stores the preference when the application is exiting. It
+	 * saves the user information is auto-saving is turned on. Otherwise, no
+	 * user information will be stored in the preference.
+	 * 
+	 * @param prefs
+	 *            the shared preference instance used.
+	 * @param saveInfo
+	 *            whether to save user information. To be stored with the key
+	 *            INFO_SAVED.
+	 * @param username
+	 *            to be stored with the key USERNAME if auto-saving is turned
+	 *            on.
+	 * @param url
+	 *            to be stored with the key URL if auto-saving is turned on.
+	 */
+	public static synchronized void storePreference(SharedPreferences prefs,
+			Boolean saveInfo, String username, String url) {
+		if (saveInfo)
+			setPreference(prefs, saveInfo, username, url);
+		else
+			setPreference(prefs, saveInfo, "", "");
 	}
 }

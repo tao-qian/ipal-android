@@ -9,5 +9,10 @@
     <string name="login_discard_button_text">Discard</string>
     <string name="invalid_username_message">Invalid username</string>
     <string name="invalid_url_message">Invalid URL</string>
+    <string name="login_account_setting_handle">Account settings</string>
+    <string name="login_passcode_text">Passcode</string>
+    <string name="submit_button_text">Submit</string>
+    <string name="invalid_answer_message">Invalid answer</string>
+    <string name="question_view_header_text">Question</string>
 
 </resources>

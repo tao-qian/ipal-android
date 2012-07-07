@@ -1,56 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
-    <include android:id="@+id/header"
-        layout="@layout/header"
+    android:layout_height="fill_parent" >
+    
+    <include
+        android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        layout="@layout/header" />
 
     <TextView
-        android:id="@+id/userNameTextView"
+        android:id="@+id/passcodeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/login_username_text" />
+        android:layout_below="@id/header"
+        android:text="@string/login_passcode_text" />
 
     <EditText
-        android:id="@+id/userNameEditText"
-        android:layout_width="match_parent"
+        android:id="@+id/passcodeEditText"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:ems="10" >
-
-        <requestFocus />
-    </EditText>
-
-    <TextView
-        android:id="@+id/urlTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/login_url_text" />
-
-    <EditText
-        android:id="@+id/urlEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_below="@id/passcodeTextView"
+        android:inputType="number"
         android:ems="10" />
-
-    <CheckBox
-        android:id="@+id/saveInfoCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/login_save_info_text" />
 
     <Button
         android:id="@+id/confirmButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/passcodeEditText"
+        android:layout_centerHorizontal="true"
         android:text="@string/login_confirm_button_text" />
 
-    <Button
-        android:id="@+id/discardButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/login_discard_button_text" />
+    <SlidingDrawer
+        android:id="@+id/loginSlidingDrawer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/confirmButton"
+        android:content="@+id/content"
+        android:handle="@+id/handle"
+        android:orientation="vertical" >
 
-</LinearLayout>
+        <Button
+            android:id="@+id/handle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_account_setting_handle" />
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/userNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login_username_text" />
+
+            <EditText
+                android:id="@+id/userNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textNoSuggestions" >
+
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:id="@+id/urlTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login_url_text" />
+
+            <EditText
+                android:id="@+id/urlEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textUri" />
+
+            <CheckBox
+                android:id="@+id/saveInfoCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login_save_info_text" />
+        </LinearLayout>
+    </SlidingDrawer>
+
+</RelativeLayout>
