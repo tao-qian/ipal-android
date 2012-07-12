@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 /**
  * This class defines some static methods and constants.
+ * 
  * @author Tao Qian, DePauw Open Source Development Team
  */
 public class Utilities {
@@ -57,10 +58,10 @@ public class Utilities {
 			return true;
 		return false;
 	}
-	
+
 	/**
-	 * This method validate whether the password is legal. Now it only checks whether
-	 * the length of the password is bigger than 0.
+	 * This method validate whether the password is legal. Now it only checks
+	 * whether the length of the password is bigger than 0.
 	 * 
 	 * @param password
 	 *            the password to be checked.
@@ -93,20 +94,24 @@ public class Utilities {
 		editor.putString(SharedPreferenceKeys.URL, url);
 		editor.commit();
 	}
-	
+
 	/**
-	 * This method tried to log into Moodle using the given username and password.
-	 * It checks whether the username and the password are valid.
-	 * @param username the username used.
-	 * @param password the password used.
-	 * @param url the url of the moodle
+	 * This method tried to log into Moodle using the given username and
+	 * password. It checks whether the username and the password are valid.
+	 * 
+	 * @param username
+	 *            the username used.
+	 * @param password
+	 *            the password used.
+	 * @param url
+	 *            the url of the moodle
 	 * @return true if the username and password are valid. false otherwise.
 	 */
-	public static boolean validateUser(String username, String password, String url)
-	{
-		if(!(validateUsername(username)&&validatePassword(password)&&validateURL(url)))
+	public static boolean validateUser(String username, String password,
+			String url) {
+		if (!(validateUsername(username) && validatePassword(password) && validateURL(url)))
 			return false;
-		if(password.length()<3)
+		if (password.length() < 3)
 			return false;
 		return true;
 	}

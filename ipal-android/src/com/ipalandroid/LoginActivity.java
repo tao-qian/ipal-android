@@ -178,7 +178,7 @@ public class LoginActivity extends Activity {
 		saveInfoCheckBox = (CheckBox) findViewById(R.id.saveInfoCheckBox);
 		confirmButton = (Button) findViewById(R.id.confirmButton);
 		applyButton = (Button) findViewById(R.id.applyAccountSettingsButton);
-		passcodeEditText = (EditText)findViewById(R.id.passcodeEditText);
+		passcodeEditText = (EditText) findViewById(R.id.passcodeEditText);
 	}
 
 	/**
