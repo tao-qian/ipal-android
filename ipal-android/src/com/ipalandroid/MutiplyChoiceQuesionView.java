@@ -1,6 +1,10 @@
 package com.ipalandroid;
 
+import java.io.IOException;
+
 import android.view.View;
+
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 public class MutiplyChoiceQuesionView extends QuestionView {
@@ -25,6 +29,15 @@ public class MutiplyChoiceQuesionView extends QuestionView {
 	@Override
 	public Boolean sendResult() {
 		// TODO Auto-generated method stub
+		//Jsoup example, using post to log into depauw moodle
+		try {
+			Document doc = Jsoup.connect("https://moodle.depauw.edu/login/index.php")
+					.data("username", "Your username here")
+					.data("password","Your password here").post();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return null;
 	}
 
