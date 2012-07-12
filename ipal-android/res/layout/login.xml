@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
-    
+
     <include
         android:id="@+id/header"
         android:layout_width="match_parent"
@@ -10,10 +10,17 @@
         layout="@layout/header" />
 
     <TextView
-        android:id="@+id/passcodeTextView"
+        android:id="@+id/loginInfoTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/header"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/passcodeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/loginInfoTextView"
         android:text="@string/login_passcode_text" />
 
     <EditText
@@ -21,8 +28,11 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/passcodeTextView"
-        android:inputType="number"
-        android:ems="10" />
+        android:ems="10"
+        android:inputType="number" >
+
+        <requestFocus />
+    </EditText>
 
     <Button
         android:id="@+id/confirmButton"
@@ -35,20 +45,24 @@
     <SlidingDrawer
         android:id="@+id/loginSlidingDrawer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/confirmButton"
         android:content="@+id/content"
         android:handle="@+id/handle"
         android:orientation="vertical" >
 
-        <Button
+        <ImageView
             android:id="@+id/handle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login_account_setting_handle" />
+            android:src="@android:drawable/ic_menu_preferences" />
 
+        
+        <ScrollView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
         <LinearLayout
-            android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
@@ -65,13 +79,25 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textNoSuggestions" >
+            </EditText>
 
-                <requestFocus />
+            <TextView
+                android:id="@+id/passwordTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login_password_text" />
+
+            <EditText
+                android:id="@+id/passwordEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPassword" >
             </EditText>
 
             <TextView
                 android:id="@+id/urlTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/login_url_text" />
 
@@ -86,8 +112,16 @@
                 android:id="@+id/saveInfoCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/login_save_info_text" />
+                android:text="@string/login_save_password_text" />
+
+            <Button
+                android:id="@+id/applyAccountSettingsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="" />
         </LinearLayout>
+        </ScrollView>
     </SlidingDrawer>
 
 </RelativeLayout>

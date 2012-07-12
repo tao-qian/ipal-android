@@ -14,7 +14,7 @@ public class Utilities {
 	interface SharedPreferenceKeys {
 		public final static String USERNAME = "username";
 		public final static String URL = "url";
-		public final static String INFO_SAVED = "infosaved";
+		public final static String IS_VALID = "isvalid";
 	}
 
 	/**
@@ -38,7 +38,7 @@ public class Utilities {
 	 *            the user name to be checked
 	 * @return true if legal, false if not
 	 */
-	public static Boolean validateUsername(String username) {
+	private static Boolean validateUsername(String username) {
 		if (username.length() > 0)
 			return true;
 		return false;
@@ -52,8 +52,22 @@ public class Utilities {
 	 *            the URL to be checked.
 	 * @return true if legal, false if not.
 	 */
-	public static Boolean validateURL(String url) {
+	private static Boolean validateURL(String url) {
 		if (url.length() > 0)
+			return true;
+		return false;
+	}
+	
+	/**
+	 * This method validate whether the password is legal. Now it only checks whether
+	 * the length of the password is bigger than 0.
+	 * 
+	 * @param password
+	 *            the password to be checked.
+	 * @return true if legal, false if not.
+	 */
+	private static Boolean validatePassword(String password) {
+		if (password.length() > 0)
 			return true;
 		return false;
 	}
@@ -64,43 +78,36 @@ public class Utilities {
 	 * 
 	 * @param prefs
 	 *            the shared preference instance used.
-	 * @param to
-	 *            be stored with the key INFO_SAVED.
+	 * @param isValid
+	 *            be stored with the key IS_VALID.
 	 * @param username
 	 *            to be stored with the key USERNAME.
 	 * @param url
 	 *            to be stored with the key URL.
 	 */
 	public static synchronized void setPreference(SharedPreferences prefs,
-			Boolean saveInfo, String username, String url) {
+			Boolean isValid, String username, String url) {
 		Editor editor = prefs.edit();
-		editor.putBoolean(SharedPreferenceKeys.INFO_SAVED, saveInfo);
+		editor.putBoolean(SharedPreferenceKeys.IS_VALID, isValid);
 		editor.putString(SharedPreferenceKeys.USERNAME, username);
 		editor.putString(SharedPreferenceKeys.URL, url);
 		editor.commit();
 	}
-
+	
 	/**
-	 * This method stores the preference when the application is exiting. It
-	 * saves the user information is auto-saving is turned on. Otherwise, no
-	 * user information will be stored in the preference.
-	 * 
-	 * @param prefs
-	 *            the shared preference instance used.
-	 * @param saveInfo
-	 *            whether to save user information. To be stored with the key
-	 *            INFO_SAVED.
-	 * @param username
-	 *            to be stored with the key USERNAME if auto-saving is turned
-	 *            on.
-	 * @param url
-	 *            to be stored with the key URL if auto-saving is turned on.
+	 * This method tried to log into Moodle using the given username and password.
+	 * It checks whether the username and the password are valid.
+	 * @param username the username used.
+	 * @param password the password used.
+	 * @param url the url of the moodle
+	 * @return true if the username and password are valid. false otherwise.
 	 */
-	public static synchronized void storePreference(SharedPreferences prefs,
-			Boolean saveInfo, String username, String url) {
-		if (saveInfo)
-			setPreference(prefs, saveInfo, username, url);
-		else
-			setPreference(prefs, saveInfo, "", "");
+	public static boolean validateUser(String username, String password, String url)
+	{
+		if(!(validateUsername(username)&&validatePassword(password)&&validateURL(url)))
+			return false;
+		if(password.length()<3)
+			return false;
+		return true;
 	}
 }

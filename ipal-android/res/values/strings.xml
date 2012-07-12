@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ipal-Android</string>
+    <string name="app_name">IPAL</string>
     <string name="login_header_text">Account Setup</string>
     <string name="login_username_text">Username</string>
     <string name="login_url_text">Moodle URL</string>
     <string name="login_confirm_button_text">Confirm</string>
-    <string name="login_save_info_text">Save info</string>
-    <string name="login_discard_button_text">Discard</string>
-    <string name="invalid_username_message">Invalid username</string>
+    <string name="login_save_password_text">Save password</string>
     <string name="invalid_url_message">Invalid URL</string>
-    <string name="login_account_setting_handle">Account settings</string>
     <string name="login_passcode_text">Passcode</string>
     <string name="submit_button_text">Submit</string>
     <string name="invalid_answer_message">Invalid answer</string>
     <string name="question_view_header_text">Question</string>
+    <string name="login_password_text">Password</string>
+    <string name="invalid_account_settings_message">Invalid user data</string>
+    <string name="login_info_valid_message">Welcome, </string>
+    <string name="login_info_invalid_message">You are not logged in.</string>
+    <string name="apply_button_apply_text">Apply</string>
+    <string name="apply_button_change_text">Change account settings</string>
 
 </resources>
