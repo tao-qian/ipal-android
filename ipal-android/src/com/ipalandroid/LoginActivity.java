@@ -3,8 +3,12 @@ package com.ipalandroid;
 import com.ipalandroid.Utilities.SharedPreferenceKeys;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -91,13 +95,8 @@ public class LoginActivity extends Activity {
 				username = userNameEditText.getText().toString();
 				password = passwordEditText.getText().toString();
 				url = urlEditText.getText().toString();
-				isValid = Utilities.validateUser(username, password, url);
-				// If not valid, notify the user.
-				if (!isValid)
-					Toast.makeText(LoginActivity.this, INVALID_USER_MESSAGE,
-							Toast.LENGTH_SHORT).show();
-				else
-					reloadForm(isValid);
+				UserChecker userChecker = new UserChecker();
+				userChecker.execute(username,password,url);
 			}
 		});
 
@@ -202,5 +201,51 @@ public class LoginActivity extends Activity {
 		APPLY_BUTTON_APPLY = getString(R.string.apply_button_apply_text);
 		APPLY_BUTTON_CHANGE = getString(R.string.apply_button_change_text);
 		INVALID_USER_MESSAGE = getString(R.string.invalid_account_settings_message);
+	}
+	
+	private class UserChecker extends AsyncTask<String, Void, Boolean >
+	{
+		Boolean dialogCanceled;
+		ProgressDialog progressDialog;
+		
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+			progressDialog = new ProgressDialog(LoginActivity.this);
+			progressDialog.setMessage(getApplicationContext().getString(R.string.checking_user_message));
+			dialogCanceled = false;
+			progressDialog.setOnCancelListener(new OnCancelListener() {
+				
+				public void onCancel(DialogInterface dialog) {
+					// TODO Auto-generated method stub
+					dialogCanceled = true;
+				}
+			});
+			progressDialog.show();
+		}
+
+		@Override
+		protected Boolean doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			return Utilities.validateUser(params[0], params[1],params[2]);
+		}
+		
+		@Override
+		protected void onPostExecute(Boolean result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			if(dialogCanceled)
+				return;
+			isValid = result;
+			progressDialog.dismiss();
+			// If not valid, notify the user.
+			if (!isValid)
+				Toast.makeText(LoginActivity.this, INVALID_USER_MESSAGE,
+						Toast.LENGTH_SHORT).show();
+			else
+				reloadForm(isValid);
+		}
+		
 	}
 }

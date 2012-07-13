@@ -8,7 +8,6 @@ import org.jsoup.nodes.Element;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 

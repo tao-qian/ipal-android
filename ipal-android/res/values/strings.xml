@@ -17,5 +17,6 @@
     <string name="login_info_invalid_message">You are not logged in.</string>
     <string name="apply_button_apply_text">Apply</string>
     <string name="apply_button_change_text">Change account settings</string>
+    <string name="checking_user_message">Checking user data...</string>
 
 </resources>
