@@ -1,6 +1,10 @@
-package com.ipalandroid;
+package com.ipalandroid.questionview;
 
 import org.jsoup.nodes.Document;
+
+import com.ipalandroid.R;
+import com.ipalandroid.Utilities;
+import com.ipalandroid.login.LoginActivity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -27,6 +31,7 @@ public class QuestionViewActivity extends Activity {
 		Utilities.setHeaderContent(findViewById(R.id.header),
 				getString(R.string.question_view_header_text));
 		// Add the detail about querying the server for IPAL questions here!
+		int passcode = getIntent().getIntExtra(LoginActivity.PASSCODE_EXTRA, -1);
 		Document questionPage = null;
 		final QuestionView questionView = QuestionFactory
 				.getQuestionView(questionPage);

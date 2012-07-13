@@ -1,4 +1,4 @@
-package com.ipalandroid;
+package com.ipalandroid.questionview;
 
 import android.view.View;
 import org.jsoup.nodes.Document;

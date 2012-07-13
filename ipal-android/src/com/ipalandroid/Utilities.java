@@ -22,7 +22,7 @@ public class Utilities {
 	 * This interface stores the keys used to access the
 	 * preference of this app.
 	 */
-	interface SharedPreferenceKeys {
+	public interface SharedPreferenceKeys {
 		public final static String USERNAME = "username";
 		public final static String URL = "url";
 		public final static String IS_VALID = "isvalid";
@@ -110,6 +110,25 @@ public class Utilities {
 		if (password.length() > 0)
 			return true;
 		return false;
+	}
+	
+	/**
+	 * This method validate whether the passcode is legal. Now it only checks
+	 * whether the passcode is a integer.
+	 * 
+	 * @param passcode
+	 *            the passcode to be checked.
+	 * @return the passcode as an integer if it is legal. -1 otherwise.
+	 */
+	public static int validatePasscode(String passcode) {
+		int result = -1;
+		try{
+			result = Integer.parseInt(passcode);
+		}
+		catch (NumberFormatException e) {
+			result = -1;
+		}
+		return result;
 	}
 
 	/**

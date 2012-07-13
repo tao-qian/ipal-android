@@ -1,6 +1,9 @@
-package com.ipalandroid;
+package com.ipalandroid.login;
 
+import com.ipalandroid.R;
+import com.ipalandroid.Utilities;
 import com.ipalandroid.Utilities.SharedPreferenceKeys;
+import com.ipalandroid.questionview.QuestionViewActivity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -27,6 +30,7 @@ import android.widget.Toast;
 public class LoginActivity extends Activity {
 
 	private static final String VALID_PASSWORD = "password";
+	public static final String PASSCODE_EXTRA = "passcode";
 
 	SharedPreferences prefs;
 
@@ -48,6 +52,7 @@ public class LoginActivity extends Activity {
 	String APPLY_BUTTON_APPLY;
 	String APPLY_BUTTON_CHANGE;
 	String INVALID_USER_MESSAGE;
+	String INVALID_PASSCODE_FORMAT_MESSAGE;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -110,8 +115,15 @@ public class LoginActivity extends Activity {
 					return;
 				}
 				// Start the QuestionViewActivity
+				int passcode = Utilities.validatePasscode(passcodeEditText.getText().toString());
+				if(passcode<0)
+				{
+					Toast.makeText(getApplicationContext(), INVALID_PASSCODE_FORMAT_MESSAGE, Toast.LENGTH_SHORT).show();
+					return;
+				}
 				Intent intent = new Intent(LoginActivity.this,
 						QuestionViewActivity.class);
+				intent.putExtra(PASSCODE_EXTRA, passcode);
 				startActivity(intent);
 			}
 		});
@@ -201,8 +213,13 @@ public class LoginActivity extends Activity {
 		APPLY_BUTTON_APPLY = getString(R.string.apply_button_apply_text);
 		APPLY_BUTTON_CHANGE = getString(R.string.apply_button_change_text);
 		INVALID_USER_MESSAGE = getString(R.string.invalid_account_settings_message);
+		INVALID_PASSCODE_FORMAT_MESSAGE = getString(R.string.invalid_passcode_format_message);
 	}
 	
+	/**
+	 * AsyncTask class used for validating the user. It displays
+	 * a progress dialog while checking at the background.
+	 */
 	private class UserChecker extends AsyncTask<String, Void, Boolean >
 	{
 		Boolean dialogCanceled;

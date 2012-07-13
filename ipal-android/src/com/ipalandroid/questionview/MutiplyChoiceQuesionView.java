@@ -1,4 +1,4 @@
-package com.ipalandroid;
+package com.ipalandroid.questionview;
 
 import java.io.IOException;
 
