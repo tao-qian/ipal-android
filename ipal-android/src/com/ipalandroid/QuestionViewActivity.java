@@ -51,5 +51,4 @@ public class QuestionViewActivity extends Activity {
 			}
 		});
 	}
-
 }

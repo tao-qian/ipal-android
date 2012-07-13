@@ -96,7 +96,8 @@ public class LoginActivity extends Activity {
 				if (!isValid)
 					Toast.makeText(LoginActivity.this, INVALID_USER_MESSAGE,
 							Toast.LENGTH_SHORT).show();
-				reloadForm(isValid);
+				else
+					reloadForm(isValid);
 			}
 		});
 
@@ -147,17 +148,28 @@ public class LoginActivity extends Activity {
 	 *            true if the user data is valid. false otherwise.
 	 */
 	private void reloadForm(Boolean isValid) {
+		/**
+		 * Because of a bug in Android,
+		 * we have to use setFocusable in combination with setEnabled
+		 * to disable an EditText.
+		 * However, because of another bug, setFocusable(true) will
+		 * not make a EditText focusable again, we need to use
+		 * setFocusableInTouchMode(true) instead.
+		 */
 		userNameEditText.setEnabled(!isValid);
 		urlEditText.setEnabled(!isValid);
 		passwordEditText.setEnabled(!isValid);
-		userNameEditText.setFocusable(!isValid);
-		urlEditText.setFocusable(!isValid);
-		passwordEditText.setFocusable(!isValid);
 		if (isValid) {
+			userNameEditText.setFocusable(false);
+			urlEditText.setFocusable(false);
+			passwordEditText.setFocusable(false);
 			applyButton.setText(APPLY_BUTTON_CHANGE);
 			loginInfoTextView.setText(LOGIN_INFO_VALID + username);
 			passcodeEditText.requestFocus();
 		} else {
+			userNameEditText.setFocusableInTouchMode(true);
+			urlEditText.setFocusableInTouchMode(true);
+			passwordEditText.setFocusableInTouchMode(true);
 			userNameEditText.requestFocus();
 			applyButton.setText(APPLY_BUTTON_APPLY);
 			loginInfoTextView.setText(LOGIN_INFO_INVALID);
