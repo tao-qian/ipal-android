@@ -30,11 +30,15 @@ public class QuestionViewActivity extends Activity {
 		setContentView(R.layout.question_view);
 		Utilities.setHeaderContent(findViewById(R.id.header),
 				getString(R.string.question_view_header_text));
-		// Add the detail about querying the server for IPAL questions here!
+		//Getting variables from the intent.
 		int passcode = getIntent().getIntExtra(LoginActivity.PASSCODE_EXTRA, -1);
+		String username = getIntent().getStringExtra(LoginActivity.USERNAME_EXTRA);
+		String url = getIntent().getStringExtra(LoginActivity.URL_EXTRA);
+		//Here we post to the tempview.php to get the question page html.
+		//Will add detailed code after getting the new tempview.php.
 		Document questionPage = null;
 		final QuestionView questionView = QuestionFactory
-				.getQuestionView(questionPage);
+				.getQuestionView(questionPage,url,username,passcode);
 
 		LinearLayout questionViewLayout = (LinearLayout) findViewById(R.id.questionViewLinearLayout);
 		LayoutParams questionParams = new LayoutParams(

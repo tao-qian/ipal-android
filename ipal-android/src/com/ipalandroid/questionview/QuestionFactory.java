@@ -9,16 +9,20 @@ import org.jsoup.nodes.Document;
  */
 public class QuestionFactory {
 
+
 	/**
 	 * This method creates the right QuestionView instance from an Document
-	 * instance.
+	 * instance. 
 	 * 
 	 * @param questionPage
 	 *            the HTML of the question page returned from the server
+	 * @param url the url of the Moodle
+	 * @param username  the username of the user
+	 * @param passcode the passcode of the IPAL
 	 * @return the right QuestionView instance will display the HTML in Android
 	 *         GUI.
 	 */
-	public static QuestionView getQuestionView(Document questionPage) {
+	public static QuestionView getQuestionView(Document questionPage, String url, String username, int passcode) {
 		int type = 0;
 		switch (type) {
 		default:

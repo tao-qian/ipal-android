@@ -36,7 +36,7 @@ public class Utilities {
 	 * e.g. String LOGIN_FORM_ID = "login" is used to 
 	 * 		find the HTML element which has an id of "login".
 	 */
-	interface MoodleHTMLContract
+	public interface MoodleHTMLContract
 	{
 		public final static String LOGIN_FORM_ID = "login";
 		public final static String LOGIN_USERNAME_NAME = "username";
@@ -50,7 +50,7 @@ public class Utilities {
 	 * This interface is used to store the attribute names
 	 * used in HTML.
 	 */
-	interface HTMLAttribute
+	public interface HTMLAttribute
 	{
 		public final static String ID_ATTR = "id";
 		public final static String ACTION_ATTR = "action";

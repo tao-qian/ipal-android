@@ -30,7 +30,10 @@ import android.widget.Toast;
 public class LoginActivity extends Activity {
 
 	private static final String VALID_PASSWORD = "password";
-	public static final String PASSCODE_EXTRA = "passcode";
+	//Keys used to identify extra data passed with intent.
+	public static final String PASSCODE_EXTRA = "passcode_extra";
+	public static final String URL_EXTRA = "url_extral";
+	public static final String USERNAME_EXTRA = "username_extra";
 
 	SharedPreferences prefs;
 
@@ -42,6 +45,7 @@ public class LoginActivity extends Activity {
 	CheckBox saveInfoCheckBox;
 	Button confirmButton;
 	Button applyButton;
+	
 	String url;
 	String username;
 	String password;
@@ -124,6 +128,8 @@ public class LoginActivity extends Activity {
 				Intent intent = new Intent(LoginActivity.this,
 						QuestionViewActivity.class);
 				intent.putExtra(PASSCODE_EXTRA, passcode);
+				intent.putExtra(USERNAME_EXTRA, username);
+				intent.putExtra(URL_EXTRA, url);
 				startActivity(intent);
 			}
 		});

@@ -13,7 +13,25 @@ import org.jsoup.nodes.Document;
 public abstract class QuestionView {
 
 	protected Document questionPage;
-
+	protected String url;
+	protected String username;
+	protected int passcode;
+	
+	/**
+	 * Super class constructor.
+	 * @param questionPage the question page HTML used.
+	 * @param url the Moodle URL.
+	 * @param username the username of the user 
+	 * @param passcode the passcode of the IPAL
+	 */
+	public QuestionView(Document questionPage, String url, String username, int passcode)
+	{
+		this.questionPage = questionPage;
+		this.url = url;
+		this.username = username;
+		this.passcode = passcode;
+	}
+	
 	/**
 	 * This method returns a view containing the question that is to be added to
 	 * the QuestionViewActivity.

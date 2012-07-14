@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/questionViewLinearLayout" >
+    android:orientation="vertical" >
 
     <include
         android:id="@+id/header"
@@ -11,11 +10,22 @@
         android:layout_height="wrap_content"
         layout="@layout/header" />
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:id="@+id/questionViewLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </LinearLayout>
+    </ScrollView>
+
     <Button
         android:id="@+id/submitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/submit_button_text"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:text="@string/submit_button_text" />
 
 </LinearLayout>

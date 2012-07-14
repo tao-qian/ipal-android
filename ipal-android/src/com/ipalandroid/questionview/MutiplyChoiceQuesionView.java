@@ -8,12 +8,15 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 public class MutiplyChoiceQuesionView extends QuestionView {
-
-	public MutiplyChoiceQuesionView(Document doc)
-	{
-		questionPage = doc;
-	}
 	
+	
+	
+	public MutiplyChoiceQuesionView(Document questionPage, String url,
+			String username, int passcode) {
+		super(questionPage, url, username, passcode);
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public View getQuestionView() {
 		// TODO Auto-generated method stub
