@@ -56,7 +56,7 @@ public class QuestionViewActivity extends Activity {
 							Toast.LENGTH_SHORT).show();
 					return;
 				}
-				questionView.sendResult();
+				//questionView.sendResult();
 			}
 		});
 	}

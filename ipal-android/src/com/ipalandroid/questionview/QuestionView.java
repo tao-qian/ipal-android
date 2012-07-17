@@ -1,5 +1,6 @@
 package com.ipalandroid.questionview;
 
+import android.content.Context;
 import android.view.View;
 import org.jsoup.nodes.Document;
 
@@ -38,7 +39,7 @@ public abstract class QuestionView {
 	 * 
 	 * @return a view to be added to the QuestionViewActivity.
 	 */
-	public abstract View getQuestionView();
+	public abstract View getQuestionView(Context c);
 
 	/**
 	 * This method reads the user input and checks whether it is valid.

@@ -1,44 +1,19 @@
 package com.ipalandroid.questionview;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.view.View;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
-public class MutiplyChoiceQuesionView extends QuestionView {
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-	private class Choice
-	{
-		private String text;
-		private int value;
+public class EssayQuestionView extends QuestionView {
 
-		public Choice(String cText, int cValue) {
-			text= cText;
-			value= cValue;
-		}
-
-		public String getText() {
-			return text;
-		}
-
-		public int getValue() {
-			return value;
-		}
-
-	}
-
-	private ArrayList<Choice> choices = new ArrayList<Choice>();
 	private String qText;
 	private int question_id;
 	private int active_question_id;
@@ -46,19 +21,11 @@ public class MutiplyChoiceQuesionView extends QuestionView {
 	private int user_id;
 	private int ipal_id;
 	private String instructor;
-	private RadioGroup g;
-	private String currentChoice;
+	private EditText answerField;
 
-	public MutiplyChoiceQuesionView(Document questionPage, String url, String username, int passcode)
-	{
+
+	public EssayQuestionView(Document questionPage, String url, String username, int passcode) {
 		super(questionPage, url, username, passcode);
-		questionPage = this.questionPage;
-		Elements spans = this.questionPage.getElementsByTag("span");
-		for (Element s: spans) {
-			String cText = s.select("label").text();
-			int cValue = Integer.parseInt(s.select("input").attr("value"));
-			choices.add(new Choice(cText, cValue));
-		}
 		qText = this.questionPage.select("legend").text();
 		question_id = Integer.parseInt(this.questionPage.select("input[name=question_id]").attr("value"));
 		active_question_id = Integer.parseInt(this.questionPage.select("input[name=active_question_id]").attr("value"));
@@ -67,7 +34,6 @@ public class MutiplyChoiceQuesionView extends QuestionView {
 		ipal_id = Integer.parseInt(this.questionPage.select("input[name=ipal_id]").attr("value"));
 		instructor = this.questionPage.select("input[name=instructor]").attr("value");
 	}
-
 	@Override
 	public View getQuestionView(Context c) {
 		LinearLayout layout = new LinearLayout(c);
@@ -79,42 +45,26 @@ public class MutiplyChoiceQuesionView extends QuestionView {
 		questionText.setText(qText);
 		questionText.setTextSize(18);
 		layout.addView(questionText);
-		g = new RadioGroup(null);
-		for (Choice ch: choices) {
-			RadioButton b = new RadioButton(null);
-			b.setText(ch.text);
-			g.addView(b);
-		}
-		g.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-			public void onCheckedChanged(RadioGroup rg, int checkedId) {
-				for(int i=0; i<rg.getChildCount(); i++) {
-					RadioButton btn = (RadioButton) rg.getChildAt(i);
-					if(btn.getId() == checkedId) {
-						currentChoice = (String) btn.getText();
-						return;
-					}
-				}
-			}
-		});
-		layout.addView(g);
+		answerField = new EditText(c);
+		layout.addView(answerField);
 		return layout;
 	}
 
 	@Override
 	public Boolean validateInput() {
-		return true;
+		if (answerField.getText().toString().trim().length() > 0)
+			return true;
+		return false;
 	}
 
 	@Override
 	public Boolean sendResult() {
-		//SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
-		int valueToSend = getChoiceValueFromText(currentChoice);
-		if (valueToSend != -1) {
-			//Jsoup example, using post to log into depauw moodle
+		if (validateInput()) {
+			//SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
 			try {
 				Document doc = Jsoup.connect(this.url+"/mod/ipal/tempview.php?user="+this.username+"&p="+this.passcode)
-				.data("answer_id", valueToSend+"")
-				.data("a_text", "")
+				.data("answer_id", "-1")
+				.data("a_text", answerField.getText().toString())
 				.data("question_id", question_id+"")
 				.data("active_question_id", active_question_id+"")
 				.data("course_id", course_id+"")
@@ -130,15 +80,6 @@ public class MutiplyChoiceQuesionView extends QuestionView {
 			return true;
 		}
 		return false;
-	}
-
-	private int getChoiceValueFromText(String cText) {
-		for (Choice c: choices) {
-			if (c.getText().equals(cText)) {
-				return c.getValue();
-			}
-		}
-		return -1;
 	}
 
 }
