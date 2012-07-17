@@ -1,5 +1,6 @@
 <?php
 
+
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once('./locallib.php');
 //echo "hello world";
@@ -42,7 +43,7 @@ foreach ($students as $s) {
 	//echo "with id: " .$s->username. "\n </br>";
 	if (strcasecmp($username, $s->username) == 0) {
 		$found_user = 1;
-		//echo "\nfound student that match username </br>";
+		$userid = $s->id;
 	}
 }
 
@@ -52,7 +53,10 @@ if ($found_user != 1) {
 
 echo "<html>\n<head>\n<title>IPAL: ". $ipal->name."</title>\n</head>\n";
 echo "<body>\n";
-ipal_print_anonymous_message();
-ipal_display_student_interface();
+//ipal_print_anonymous_message();
+//ipal_display_student_interface();
+ipal_tempview_display_question($userid, $passcode, $username);
 echo "</body>\n</html>";
+
+
 ?>
