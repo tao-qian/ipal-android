@@ -15,7 +15,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class MutiplyChoiceQuesionView extends QuestionView {
+public class MutipleChoiceQuesionView extends QuestionView {
 
 	private class Choice
 	{
@@ -48,7 +48,7 @@ public class MutiplyChoiceQuesionView extends QuestionView {
 	private RadioGroup g;
 	private String currentChoice;
 
-	public MutiplyChoiceQuesionView(Document questionPage, String url, String username, int passcode)
+	public MutipleChoiceQuesionView(Document questionPage, String url, String username, int passcode)
 	{
 		super(questionPage, url, username, passcode);
 		questionPage = this.questionPage;

@@ -6,6 +6,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import com.ipalandroid.Utilities.ConnectionResult;
+import com.ipalandroid.Utilities.QuestionType;
 import com.ipalandroid.Utilities.TempViewPostContract;
 
 /**
@@ -50,14 +51,40 @@ public class QuestionFactory {
 		} catch (IOException e) {
 			return  ConnectionResult.CONNECTION_ERROR;
 		}
-		//Add detail here after the question identifier of tempview.php is changed.
-		int type = 0;
-		switch (type) {
-		default:
-			questionView = null;
-			return ConnectionResult.CONNECTION_ERROR;
-		}
 		
+		String type = questionPage.select("p[id=questiontype]").text();
+		
+		if(type.equals(QuestionType.ESSAY_QUESTION))
+		{
+			questionView = new EssayQuestionView(questionPage, url, username, passcode);
+			return ConnectionResult.RESULT_FOUND;
+		}
+		else if(type.equals(QuestionType.MUTIPLE_CHOICE_QUESTION))
+		{
+			questionView = new MutipleChoiceQuesionView(questionPage, url, username, passcode);
+			return ConnectionResult.RESULT_FOUND;
+		}
+		else if (type.equals(QuestionType.TRUE_FALSE_QUESTION))
+		{
+			questionView = new MutipleChoiceQuesionView(questionPage, url, username, passcode);
+			return ConnectionResult.RESULT_FOUND;
+		}
+		else if (type.equals(QuestionType.ERROR_INVALID_PASSCODE))
+		{
+			questionView = null;
+			return ConnectionResult.RESULT_NOT_FOUND;
+		}
+		else if (type.equals(QuestionType.ERROR_INVALID_USERNAME))
+		{
+			questionView = null;
+			return ConnectionResult.RESULT_NOT_FOUND;
+		}
+		else if (type.equals(QuestionType.ERROR_NO_CURRENT_QUESTION))
+		{
+			questionView = null;
+			return ConnectionResult.RESULT_NOT_FOUND;
+		}
+		return ConnectionResult.RESULT_NOT_FOUND;
 	}
 	
 	/**

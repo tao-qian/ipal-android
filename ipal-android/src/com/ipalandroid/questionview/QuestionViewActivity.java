@@ -93,7 +93,6 @@ public class QuestionViewActivity extends Activity {
 		protected void onPostExecute(Integer result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-			Log.e("result","r: "+result);
 			if(result == ConnectionResult.CONNECTION_ERROR)
 			{
 				Toast.makeText(QuestionViewActivity.this,CONNECTION_ERROR_MESSAGE , Toast.LENGTH_SHORT).show();
@@ -127,7 +126,7 @@ public class QuestionViewActivity extends Activity {
 								Toast.LENGTH_SHORT).show();
 						return;
 					}
-					//questionView.sendResult();
+					questionView.sendResult();
 				}
 			});
 		}

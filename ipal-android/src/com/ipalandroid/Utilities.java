@@ -17,7 +17,7 @@ import android.widget.TextView;
  * @author Tao Qian, DePauw Open Source Development Team
  */
 public class Utilities {
-
+	
 	/**
 	 * This interface stores the keys used to access the
 	 * preference of this app.
@@ -27,7 +27,7 @@ public class Utilities {
 		public final static String URL = "url";
 		public final static String IS_VALID = "isvalid";
 	}
-
+	
 	/**
 	 * This interface stores the attribute values
 	 * used in Moodle/IPAL. 
@@ -78,6 +78,17 @@ public class Utilities {
 		public final static int RESULT_NOT_FOUND = 0;
 		public final static int RESULT_FOUND = 1;
 	}
+	
+	public interface QuestionType
+	{
+		public final static int TRUE_FALSE_QUESTION = "truefalse".hashCode();
+		public final static int MUTIPLE_CHOICE_QUESTION = "mutiplechoice".hashCode();
+		public final static int ESSAY_QUESTION = "essay".hashCode();
+		public final static int ERROR_INVALID_USERNAME = "invalidusername".hashCode();
+		public final static int ERROR_INVALID_PASSCODE = "invalidpasscode".hashCode();
+		public final static int ERROR_NO_CURRENT_QUESTION = "nocurrentquestion".hashCode();
+	}
+	
 	/**
 	 * This method sets the text of a header.
 	 * 
@@ -132,6 +143,8 @@ public class Utilities {
 			return true;
 		return false;
 	}
+	
+	
 	
 	/**
 	 * This method validate whether the passcode is legal. Now it only checks
