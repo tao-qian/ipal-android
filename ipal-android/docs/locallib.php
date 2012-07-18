@@ -825,7 +825,7 @@ function ipal_tempview_display_question($userid, $passcode, $username) {
 		$myFormArray= ipal_get_questions_student($questionid);
 		//		$disabled=ipal_check_if_answered($USER->id,$myFormArray[0]['id'],$ipal_quiz->quiz_id,$course->id,$ipal->id);
 		echo "<br><br><br><br>";
-		echo "<p id=\"questiontype\">".ipal_get_qtype($questionid)."<p>";
+		//echo "<p id=\"questiontype\">".ipal_get_qtype($questionid)."<p>";
 		echo "<form class=\"ipalquestion\" action=\"?p=".$passcode."&user=".$username."\" method=\"post\">\n";
 
 		//Display question text
@@ -863,6 +863,7 @@ function ipal_tempview_display_question($userid, $passcode, $username) {
 		echo "</form>\n";
 	}
 	else{
+		echo "<p id=\"questiontype\">nocurrentquestion<p>";
 		echo "<br><br>No Current Question.";
 	}
 }
