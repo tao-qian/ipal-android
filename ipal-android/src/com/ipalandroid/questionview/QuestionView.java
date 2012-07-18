@@ -36,7 +36,7 @@ public abstract class QuestionView {
 	/**
 	 * This method returns a view containing the question that is to be added to
 	 * the QuestionViewActivity.
-	 * 
+	 * @param c the context used to initialize the view
 	 * @return a view to be added to the QuestionViewActivity.
 	 */
 	public abstract View getQuestionView(Context c);

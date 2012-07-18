@@ -58,6 +58,27 @@ public class Utilities {
 	}
 	
 	/**
+	 * This interface stores the constants used to post
+	 * to tempview.php.
+	 */
+	public interface TempViewPostContract
+	{
+		public final static String URL_SEGMENT = "/mod/ipal/tempview.php";
+		public final static String USER = "user";
+		public final static String PASSCODE = "p";
+	}
+	
+	/**
+	 * This interface stores the identification code returned by
+	 * a connection.
+	 */
+	public interface ConnectionResult
+	{
+		public final static int CONNECTION_ERROR = -1;
+		public final static int RESULT_NOT_FOUND = 0;
+		public final static int RESULT_FOUND = 1;
+	}
+	/**
 	 * This method sets the text of a header.
 	 * 
 	 * @param header
@@ -163,12 +184,12 @@ public class Utilities {
 	 *            the password used.
 	 * @param url
 	 *            the url of the moodle
-	 * @return true if the username and password are valid. false otherwise.
+	 * @return result code to indicate whether the connection is successful.
 	 */
-	public static boolean validateUser(String username, String password,
+	public static int validateUser(String username, String password,
 			String url) {
 		if (!(validateUsername(username) && validatePassword(password) && validateURL(url)))
-			return false;
+			return ConnectionResult.RESULT_NOT_FOUND;
         try {
 			Document homePage = Jsoup.connect(url).get();
 			Element loginForm = homePage.getElementById(MoodleHTMLContract.LOGIN_FORM_ID);
@@ -194,16 +215,16 @@ public class Utilities {
 			}
 			catch (NullPointerException e) {
 				//loginInfo = loginPage.getElementById(MoodleHTMLContract.LOGIN_INDEX_ID).attr(HTMLAttribute.CLASS_ATTR);
-				return false;
+				return ConnectionResult.RESULT_NOT_FOUND;
 			}
 			if(loginInfo.contains(MoodleHTMLContract.NOT_LOGGED_IN_CLASS))
 			{
-				return false;
+				return ConnectionResult.RESULT_NOT_FOUND;
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			return false;
+			return ConnectionResult.CONNECTION_ERROR;
 		}
-		return true;
+		return ConnectionResult.RESULT_FOUND;
 	}
 }

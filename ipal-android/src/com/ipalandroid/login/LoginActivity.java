@@ -2,6 +2,7 @@ package com.ipalandroid.login;
 
 import com.ipalandroid.R;
 import com.ipalandroid.Utilities;
+import com.ipalandroid.Utilities.ConnectionResult;
 import com.ipalandroid.Utilities.SharedPreferenceKeys;
 import com.ipalandroid.questionview.QuestionViewActivity;
 
@@ -35,28 +36,30 @@ public class LoginActivity extends Activity {
 	public static final String URL_EXTRA = "url_extral";
 	public static final String USERNAME_EXTRA = "username_extra";
 
-	SharedPreferences prefs;
+	private SharedPreferences prefs;
 
-	TextView loginInfoTextView;
-	EditText userNameEditText;
-	EditText urlEditText;
-	EditText passwordEditText;
-	EditText passcodeEditText;
-	CheckBox saveInfoCheckBox;
-	Button confirmButton;
-	Button applyButton;
+	private TextView loginInfoTextView;
+	private EditText userNameEditText;
+	private EditText urlEditText;
+	private EditText passwordEditText;
+	private EditText passcodeEditText;
+	private CheckBox saveInfoCheckBox;
+	private Button confirmButton;
+	private Button applyButton;
 	
-	String url;
-	String username;
-	String password;
-	Boolean isValid;
+	private String url;
+	private String username;
+	private String password;
+	private Boolean isValid;
 
-	String LOGIN_INFO_VALID;
-	String LOGIN_INFO_INVALID;
-	String APPLY_BUTTON_APPLY;
-	String APPLY_BUTTON_CHANGE;
-	String INVALID_USER_MESSAGE;
-	String INVALID_PASSCODE_FORMAT_MESSAGE;
+	private String LOGIN_INFO_VALID;
+	private String LOGIN_INFO_INVALID;
+	private String APPLY_BUTTON_APPLY;
+	private String APPLY_BUTTON_CHANGE;
+	private String INVALID_USER_MESSAGE;
+	private String INVALID_PASSCODE_FORMAT_MESSAGE;
+	private String CONNECTION_ERROR_MESSAGE;
+	private String CHECKING_USER_MESSAGE;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -220,13 +223,15 @@ public class LoginActivity extends Activity {
 		APPLY_BUTTON_CHANGE = getString(R.string.apply_button_change_text);
 		INVALID_USER_MESSAGE = getString(R.string.invalid_account_settings_message);
 		INVALID_PASSCODE_FORMAT_MESSAGE = getString(R.string.invalid_passcode_format_message);
+		CONNECTION_ERROR_MESSAGE = getString(R.string.connection_problem_message);
+		CHECKING_USER_MESSAGE = getString(R.string.checking_user_message);
 	}
 	
 	/**
 	 * AsyncTask class used for validating the user. It displays
 	 * a progress dialog while checking at the background.
 	 */
-	private class UserChecker extends AsyncTask<String, Void, Boolean >
+	private class UserChecker extends AsyncTask<String, Void, Integer >
 	{
 		Boolean dialogCanceled;
 		ProgressDialog progressDialog;
@@ -236,7 +241,7 @@ public class LoginActivity extends Activity {
 			// TODO Auto-generated method stub
 			super.onPreExecute();
 			progressDialog = new ProgressDialog(LoginActivity.this);
-			progressDialog.setMessage(getApplicationContext().getString(R.string.checking_user_message));
+			progressDialog.setMessage(CHECKING_USER_MESSAGE);
 			dialogCanceled = false;
 			progressDialog.setOnCancelListener(new OnCancelListener() {
 				
@@ -249,25 +254,29 @@ public class LoginActivity extends Activity {
 		}
 
 		@Override
-		protected Boolean doInBackground(String... params) {
+		protected Integer doInBackground(String... params) {
 			// TODO Auto-generated method stub
 			return Utilities.validateUser(params[0], params[1],params[2]);
 		}
 		
 		@Override
-		protected void onPostExecute(Boolean result) {
+		protected void onPostExecute(Integer result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			if(dialogCanceled)
 				return;
-			isValid = result;
+			isValid = false;
+			if(result == ConnectionResult.RESULT_FOUND)
+				isValid = true;
 			progressDialog.dismiss();
 			// If not valid, notify the user.
-			if (!isValid)
+			if (isValid)
+				reloadForm(isValid);
+			else if( result == ConnectionResult.RESULT_NOT_FOUND)
 				Toast.makeText(LoginActivity.this, INVALID_USER_MESSAGE,
 						Toast.LENGTH_SHORT).show();
-			else
-				reloadForm(isValid);
+			else 
+				Toast.makeText(LoginActivity.this, CONNECTION_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
 		}
 		
 	}
