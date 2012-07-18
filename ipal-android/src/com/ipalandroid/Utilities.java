@@ -81,12 +81,12 @@ public class Utilities {
 	
 	public interface QuestionType
 	{
-		public final static int TRUE_FALSE_QUESTION = "truefalse".hashCode();
-		public final static int MUTIPLE_CHOICE_QUESTION = "mutiplechoice".hashCode();
-		public final static int ESSAY_QUESTION = "essay".hashCode();
-		public final static int ERROR_INVALID_USERNAME = "invalidusername".hashCode();
-		public final static int ERROR_INVALID_PASSCODE = "invalidpasscode".hashCode();
-		public final static int ERROR_NO_CURRENT_QUESTION = "nocurrentquestion".hashCode();
+		public final static String TRUE_FALSE_QUESTION = "truefalse";
+		public final static String MUTIPLE_CHOICE_QUESTION = "mutiplechoice";
+		public final static String ESSAY_QUESTION = "essay";
+		public final static String ERROR_INVALID_USERNAME = "invalidusername";
+		public final static String ERROR_INVALID_PASSCODE = "invalidpasscode";
+		public final static String ERROR_NO_CURRENT_QUESTION = "nocurrentquestion";
 	}
 	
 	/**
