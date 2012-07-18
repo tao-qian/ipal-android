@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
@@ -112,7 +111,7 @@ public class MutiplyChoiceQuesionView extends QuestionView {
 		if (valueToSend != -1) {
 			//Jsoup example, using post to log into depauw moodle
 			try {
-				Document doc = Jsoup.connect(this.url+"/mod/ipal/tempview.php?user="+this.username+"&p="+this.passcode)
+				Jsoup.connect(url+"/mod/ipal/tempview.php?user="+username+"&p="+passcode)
 				.data("answer_id", valueToSend+"")
 				.data("a_text", "")
 				.data("question_id", question_id+"")

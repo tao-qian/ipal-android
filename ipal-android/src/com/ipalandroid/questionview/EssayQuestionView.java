@@ -62,7 +62,7 @@ public class EssayQuestionView extends QuestionView {
 		if (validateInput()) {
 			//SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
 			try {
-				Document doc = Jsoup.connect(this.url+"/mod/ipal/tempview.php?user="+this.username+"&p="+this.passcode)
+				Jsoup.connect(url+"/mod/ipal/tempview.php?user="+username+"&p="+passcode)
 				.data("answer_id", "-1")
 				.data("a_text", answerField.getText().toString())
 				.data("question_id", question_id+"")
