@@ -5,7 +5,10 @@ import java.io.IOException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import com.ipalandroid.R;
+
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.EditText;
@@ -14,13 +17,6 @@ import android.widget.TextView;
 
 public class EssayQuestionView extends QuestionView {
 
-	private String qText;
-	private int question_id;
-	private int active_question_id;
-	private int course_id;
-	private int user_id;
-	private int ipal_id;
-	private String instructor;
 	private EditText answerField;
 
 
@@ -36,7 +32,7 @@ public class EssayQuestionView extends QuestionView {
 	}
 	@Override
 	public View getQuestionView(Context c) {
-		LinearLayout layout = new LinearLayout(c);
+		/*LinearLayout layout = new LinearLayout(c);
 		layout.setOrientation(LinearLayout.VERTICAL);
 		layout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 		TextView questionText = new TextView(c);
@@ -47,7 +43,15 @@ public class EssayQuestionView extends QuestionView {
 		layout.addView(questionText);
 		answerField = new EditText(c);
 		layout.addView(answerField);
+		return layout;*/
+		
+		LayoutInflater inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.essay,null);
+		answerField = (EditText) layout.findViewById(R.id.answerField);
+		TextView qTextView = (TextView) layout.findViewById(R.id.questionText);
+		qTextView.setText(qText);
 		return layout;
+		  
 	}
 
 	@Override

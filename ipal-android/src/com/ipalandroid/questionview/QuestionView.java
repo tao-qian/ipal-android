@@ -17,7 +17,13 @@ public abstract class QuestionView {
 	protected String url;
 	protected String username;
 	protected int passcode;
-	
+	protected String qText;
+	protected int question_id;
+	protected int active_question_id;
+	protected int course_id;
+	protected int user_id;
+	protected int ipal_id;
+	protected String instructor;
 	/**
 	 * Super class constructor.
 	 * @param questionPage the question page HTML used.

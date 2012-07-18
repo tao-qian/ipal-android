@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -14,6 +16,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import com.ipalandroid.R;
 
 public class MutipleChoiceQuesionView extends QuestionView {
 
@@ -38,13 +42,6 @@ public class MutipleChoiceQuesionView extends QuestionView {
 	}
 
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
-	private String qText;
-	private int question_id;
-	private int active_question_id;
-	private int course_id;
-	private int user_id;
-	private int ipal_id;
-	private String instructor;
 	private RadioGroup g;
 	private String currentChoice;
 
@@ -69,7 +66,7 @@ public class MutipleChoiceQuesionView extends QuestionView {
 
 	@Override
 	public View getQuestionView(Context c) {
-		LinearLayout layout = new LinearLayout(c);
+		/*LinearLayout layout = new LinearLayout(c);
 		layout.setOrientation(LinearLayout.VERTICAL);
 		layout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 		TextView questionText = new TextView(c);
@@ -77,8 +74,12 @@ public class MutipleChoiceQuesionView extends QuestionView {
 		questionText.setLayoutParams(lparams);
 		questionText.setText(qText);
 		questionText.setTextSize(18);
-		layout.addView(questionText);
-		g = new RadioGroup(null);
+		layout.addView(questionText);*/
+		LayoutInflater inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.essay,null);
+		TextView qTextView = (TextView) layout.findViewById(R.id.questionText);
+		qTextView.setText(qText);
+		g = (RadioGroup) layout.findViewById(R.id.answerChoice);
 		for (Choice ch: choices) {
 			RadioButton b = new RadioButton(null);
 			b.setText(ch.text);
@@ -95,7 +96,6 @@ public class MutipleChoiceQuesionView extends QuestionView {
 				}
 			}
 		});
-		layout.addView(g);
 		return layout;
 	}
 
