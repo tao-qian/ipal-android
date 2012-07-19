@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -38,7 +37,7 @@ public class QuestionViewActivity extends Activity {
 		getStringResources();
 		
 		//Getting variables from the intent.
-		int passcode = getIntent().getIntExtra(LoginActivity.PASSCODE_EXTRA, -1);
+		int passcode = getIntent().getIntExtra(LoginActivity.PASSCODE_EXTRA, Utilities.INT_FORMAT_ERROR);
 		String username = getIntent().getStringExtra(LoginActivity.USERNAME_EXTRA);
 		String url = getIntent().getStringExtra(LoginActivity.URL_EXTRA);
 		QuestionFactory questionFactory = new QuestionFactory(url, username, passcode);

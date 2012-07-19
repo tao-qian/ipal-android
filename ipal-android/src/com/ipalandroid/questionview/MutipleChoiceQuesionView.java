@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -56,12 +54,6 @@ public class MutipleChoiceQuesionView extends QuestionView {
 			choices.add(new Choice(cText, cValue));
 		}
 		qText = this.questionPage.select("legend").text();
-		question_id = Integer.parseInt(this.questionPage.select("input[name=question_id]").attr("value"));
-		active_question_id = Integer.parseInt(this.questionPage.select("input[name=active_question_id]").attr("value"));
-		course_id = Integer.parseInt(this.questionPage.select("input[name=course_id]").attr("value"));
-		user_id = Integer.parseInt(this.questionPage.select("input[name=user_id]").attr("value"));
-		ipal_id = Integer.parseInt(this.questionPage.select("input[name=ipal_id]").attr("value"));
-		instructor = this.questionPage.select("input[name=instructor]").attr("value");
 	}
 
 	@Override

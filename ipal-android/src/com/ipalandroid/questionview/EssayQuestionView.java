@@ -10,7 +10,6 @@ import com.ipalandroid.R;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,12 +22,6 @@ public class EssayQuestionView extends QuestionView {
 	public EssayQuestionView(Document questionPage, String url, String username, int passcode) {
 		super(questionPage, url, username, passcode);
 		qText = this.questionPage.select("legend").text();
-		question_id = Integer.parseInt(this.questionPage.select("input[name=question_id]").attr("value"));
-		active_question_id = Integer.parseInt(this.questionPage.select("input[name=active_question_id]").attr("value"));
-		course_id = Integer.parseInt(this.questionPage.select("input[name=course_id]").attr("value"));
-		user_id = Integer.parseInt(this.questionPage.select("input[name=user_id]").attr("value"));
-		ipal_id = Integer.parseInt(this.questionPage.select("input[name=ipal_id]").attr("value"));
-		instructor = this.questionPage.select("input[name=instructor]").attr("value");
 	}
 	@Override
 	public View getQuestionView(Context c) {

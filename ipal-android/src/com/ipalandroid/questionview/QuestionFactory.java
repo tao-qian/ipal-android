@@ -4,10 +4,7 @@ import java.io.IOException;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-
 import com.ipalandroid.Utilities.ConnectionResult;
-import com.ipalandroid.Utilities.QuestionType;
-import com.ipalandroid.Utilities.TempViewPostContract;
 
 /**
  * This class is responsible for creating different question views.
@@ -16,11 +13,31 @@ import com.ipalandroid.Utilities.TempViewPostContract;
  */
 public class QuestionFactory {
 
+	/**
+	 * This interface stores the constants used to post to tempview.php.
+	 */
+	public interface TempViewPostContract {
+		public final static String URL_SEGMENT = "mod/ipal/tempview.php";
+		public final static String USER = "user";
+		public final static String PASSCODE = "p";
+	}
+
+	public interface QuestionType {
+		public final static String TRUE_FALSE_QUESTION = "truefalse";
+		public final static String MUTIPLE_CHOICE_QUESTION = "mutiplechoice";
+		public final static String ESSAY_QUESTION = "essay";
+		public final static String ERROR_INVALID_USERNAME = "invalidusername";
+		public final static String ERROR_INVALID_PASSCODE = "invalidpasscode";
+		public final static String ERROR_NO_CURRENT_QUESTION = "nocurrentquestion";
+	}
+	
 	private Document questionPage;
 	private String url;
 	private String username;
 	private int passcode;
 	private QuestionView questionView;
+	
+	
 	
 	/**
 	 * Constructor.

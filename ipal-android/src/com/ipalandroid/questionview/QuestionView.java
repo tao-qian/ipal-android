@@ -37,6 +37,7 @@ public abstract class QuestionView {
 		this.url = url;
 		this.username = username;
 		this.passcode = passcode;
+		getIPALInfoFromUI();
 	}
 	
 	/**
@@ -61,4 +62,17 @@ public abstract class QuestionView {
 	 * @return true if the result was sent successfully, false otherwise
 	 */
 	public abstract Boolean sendResult();
+	
+	/**
+	 * This method get the IPAL info common to all QuestionViews from the HTML.
+	 */
+	private void getIPALInfoFromUI()
+	{
+		question_id = Integer.parseInt(questionPage.select("input[name=question_id]").attr("value"));
+		active_question_id = Integer.parseInt(questionPage.select("input[name=active_question_id]").attr("value"));
+		course_id = Integer.parseInt(questionPage.select("input[name=course_id]").attr("value"));
+		user_id = Integer.parseInt(questionPage.select("input[name=user_id]").attr("value"));
+		ipal_id = Integer.parseInt(questionPage.select("input[name=ipal_id]").attr("value"));
+		instructor = questionPage.select("input[name=instructor]").attr("value");
+	}
 }

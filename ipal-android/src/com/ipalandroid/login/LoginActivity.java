@@ -122,7 +122,7 @@ public class LoginActivity extends Activity {
 					return;
 				}
 				// Start the QuestionViewActivity
-				int passcode = Utilities.validatePasscode(passcodeEditText.getText().toString());
+				int passcode = UserValidationUtilities.validatePasscode(passcodeEditText.getText().toString());
 				if(passcode<0)
 				{
 					Toast.makeText(getApplicationContext(), INVALID_PASSCODE_FORMAT_MESSAGE, Toast.LENGTH_SHORT).show();
@@ -256,7 +256,7 @@ public class LoginActivity extends Activity {
 		@Override
 		protected Integer doInBackground(String... params) {
 			// TODO Auto-generated method stub
-			return Utilities.validateUser(params[0], params[1],params[2]);
+			return UserValidationUtilities.validateUser(params[0], params[1],params[2]);
 		}
 		
 		@Override
