@@ -51,6 +51,7 @@ public class LoginActivity extends Activity {
 	private String username;
 	private String password;
 	private Boolean isValid;
+	private UserValidater userValidater;
 
 	private String LOGIN_INFO_VALID;
 	private String LOGIN_INFO_INVALID;
@@ -69,6 +70,7 @@ public class LoginActivity extends Activity {
 		initializeUIElements();
 		getStringResources();
 		setUpElements();
+		userValidater = null;
 	}
 
 	/**
@@ -122,7 +124,7 @@ public class LoginActivity extends Activity {
 					return;
 				}
 				// Start the QuestionViewActivity
-				int passcode = UserValidationUtilities.validatePasscode(passcodeEditText.getText().toString());
+				int passcode = UserValidater.validatePasscode(passcodeEditText.getText().toString());
 				if(passcode<0)
 				{
 					Toast.makeText(getApplicationContext(), INVALID_PASSCODE_FORMAT_MESSAGE, Toast.LENGTH_SHORT).show();
@@ -256,7 +258,8 @@ public class LoginActivity extends Activity {
 		@Override
 		protected Integer doInBackground(String... params) {
 			// TODO Auto-generated method stub
-			return UserValidationUtilities.validateUser(params[0], params[1],params[2]);
+			userValidater = new UserValidater(params[0], params[1],params[2]);
+			return userValidater.validateUser();
 		}
 		
 		@Override
@@ -271,7 +274,11 @@ public class LoginActivity extends Activity {
 			progressDialog.dismiss();
 			// If not valid, notify the user.
 			if (isValid)
+			{
+				username = userValidater.getUsername();
+				url = userValidater.getURL();
 				reloadForm(isValid);
+			}
 			else if( result == ConnectionResult.RESULT_NOT_FOUND)
 				Toast.makeText(LoginActivity.this, INVALID_USER_MESSAGE,
 						Toast.LENGTH_SHORT).show();

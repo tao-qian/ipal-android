@@ -16,7 +16,7 @@ import com.ipalandroid.Utilities.ConnectionResult;
  * 
  * @author Tao Qian, DePauw Open Source Development Team
  */
-public class UserValidationUtilities {
+public class UserValidater {
 
 	/**
 	 * This interface stores the constants used to validate user.
@@ -43,9 +43,12 @@ public class UserValidationUtilities {
 		public final static String LOGIN_PAGE_END_URL = "login/index.php";
 	}
 
+	private String username;
+	private String password;
+	private String url;
+
 	/**
-	 * This method tried to log into Moodle using the given username and
-	 * password. It checks whether the username and the password are valid.
+	 * Constructor.
 	 * 
 	 * @param username
 	 *            the username used.
@@ -53,50 +56,56 @@ public class UserValidationUtilities {
 	 *            the password used.
 	 * @param url
 	 *            the url of the moodle
+	 */
+	public UserValidater(String username, String password, String url) {
+		this.username = username;
+		this.password = password;
+		this.url = url;
+	}
+
+	/**
+	 * This method tried to log into Moodle using the given username and
+	 * password. It checks whether the username and the password are valid.
+	 * 
 	 * @return result code to indicate whether the connection is successful.
 	 */
-	public static int validateUser(String username, String password, String url) {
-		username = validateUsername(username);
-		password = validatePassword(password);
+	public int validateUser() {
+		String validatedUsername = validateUsername(username);
+		String validatedPassword = validatePassword(password);
 		String protocolURL = validateURL(url, true);
-		if (username.equals(Utilities.STRING_FORMAT_ERROR)
-				|| password.equals(Utilities.STRING_FORMAT_ERROR)
-				|| url.equals(Utilities.STRING_FORMAT_ERROR))
+		if (validatedUsername.equals(Utilities.STRING_FORMAT_ERROR)
+				|| validatedPassword.equals(Utilities.STRING_FORMAT_ERROR)
+				|| protocolURL.equals(Utilities.STRING_FORMAT_ERROR))
 			return ConnectionResult.RESULT_NOT_FOUND;
-		protocolURL = protocolURL + UserValidationContract.LOGIN_PAGE_END_URL;
-		//First check with HTTPS protocol.
-		int result = connectToMoodle(username, password, protocolURL);
-		//If HTTPS protocol causes connection error, check with HTTP protocol.
-		if(connectToMoodle(username, password, protocolURL) == ConnectionResult.CONNECTION_ERROR)
-		{
+		username = validatedUsername;
+		password = validatedPassword;
+		// First check with HTTPS protocol.
+		int result = connectToMoodle(protocolURL);
+		// If HTTPS protocol causes connection error, check with HTTP protocol.
+		if (result == ConnectionResult.CONNECTION_ERROR) {
 			protocolURL = validateURL(url, false);
-			protocolURL = protocolURL + UserValidationContract.LOGIN_PAGE_END_URL;
-			result = connectToMoodle(username, password, protocolURL);
+			result = connectToMoodle(protocolURL);
 		}
+		url = protocolURL;
 		return result;
 	}
 
 	/**
 	 * This method connects to Moodle to check whether the user name and
-	 * password are valid.
+	 * password are valid. 
 	 * 
-	 * @param username
-	 *            the username used.
-	 * @param password
-	 *            the password used.
-	 * @param url
-	 *            the url of the moodle
+	 * @param loginURL the URL of the Moodle home page, contains protocol.
 	 * @return result code to indicate whether the connection is successful.
 	 */
-	private static int connectToMoodle(String username, String password,
-			String url) {
+	private int connectToMoodle(String loginURL) {
 		try {
-			Document loginPage = Jsoup.connect(url).get();
+			loginURL = loginURL + UserValidationContract.LOGIN_PAGE_END_URL;
+			Document loginPage = Jsoup.connect(loginURL).get();
 			Element loginForm = loginPage
 					.getElementById(UserValidationContract.LOGIN_FORM_ID);
-			String loginURL = loginForm
+			String loginFormURL = loginForm
 					.attr(UserValidationContract.ACTION_ATTR);
-			Document loggedInPage = Jsoup.connect(loginURL)
+			Document loggedInPage = Jsoup.connect(loginFormURL)
 					.data(UserValidationContract.LOGIN_USERNAME_NAME, username)
 					.data(UserValidationContract.LOGIN_PASSWORD_NAME, password)
 					.post();
@@ -212,5 +221,23 @@ public class UserValidationUtilities {
 			result = Utilities.INT_FORMAT_ERROR;
 		}
 		return result;
+	}
+	
+	/**
+	 * Getter for URL, can only be called when validation is successful.
+	 * @return the validated URL
+	 */
+	public String getURL()
+	{
+		return url;
+	}
+	
+	/**
+	 * Getter for username, can only be called when validation is successful.
+	 * @return the validated username
+	 */
+	public String getUsername()
+	{
+		return username;
 	}
 }
