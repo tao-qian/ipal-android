@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -40,7 +41,6 @@ public class MutipleChoiceQuesionView extends QuestionView {
 	}
 
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
-	private RadioGroup g;
 	private String currentChoice;
 
 	public MutipleChoiceQuesionView(Document questionPage, String url, String username, int passcode)
@@ -68,14 +68,14 @@ public class MutipleChoiceQuesionView extends QuestionView {
 		questionText.setTextSize(18);
 		layout.addView(questionText);*/
 		LayoutInflater inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.essay,null);
+		LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.multichoice,null);
 		TextView qTextView = (TextView) layout.findViewById(R.id.questionText);
 		qTextView.setText(qText);
-		g = (RadioGroup) layout.findViewById(R.id.answerChoice);
+		RadioGroup g = (RadioGroup) layout.findViewById(R.id.answerChoice);
 		for (Choice ch: choices) {
-			RadioButton b = new RadioButton(null);
+			RadioButton b = new RadioButton(c);
 			b.setText(ch.text);
-			g.addView(b);
+			g.addView(b,new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		}
 		g.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 			public void onCheckedChanged(RadioGroup rg, int checkedId) {

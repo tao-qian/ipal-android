@@ -39,16 +39,17 @@ public class QuestionViewActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		getStringResources();
-		initializeUIElements();
-
+		setContentView(R.layout.question_view);
+		Utilities.setHeaderContent(findViewById(R.id.header),
+				getString(R.string.question_view_header_text));
+		
 		// Getting variables from the intent.
 		int passcode = getIntent().getIntExtra(LoginActivity.PASSCODE_EXTRA,
 				Utilities.INT_FORMAT_ERROR);
 		String username = getIntent().getStringExtra(
 				LoginActivity.USERNAME_EXTRA);
 		String url = getIntent().getStringExtra(LoginActivity.URL_EXTRA);
-
-		setContentView(R.layout.question_view);
+		
 		final QuestionFactory questionFactory = new QuestionFactory(url,
 				username, passcode);
 		final QuestionViewCreator creator = new QuestionViewCreator(
@@ -64,8 +65,8 @@ public class QuestionViewActivity extends Activity {
 				.setOnClickListener(new OnClickListener() {
 
 					public void onClick(View v) {
-						creator.setDialogMessage(REFRESHING_IPAL_MESSAGE);
-						creator.execute(questionFactory);
+						QuestionViewCreator refresher = new QuestionViewCreator(REFRESHING_IPAL_MESSAGE);
+						refresher.execute(questionFactory);
 					}
 				});
 	}
@@ -156,6 +157,7 @@ public class QuestionViewActivity extends Activity {
 			final QuestionView questionView = questionFactory.getQuestionView();
 			LayoutParams questionParams = new LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+			initializeUIElements();
 			if (questionScrollView.getChildCount() > 0)
 				questionScrollView.removeAllViews();// Remove previous question
 													// view if there is one.

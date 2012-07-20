@@ -25,7 +25,7 @@ public class QuestionFactory {
 
 	public interface QuestionType {
 		public final static String TRUE_FALSE_QUESTION = "truefalse";
-		public final static String MUTIPLE_CHOICE_QUESTION = "mutiplechoice";
+		public final static String MULTIPLE_CHOICE_QUESTION = "multichoice";
 		public final static String ESSAY_QUESTION = "essay";
 		public final static String ERROR_INVALID_USERNAME = "invalidusername";
 		public final static String ERROR_INVALID_PASSCODE = "invalidpasscode";
@@ -77,7 +77,7 @@ public class QuestionFactory {
 			questionView = new EssayQuestionView(questionPage, url, username, passcode);
 			return ConnectionResult.RESULT_FOUND;
 		}
-		else if(type.equals(QuestionType.MUTIPLE_CHOICE_QUESTION))
+		else if(type.equals(QuestionType.MULTIPLE_CHOICE_QUESTION))
 		{
 			questionView = new MutipleChoiceQuesionView(questionPage, url, username, passcode);
 			return ConnectionResult.RESULT_FOUND;
