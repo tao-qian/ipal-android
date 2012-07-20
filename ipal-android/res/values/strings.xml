@@ -22,5 +22,6 @@
     <string name="connection_problem_message">Unable to connect to the server, please check Internet settings.</string>
     <string name="ipal_info_invalid_message">Invalid passcode or username</string>
     <string name="connecting_ipal_message">Connecting to the server...</string>
+    <string name="refreshing_ipal_message">Retrieveing new questions from the server...</string>
 
 </resources>

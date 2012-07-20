@@ -259,7 +259,7 @@ public class LoginActivity extends Activity {
 		protected Integer doInBackground(String... params) {
 			// TODO Auto-generated method stub
 			userValidater = new UserValidater(params[0], params[1],params[2]);
-			return userValidater.validateUser();
+			return userValidater.validateUserLocalHost();
 		}
 		
 		@Override

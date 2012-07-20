@@ -32,6 +32,7 @@ public class UserValidater {
 		public final static String LOGIN_USERNAME_NAME = "username";
 		public final static String LOGIN_PASSWORD_NAME = "password";
 		public final static String SITE_INDEX_ID = "site-index";
+		public final static String PAGE_SITE_INDEX_ID = "page-site-index";
 		public final static String LOGIN_INDEX_ID = "login-index";
 		public final static String NOT_LOGGED_IN_CLASS = "notloggedin";
 
@@ -91,10 +92,23 @@ public class UserValidater {
 	}
 
 	/**
-	 * This method connects to Moodle to check whether the user name and
-	 * password are valid. 
+	 * Only used for testing IPAL using localhost.
 	 * 
-	 * @param loginURL the URL of the Moodle home page, contains protocol.
+	 * @return
+	 */
+	public int validateUserLocalHost() {
+		username = "student1";
+		password = "student1#1IPAL";
+		url = "http://192.168.1.197/moodle/";
+		return connectToMoodle(url);
+	}
+
+	/**
+	 * This method connects to Moodle to check whether the user name and
+	 * password are valid.
+	 * 
+	 * @param loginURL
+	 *            the URL of the Moodle home page, contains protocol.
 	 * @return result code to indicate whether the connection is successful.
 	 */
 	private int connectToMoodle(String loginURL) {
@@ -114,7 +128,8 @@ public class UserValidater {
 			 * Here we used the attributes of the body to identify whether the
 			 * login is successful. If the login is successful, we will be
 			 * redirected to the home page, which has a body with an id of
-			 * UserValidationContract.SITE_INDEX_ID. Otherwise, we will be
+			 * UserValidationContract.SITE_INDEX_ID or an id of
+			 * UserValidationContract.PAGE_SITE_INDEX_ID. Otherwise, we will be
 			 * redirected to the login page, which has a body with an id of
 			 * UserValidationContract.LOGIN_INDEX_ID. In the case of an
 			 * unsuccessful login, the class attribute of body will contain the
@@ -125,15 +140,20 @@ public class UserValidater {
 						UserValidationContract.SITE_INDEX_ID).attr(
 						UserValidationContract.CLASS_ATTR);
 			} catch (NullPointerException e) {
-				// loginInfo =
-				// loginPage.getElementById(MoodleHTMLContract.LOGIN_INDEX_ID).attr(HTMLAttribute.CLASS_ATTR);
-				return ConnectionResult.RESULT_NOT_FOUND;
+				try {
+					loginInfo = loggedInPage.getElementById(
+							UserValidationContract.PAGE_SITE_INDEX_ID).attr(
+							UserValidationContract.CLASS_ATTR);
+				} catch (NullPointerException e2) {
+					return ConnectionResult.RESULT_NOT_FOUND;
+				}
 			}
 			if (loginInfo.contains(UserValidationContract.NOT_LOGGED_IN_CLASS)) {
 				return ConnectionResult.RESULT_NOT_FOUND;
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
 			return ConnectionResult.CONNECTION_ERROR;
 		}
 		return ConnectionResult.RESULT_FOUND;
@@ -222,22 +242,22 @@ public class UserValidater {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Getter for URL, can only be called when validation is successful.
+	 * 
 	 * @return the validated URL
 	 */
-	public String getURL()
-	{
+	public String getURL() {
 		return url;
 	}
-	
+
 	/**
 	 * Getter for username, can only be called when validation is successful.
+	 * 
 	 * @return the validated username
 	 */
-	public String getUsername()
-	{
+	public String getUsername() {
 		return username;
 	}
 }

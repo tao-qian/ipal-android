@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+
 import com.ipalandroid.Utilities.ConnectionResult;
 
 /**
@@ -66,11 +67,11 @@ public class QuestionFactory {
 					.data(TempViewPostContract.PASSCODE, String.valueOf(passcode))
 					.post();
 		} catch (IOException e) {
+			e.printStackTrace();
 			return  ConnectionResult.CONNECTION_ERROR;
 		}
 		
 		String type = questionPage.select("p[id=questiontype]").text();
-		
 		if(type.equals(QuestionType.ESSAY_QUESTION))
 		{
 			questionView = new EssayQuestionView(questionPage, url, username, passcode);
