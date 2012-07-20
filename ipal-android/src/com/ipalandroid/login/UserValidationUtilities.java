@@ -23,10 +23,10 @@ public class UserValidationUtilities {
 	 */
 	public interface UserValidationContract {
 		/*
-		 * The attribute values used. The last string segment of
-		 * the constants in this class must be the name of the attribute, e.g.
-		 * String LOGIN_FORM_ID = "login" is used to find the HTML element which
-		 * has an id of "login".
+		 * The attribute values used. The last string segment of the constants
+		 * in this class must be the name of the attribute, e.g. String
+		 * LOGIN_FORM_ID = "login" is used to find the HTML element which has an
+		 * id of "login".
 		 */
 		public final static String LOGIN_FORM_ID = "login";
 		public final static String LOGIN_USERNAME_NAME = "username";
@@ -39,10 +39,10 @@ public class UserValidationUtilities {
 		public final static String ID_ATTR = "id";
 		public final static String ACTION_ATTR = "action";
 		public final static String CLASS_ATTR = "class";
-		
+
 		public final static String LOGIN_PAGE_END_URL = "login/index.php";
 	}
-	
+
 	/**
 	 * This method tried to log into Moodle using the given username and
 	 * password. It checks whether the username and the password are valid.
@@ -58,15 +58,44 @@ public class UserValidationUtilities {
 	public static int validateUser(String username, String password, String url) {
 		username = validateUsername(username);
 		password = validatePassword(password);
-		url = validateURL(url);
-		if(username.equals(Utilities.STRING_FORMAT_ERROR)||password.equals(Utilities.STRING_FORMAT_ERROR)||url.equals(Utilities.STRING_FORMAT_ERROR))
+		String protocolURL = validateURL(url, true);
+		if (username.equals(Utilities.STRING_FORMAT_ERROR)
+				|| password.equals(Utilities.STRING_FORMAT_ERROR)
+				|| url.equals(Utilities.STRING_FORMAT_ERROR))
 			return ConnectionResult.RESULT_NOT_FOUND;
-		url = url + UserValidationContract.LOGIN_PAGE_END_URL;
+		protocolURL = protocolURL + UserValidationContract.LOGIN_PAGE_END_URL;
+		//First check with HTTPS protocol.
+		int result = connectToMoodle(username, password, protocolURL);
+		//If HTTPS protocol causes connection error, check with HTTP protocol.
+		if(connectToMoodle(username, password, protocolURL) == ConnectionResult.CONNECTION_ERROR)
+		{
+			protocolURL = validateURL(url, false);
+			protocolURL = protocolURL + UserValidationContract.LOGIN_PAGE_END_URL;
+			result = connectToMoodle(username, password, protocolURL);
+		}
+		return result;
+	}
+
+	/**
+	 * This method connects to Moodle to check whether the user name and
+	 * password are valid.
+	 * 
+	 * @param username
+	 *            the username used.
+	 * @param password
+	 *            the password used.
+	 * @param url
+	 *            the url of the moodle
+	 * @return result code to indicate whether the connection is successful.
+	 */
+	private static int connectToMoodle(String username, String password,
+			String url) {
 		try {
 			Document loginPage = Jsoup.connect(url).get();
 			Element loginForm = loginPage
-					.getElementById(UserValidationContract .LOGIN_FORM_ID);
-			String loginURL = loginForm.attr(UserValidationContract .ACTION_ATTR);
+					.getElementById(UserValidationContract.LOGIN_FORM_ID);
+			String loginURL = loginForm
+					.attr(UserValidationContract.ACTION_ATTR);
 			Document loggedInPage = Jsoup.connect(loginURL)
 					.data(UserValidationContract.LOGIN_USERNAME_NAME, username)
 					.data(UserValidationContract.LOGIN_PASSWORD_NAME, password)
@@ -78,14 +107,14 @@ public class UserValidationUtilities {
 			 * redirected to the home page, which has a body with an id of
 			 * UserValidationContract.SITE_INDEX_ID. Otherwise, we will be
 			 * redirected to the login page, which has a body with an id of
-			 * UserValidationContract.LOGIN_INDEX_ID. In the case of an unsuccessful
-			 * login, the class attribute of body will contain the string
-			 * UserValidationContract.NOT_LOGGED_IN_CONTENT.
+			 * UserValidationContract.LOGIN_INDEX_ID. In the case of an
+			 * unsuccessful login, the class attribute of body will contain the
+			 * string UserValidationContract.NOT_LOGGED_IN_CONTENT.
 			 */
 			try {
 				loginInfo = loggedInPage.getElementById(
 						UserValidationContract.SITE_INDEX_ID).attr(
-								UserValidationContract.CLASS_ATTR);
+						UserValidationContract.CLASS_ATTR);
 			} catch (NullPointerException e) {
 				// loginInfo =
 				// loginPage.getElementById(MoodleHTMLContract.LOGIN_INDEX_ID).attr(HTMLAttribute.CLASS_ATTR);
@@ -100,7 +129,7 @@ public class UserValidationUtilities {
 		}
 		return ConnectionResult.RESULT_FOUND;
 	}
-	
+
 	/**
 	 * This method formats the user name given by the user, it then validates
 	 * whether the formatted user name is legal.
@@ -111,7 +140,7 @@ public class UserValidationUtilities {
 	 *         otherwise.
 	 */
 	private static String validateUsername(String username) {
-		//Remove all white space.
+		// Remove all white space.
 		username = username.replace(" ", "");
 		if (username.length() > 0)
 			return username;
@@ -126,25 +155,32 @@ public class UserValidationUtilities {
 	 * 
 	 * @param url
 	 *            the URL to be checked
-	 * @return the formatted URL if it is legal, STRING_FORMAT_ERROR
-	 *         otherwise.
+	 * @param useHTTPS
+	 *            if true, https protocol will be used, otherwise use http.
+	 * @return the formatted URL if it is legal, STRING_FORMAT_ERROR otherwise.
 	 */
-	private static String validateURL(String url) {
+	private static String validateURL(String url, Boolean useHTTPS) {
+		String wrongProtocol = "http://";
+		String rightProtocol = "https://";
+		if (!useHTTPS) {
+			wrongProtocol = "https://";
+			rightProtocol = "http://";
+		}
+
 		url = url.replace(" ", "");
-		if(url.startsWith("http://"))
-			url = url.replace("http://", "https://");
-		if(!url.startsWith("https://"))
-			url = "https://"+ url;
-		if(!url.endsWith("/"))
+		if (!url.endsWith("/"))
 			url = url + "/";
-		if(URLUtil.isValidUrl(url))
+		url = url.replace(wrongProtocol, rightProtocol);
+		if (!url.startsWith(rightProtocol))
+			url = rightProtocol + url;
+		if (URLUtil.isValidUrl(url))
 			return url;
 		return Utilities.STRING_FORMAT_ERROR;
 	}
 
 	/**
-	 * This method formats the password given by the user, it then validates whether
-	 * the formatted password is legal. 
+	 * This method formats the password given by the user, it then validates
+	 * whether the formatted password is legal.
 	 * 
 	 * 
 	 * @param password
@@ -159,7 +195,6 @@ public class UserValidationUtilities {
 		return Utilities.STRING_FORMAT_ERROR;
 	}
 
-	
 	/**
 	 * This method validate whether the passcode is legal. Now it only checks
 	 * whether the passcode is a integer.
