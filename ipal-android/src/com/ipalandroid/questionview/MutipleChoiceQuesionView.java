@@ -10,6 +10,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -50,8 +51,11 @@ public class MutipleChoiceQuesionView extends QuestionView {
 		Elements spans = this.questionPage.getElementsByTag("span");
 		for (Element s: spans) {
 			String cText = s.select("label").text();
-			int cValue = Integer.parseInt(s.select("input").attr("value"));
-			choices.add(new Choice(cText, cValue));
+			if (s.select("input").attr("value").length() > 0) {
+				int cValue = Integer.parseInt(s.select("input").attr("value"));
+				choices.add(new Choice(cText, cValue));
+			}
+			
 		}
 		qText = this.questionPage.select("legend").text();
 	}
@@ -68,7 +72,9 @@ public class MutipleChoiceQuesionView extends QuestionView {
 		questionText.setTextSize(18);
 		layout.addView(questionText);*/
 		LayoutInflater inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		//ScrollView view = (ScrollView) inflater.inflate(R.layout.multichoice, null);
 		LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.multichoice,null);
+		//LinearLayout layout = (LinearLayout) view.findViewById(R.id.layout);
 		TextView qTextView = (TextView) layout.findViewById(R.id.questionText);
 		qTextView.setText(qText);
 		RadioGroup g = (RadioGroup) layout.findViewById(R.id.answerChoice);

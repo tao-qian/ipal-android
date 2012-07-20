@@ -1,33 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-    <include
-        android:id="@+id/header"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/header" />
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
 
-    <ScrollView
-        android:id="@+id/questionViewScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-         >
-    </ScrollView>
+        <include
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/header" />
 
-    <Button
-        android:id="@+id/submitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/submit_button_text" />
+        <ScrollView
+            android:id="@+id/questionViewScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </ScrollView>
+
         <Button
-        android:id="@+id/refreshButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Refresh~~" />
+            android:id="@+id/submitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/submit_button_text" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/refreshButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Refresh~~" />
+    </LinearLayout>
+
+</ScrollView>
