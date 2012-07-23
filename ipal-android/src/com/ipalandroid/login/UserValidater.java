@@ -98,8 +98,8 @@ public class UserValidater {
 	 */
 	public int validateUserLocalHost() {
 		username = "student1";
-		password = "student1#1IPAL";
-		url = "http://169.254.158.158/moodle/";
+		password = "Student#1";
+		url = "http://10.60.5.156/moodle/";
 		return connectToMoodle(url);
 	}
 

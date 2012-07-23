@@ -1,5 +1,6 @@
 package com.ipalandroid.login;
 
+import com.google.android.gcm.GCMRegistrar;
 import com.ipalandroid.R;
 import com.ipalandroid.Utilities;
 import com.ipalandroid.Utilities.ConnectionResult;
@@ -14,6 +15,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -35,7 +37,8 @@ public class LoginActivity extends Activity {
 	public static final String PASSCODE_EXTRA = "passcode_extra";
 	public static final String URL_EXTRA = "url_extral";
 	public static final String USERNAME_EXTRA = "username_extra";
-
+	private static final String SENDER_ID = "42332721478";
+	
 	private SharedPreferences prefs;
 
 	private TextView loginInfoTextView;
@@ -71,6 +74,20 @@ public class LoginActivity extends Activity {
 		getStringResources();
 		setUpElements();
 		userValidater = null;
+		
+		//Setup GCM
+		GCMRegistrar.checkDevice(this);
+		GCMRegistrar.checkManifest(this);
+		String regId = GCMRegistrar.getRegistrationId(this);
+		Log.w("regID", regId+"a");
+		//Log.w("regID", GCMRegistrar.getRegistrationId(this));
+		if (regId.equals("")) {
+		  GCMRegistrar.register(this, SENDER_ID);
+		  Log.w("regID", GCMRegistrar.getRegistrationId(this));
+		} else {
+		  Log.v("ABCD", "Already registered");
+		  
+		}
 	}
 
 	/**

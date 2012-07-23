@@ -9,5 +9,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/ipal-android/libs/jsoup-1.6.3-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Ngoc Nguyen/git/ipal-android/ipal-android/libs/gcm.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
