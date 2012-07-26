@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent" 
+    android:background="@color/view_background">
 
     <include
         android:id="@+id/header"
@@ -14,14 +15,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/header"
-        android:text="" />
+        android:text="" 
+        android:textColor="@color/view_text_color"/>
 
     <TextView
         android:id="@+id/passcodeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/loginInfoTextView"
-        android:text="@string/login_passcode_text" />
+        android:text="@string/login_passcode_text"
+        android:textColor="@color/view_text_color" />
 
     <EditText
         android:id="@+id/passcodeEditText"
@@ -65,13 +68,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical" 
+            android:textColor="@color/view_text_color">
 
             <TextView
                 android:id="@+id/userNameTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/login_username_text" />
+                android:text="@string/login_username_text" 
+                android:textColor="@color/view_text_color"/>
 
             <EditText
                 android:id="@+id/userNameEditText"
@@ -85,7 +90,8 @@
                 android:id="@+id/passwordTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/login_password_text" />
+                android:text="@string/login_password_text"
+                android:textColor="@color/view_text_color" />
 
             <EditText
                 android:id="@+id/passwordEditText"
@@ -99,7 +105,8 @@
                 android:id="@+id/urlTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/login_url_text" />
+                android:text="@string/login_url_text"
+                android:textColor="@color/view_text_color" />
 
             <EditText
                 android:id="@+id/urlEditText"
@@ -112,7 +119,8 @@
                 android:id="@+id/saveInfoCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/login_save_password_text" />
+                android:text="@string/login_save_password_text"
+				android:textColor="@color/view_text_color"/>
 
             <Button
                 android:id="@+id/applyAccountSettingsButton"
