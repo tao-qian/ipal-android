@@ -80,6 +80,8 @@ public class MutipleChoiceQuesionView extends QuestionView {
 		for (Choice ch: choices) {
 			RadioButton b = new RadioButton(c);
 			b.setText(ch.text);
+			b.setTextColor(c.getResources().getColor(R.color.view_text_color));
+			//b.setTextColor(R.color.view_text_color);
 			g.addView(b,new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		}
 		g.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

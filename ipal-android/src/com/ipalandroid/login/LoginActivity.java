@@ -1,5 +1,9 @@
 package com.ipalandroid.login;
 
+import java.io.IOException;
+
+import org.jsoup.Jsoup;
+
 import com.google.android.gcm.GCMRegistrar;
 import com.ipalandroid.R;
 import com.ipalandroid.Utilities;
@@ -37,7 +41,6 @@ public class LoginActivity extends Activity {
 	public static final String PASSCODE_EXTRA = "passcode_extra";
 	public static final String URL_EXTRA = "url_extral";
 	public static final String USERNAME_EXTRA = "username_extra";
-	private static final String SENDER_ID = "42332721478";
 	
 	private SharedPreferences prefs;
 
@@ -50,12 +53,13 @@ public class LoginActivity extends Activity {
 	private Button confirmButton;
 	private Button applyButton;
 	
-	private String url;
-	private String username;
+	private static String url;
+	private static String username;
 	private String password;
 	private Boolean isValid;
 	private UserValidater userValidater;
-
+	private static int currentPasscode; 
+	
 	private String LOGIN_INFO_VALID;
 	private String LOGIN_INFO_INVALID;
 	private String APPLY_BUTTON_APPLY;
@@ -75,19 +79,6 @@ public class LoginActivity extends Activity {
 		setUpElements();
 		userValidater = null;
 		
-		//Setup GCM
-		GCMRegistrar.checkDevice(this);
-		GCMRegistrar.checkManifest(this);
-		String regId = GCMRegistrar.getRegistrationId(this);
-		Log.w("regID", regId+"a");
-		//Log.w("regID", GCMRegistrar.getRegistrationId(this));
-		if (regId.equals("")) {
-		  GCMRegistrar.register(this, SENDER_ID);
-		  Log.w("regID", GCMRegistrar.getRegistrationId(this));
-		} else {
-		  Log.v("ABCD", "Already registered");
-		  
-		}
 	}
 
 	/**
@@ -147,6 +138,10 @@ public class LoginActivity extends Activity {
 					Toast.makeText(getApplicationContext(), INVALID_PASSCODE_FORMAT_MESSAGE, Toast.LENGTH_SHORT).show();
 					return;
 				}
+				
+				//Register when the user have a valid passcode and username
+				Utilities.registerGCM(v.getContext());
+				
 				Intent intent = new Intent(LoginActivity.this,
 						QuestionViewActivity.class);
 				intent.putExtra(PASSCODE_EXTRA, passcode);
@@ -303,5 +298,19 @@ public class LoginActivity extends Activity {
 				Toast.makeText(LoginActivity.this, CONNECTION_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
 		}
 		
+	}
+	
+	public static boolean sendToServer(String regId) {
+		try {
+			Jsoup.connect(url+"/mod/ipal/tempview.php")
+			.data("user", username)
+			.data("p", currentPasscode+"")
+			.data("r", regId)
+			.get();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
 	}
 }

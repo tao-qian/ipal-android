@@ -2,15 +2,18 @@ package com.ipalandroid;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gcm.GCMBaseIntentService;
+import com.ipalandroid.Utilities.SharedPreferenceKeys;
+import com.ipalandroid.login.LoginActivity;
 
 public class GCMIntentService extends GCMBaseIntentService {
-	public static final String SENDER_ID = "42332721478";
 	
 	public GCMIntentService() {
-        super(SENDER_ID);
+        super(Utilities.SENDER_ID);
         //Log.d("GCMIntentService", senderId);
     }
 	
@@ -28,17 +31,16 @@ public class GCMIntentService extends GCMBaseIntentService {
 	}
 
 	@Override
-	protected void onRegistered(Context arg0, String arg1) {
-		// TODO Auto-generated method stub
-		Log.w("RegID", arg1+"   ");
+	protected void onRegistered(Context context, String regId) {
 		//TODO: send the regID to the server
+		LoginActivity.sendToServer(regId);
 		
 	}
 
 	@Override
 	protected void onUnregistered(Context arg0, String arg1) {
 		// TODO Auto-generated method stub
-		Log.w("RegID", arg1+"   ");
+		Log.w("RegID Unregister", arg1+"   ");
 		
 	}
 
