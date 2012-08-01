@@ -21,6 +21,7 @@ public abstract class QuestionView {
 	
 	//HTML elements used to send result.
 	protected String qText;
+	protected String imageURL;
 	protected int question_id;
 	protected int active_question_id;
 	protected int course_id;

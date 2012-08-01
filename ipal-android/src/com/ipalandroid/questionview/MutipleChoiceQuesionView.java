@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -16,7 +18,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.ipalandroid.ImageDownloader;
 import com.ipalandroid.R;
+import com.ipalandroid.TouchImageView;
 
 public class MutipleChoiceQuesionView extends QuestionView {
 
@@ -57,6 +61,8 @@ public class MutipleChoiceQuesionView extends QuestionView {
 			
 		}
 		qText = this.questionPage.select("legend").text();
+		imageURL = questionPage.select("img").attr("src");
+		Log.w("IMAGE URL", imageURL+ "   a a a");
 	}
 
 	@Override
@@ -76,6 +82,13 @@ public class MutipleChoiceQuesionView extends QuestionView {
 		//LinearLayout layout = (LinearLayout) view.findViewById(R.id.layout);
 		TextView qTextView = (TextView) layout.findViewById(R.id.questionText);
 		qTextView.setText(qText);
+		
+		//Download and display the image
+		ImageDownloader downloader = new ImageDownloader(c);
+		Bitmap img = downloader.getImage(imageURL);
+		TouchImageView tiv = new TouchImageView(c);
+		tiv.setImageBitmap(img);
+		layout.addView(tiv);
 		RadioGroup g = (RadioGroup) layout.findViewById(R.id.answerChoice);
 		for (Choice ch: choices) {
 			RadioButton b = new RadioButton(c);

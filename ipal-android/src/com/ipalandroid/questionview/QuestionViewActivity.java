@@ -31,15 +31,20 @@ public class QuestionViewActivity extends Activity {
 	private String CONNECTION_ERROR_MESSAGE;
 	private String IPAL_INFO_INVALID;
 	private String CONNECTING_IPAL_MESSAGE;
-	private String REFRESHING_IPAL_MESSAGE;
+	private static String REFRESHING_IPAL_MESSAGE;
 	
 	//The QuestionFactory instance that is specific to this activity
-	private QuestionFactory questionFactory; 
+	private static QuestionFactory questionFactory; 
 
 	//UI elements
 	Button submitButton;
 	ScrollView questionScrollView;
-
+	
+	/*private static void refresh() {
+		QuestionViewCreator refresher = new QuestionViewCreator(REFRESHING_IPAL_MESSAGE);
+		refresher.execute(questionFactory);
+	}*/
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -227,4 +232,5 @@ public class QuestionViewActivity extends Activity {
 			});
 		}
 	}
+	
 }

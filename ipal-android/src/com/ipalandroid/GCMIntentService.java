@@ -22,7 +22,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 	protected void onError(Context arg0, String arg1) {
 		// TODO Auto-generated method stub
 		
-		
 	}
 
 	@Override
