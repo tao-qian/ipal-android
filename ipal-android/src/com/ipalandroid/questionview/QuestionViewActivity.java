@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -26,11 +27,16 @@ import android.widget.Toast;
  */
 public class QuestionViewActivity extends Activity {
 
+	//Strings used in UI
 	private String CONNECTION_ERROR_MESSAGE;
 	private String IPAL_INFO_INVALID;
 	private String CONNECTING_IPAL_MESSAGE;
 	private String REFRESHING_IPAL_MESSAGE;
+	
+	//The QuestionFactory instance that is specific to this activity
+	private QuestionFactory questionFactory; 
 
+	//UI elements
 	Button submitButton;
 	ScrollView questionScrollView;
 
@@ -49,10 +55,10 @@ public class QuestionViewActivity extends Activity {
 		String username = getIntent().getStringExtra(
 				LoginActivity.USERNAME_EXTRA);
 		String url = getIntent().getStringExtra(LoginActivity.URL_EXTRA);
-		
-		final QuestionFactory questionFactory = new QuestionFactory(url,
+		//Initialize the QuestionFactory
+		questionFactory = new QuestionFactory(url,
 				username, passcode);
-		final QuestionViewCreator creator = new QuestionViewCreator(
+		QuestionViewCreator creator = new QuestionViewCreator(
 				CONNECTING_IPAL_MESSAGE);
 		creator.execute(questionFactory);
 
@@ -71,6 +77,35 @@ public class QuestionViewActivity extends Activity {
 				});
 	}
 
+	@Override
+	protected void onNewIntent(Intent intent) {
+		// TODO Auto-generated method stub
+		super.onNewIntent(intent);
+		//Refresh the question when a new intent is received.
+		//Here we do not recreate the questionFactory instance,
+		//because refreshing is supposed to use the original data.
+		//If we need to customize the refreshing,
+		//put the parameters in the intent sent to this activity
+		//and get those parameters here.
+		QuestionViewCreator refresher = new QuestionViewCreator(REFRESHING_IPAL_MESSAGE);
+		refresher.execute(questionFactory);
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		//Unregister GCM here
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		//Register GCM here
+	}
+
+	
 	/**
 	 * This method gets the string resources used in this activity.
 	 */
@@ -80,7 +115,17 @@ public class QuestionViewActivity extends Activity {
 		CONNECTING_IPAL_MESSAGE = getString(R.string.connecting_ipal_message);
 		REFRESHING_IPAL_MESSAGE = getString(R.string.refreshing_ipal_message);
 	}
-
+	
+	/**
+	 * This method initializes all UI elements.
+	 */
+	private void initializeUIElements() {
+		submitButton = (Button) findViewById(R.id.submitButton);
+		questionScrollView = (ScrollView) findViewById(R.id.questionViewScrollView);
+	}
+	
+	
+	
 	/**
 	 * AsyncTask class used for generating QuestionView Instance. It displays a
 	 * progress dialog while checking at the background. If the loading was
@@ -116,6 +161,7 @@ public class QuestionViewActivity extends Activity {
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
 			super.onPreExecute();
+			//Create a progress dialog, used when loading the question
 			progressDialog = new ProgressDialog(QuestionViewActivity.this);
 			progressDialog.setMessage(dialogMessage);
 			progressDialog.setOnCancelListener(new OnCancelListener() {
@@ -141,6 +187,8 @@ public class QuestionViewActivity extends Activity {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			progressDialog.dismiss();
+			//If error occurs while getting the question from the server,
+			//display the error message and terminates the activity.
 			if (result == ConnectionResult.CONNECTION_ERROR) {
 				Toast.makeText(QuestionViewActivity.this,
 						CONNECTION_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
@@ -158,9 +206,10 @@ public class QuestionViewActivity extends Activity {
 			LayoutParams questionParams = new LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 			initializeUIElements();
+			// Remove previous question view if there is one.
 			if (questionScrollView.getChildCount() > 0)
-				questionScrollView.removeAllViews();// Remove previous question
-													// view if there is one.
+				questionScrollView.removeAllViews();
+			//Add the new view
 			questionScrollView.addView(
 					questionView.getQuestionView(QuestionViewActivity.this),
 					questionParams);
@@ -177,13 +226,5 @@ public class QuestionViewActivity extends Activity {
 				}
 			});
 		}
-	}
-
-	/**
-	 * This method initializes all UI elements.
-	 */
-	private void initializeUIElements() {
-		submitButton = (Button) findViewById(R.id.submitButton);
-		questionScrollView = (ScrollView) findViewById(R.id.questionViewScrollView);
 	}
 }

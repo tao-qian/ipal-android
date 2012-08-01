@@ -36,14 +36,15 @@ import android.widget.Toast;
  */
 public class LoginActivity extends Activity {
 
+	//String constant used to replace the real password in the UI.
 	private static final String VALID_PASSWORD = "password";
 	//Keys used to identify extra data passed with intent.
 	public static final String PASSCODE_EXTRA = "passcode_extra";
 	public static final String URL_EXTRA = "url_extral";
 	public static final String USERNAME_EXTRA = "username_extra";
-	
+	//Preference used to store user data.
 	private SharedPreferences prefs;
-
+	//UI elements
 	private TextView loginInfoTextView;
 	private EditText userNameEditText;
 	private EditText urlEditText;
@@ -52,14 +53,14 @@ public class LoginActivity extends Activity {
 	private CheckBox saveInfoCheckBox;
 	private Button confirmButton;
 	private Button applyButton;
-	
+	//User input. 
 	private static String url;
 	private static String username;
 	private String password;
 	private Boolean isValid;
 	private UserValidater userValidater;
 	private static int currentPasscode; 
-	
+	//String used in UI
 	private String LOGIN_INFO_VALID;
 	private String LOGIN_INFO_INVALID;
 	private String APPLY_BUTTON_APPLY;
@@ -117,6 +118,7 @@ public class LoginActivity extends Activity {
 				username = userNameEditText.getText().toString();
 				password = passwordEditText.getText().toString();
 				url = urlEditText.getText().toString();
+				//Check whether the user data is valid in a separate thread.
 				UserChecker userChecker = new UserChecker();
 				userChecker.execute(username,password,url);
 			}

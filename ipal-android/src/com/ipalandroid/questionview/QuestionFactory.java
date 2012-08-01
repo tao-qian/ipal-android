@@ -9,6 +9,10 @@ import com.ipalandroid.Utilities.ConnectionResult;
 
 /**
  * This class is responsible for creating different question views.
+ * Here we do not return the question view instance directly, instead,
+ * we save the question view first and return it when requested.
+ * This is because saving the question view itself might fail and the
+ * user needs to know whether it is successful.
  * 
  * @author Tao Qian, DePauw Open Source Development Team
  */
@@ -23,6 +27,10 @@ public class QuestionFactory {
 		public final static String PASSCODE = "p";
 	}
 
+	/**
+	 * This interface stores the constants used to identify which type of question
+	 * we are working with. Must be the same as the identifiers returned by the server.
+	 */
 	public interface QuestionType {
 		public final static String TRUE_FALSE_QUESTION = "truefalse";
 		public final static String MULTIPLE_CHOICE_QUESTION = "multichoice";
@@ -32,11 +40,11 @@ public class QuestionFactory {
 		public final static String ERROR_NO_CURRENT_QUESTION = "nocurrentquestion";
 	}
 	
-	private Document questionPage;
-	private String url;
+	private Document questionPage;//HTML of the question
+	private String url;//URL of the question page
 	private String username;
 	private int passcode;
-	private QuestionView questionView;
+	private QuestionView questionView;//The product to be returned.
 	
 	
 	
@@ -72,6 +80,7 @@ public class QuestionFactory {
 		}
 		
 		String type = questionPage.select("p[id=questiontype]").text();
+		//Not using a switch statement here because the identifiers are not integers.
 		if(type.equals(QuestionType.ESSAY_QUESTION))
 		{
 			questionView = new EssayQuestionView(questionPage, url, username, passcode);

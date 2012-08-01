@@ -3,7 +3,6 @@ package com.ipalandroid;
 import org.jsoup.Jsoup;
 
 import com.google.android.gcm.GCMRegistrar;
-import com.ipalandroid.login.LoginActivity;
 
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -13,10 +13,13 @@ import org.jsoup.nodes.Document;
  */
 public abstract class QuestionView {
 
-	protected Document questionPage;
-	protected String url;
+	protected Document questionPage;//The HTML of the question
+	protected String url;//URL of the HTML
+	//User credentials used to send result and get question
 	protected String username;
 	protected int passcode;
+	
+	//HTML elements used to send result.
 	protected String qText;
 	protected int question_id;
 	protected int active_question_id;
