@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.google.android.gcm.GCMBaseIntentService;
 import com.ipalandroid.Utilities.SharedPreferenceKeys;
 import com.ipalandroid.login.LoginActivity;
+import com.ipalandroid.questionview.QuestionViewActivity;
 
 public class GCMIntentService extends GCMBaseIntentService {
 	
@@ -27,7 +28,10 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onMessage(Context arg0, Intent arg1) {
 		// TODO Auto-generated method stub
-		
+		//Send an intent to QuestionView activity.
+		//So that it will refresh
+		Intent refreshIntent = new Intent(arg0,QuestionViewActivity.class);
+		startActivity(refreshIntent);
 	}
 
 	@Override
