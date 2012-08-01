@@ -929,7 +929,7 @@ function ipal_send_message_to_device() {
 	global $course;
 
 	// Replace with real BROWSER API key from Google APIs
-	$apiKey = "AIzaSyBqWzyeGLGkclAUua6RkbD41M1DCJwCGlo";
+	$apiKey = "AIzaSyBXg0ASZyFf5HrnQbGqyxu3I0fENLF9tGE";
 
 	// Replace with real client registration IDs
 	//$registrationIDs = array( "APA91bEjokTRyBRt9GUzihAVhiHVsgxtEFunJi8J_A8zbeLC4Sr5lgLYWnIIa-RyrIN6GvlGPrbpRVjz4_tJc0v5o2QTSk8BljCl5o05euqbc2bQd57CRliaJMxwpHMqJDPvHomUGYRO");
@@ -937,8 +937,14 @@ function ipal_send_message_to_device() {
 	//Get users in the course, and then find the regIDs in the ipal_mobile table
 	$context = get_context_instance(CONTEXT_COURSE, $course->id);
 	$students = get_role_users(5, $context);
-	$registrationIDs = $DB->get_record('ipal_mobile', array('user_id'=>$students->id));
-
+	$regIds = array();
+	foreach ($students as $s) {
+		//echo "ipal id:". $ipal->id;
+		//echo "student id:" . $s->id;
+		$r = $DB->get_record('ipal_mobile', array('user_id'=>$s->id));
+		echo "regid" . $r->reg_id;
+		array_push($regIds, $r->reg_id);
+	}
 	// Message to be sent
 	$message = "x";
 
@@ -946,7 +952,7 @@ function ipal_send_message_to_device() {
 	$url = 'https://android.googleapis.com/gcm/send';
 
 	$fields = array(
-			'registration_ids'  => $registrationIDs,
+			'registration_ids'  => $regIds,
 			'data'              => array( "message" => $message ),
 	);
 
@@ -972,7 +978,7 @@ function ipal_send_message_to_device() {
 	// Close connection
 	curl_close($ch);
 
-	//echo "This is the result:" . $result;
+	echo "This is the result:" . $result;
 }
 
 /**

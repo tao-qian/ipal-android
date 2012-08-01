@@ -26,12 +26,14 @@ public class GCMIntentService extends GCMBaseIntentService {
 	}
 
 	@Override
-	protected void onMessage(Context arg0, Intent arg1) {
+	protected void onMessage(Context c, Intent arg1) {
 		// TODO Auto-generated method stub
 		//Send an intent to QuestionView activity.
 		//So that it will refresh
-		Intent refreshIntent = new Intent(arg0,QuestionViewActivity.class);
-		startActivity(refreshIntent);
+		//TODO: need to check whether the users are logged in or not
+		//Intent refreshIntent = new Intent(c,QuestionViewActivity.class);
+		//c.startActivity(refreshIntent);
+		// This is a bug since we can't call startActivity from outside an activity context
 	}
 
 	@Override
