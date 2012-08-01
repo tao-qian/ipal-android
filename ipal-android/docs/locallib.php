@@ -218,7 +218,7 @@ function ipal_get_questions(){
 /**
  * This function counts questions based on ipal id
  * TODO: Make this function check on a count by query of answer id
- * 
+ *
  * @param int $questionid
  * @return string
  */
@@ -240,7 +240,7 @@ function ipal_count_questions($questionid){
 
 /**
  * Create the form for the instructors (or anyone higher than a student) to view
- * 
+ *
  * @return string
  */
 function ipal_make_instructor_form(){
@@ -282,6 +282,7 @@ function ipal_send_question(){
 		$mybool=$DB->delete_records('ipal_active_questions', array('ipal_id'=>$ipal->id));
 	}
 	$lastinsertid = $DB->insert_record('ipal_active_questions', $record);
+	ipal_send_message_to_device();
 
 }
 
@@ -339,7 +340,7 @@ function ipal_java_questionUpdate() {
 
 /**
  * Make the button controls in the instructor interface
- * 
+ *
  * @return string
  */
 function instructor_buttons(){
@@ -358,7 +359,7 @@ function instructor_buttons(){
 
 /**
  * Toggle view
- * 
+ *
  * @param  string $newstate
  * @return string
  */
@@ -436,7 +437,7 @@ function ipal_display_instructor_interface($cmid){
 	}
 
 	ipal_java_graphupdate();
-
+	echo "<br>Mobile passcode: ". ipal_get_passcode();
 	echo "<table><tr><td>".instructor_buttons()."</td><td>".ipal_show_compadre($cmid)."</td><td>".ipal_toggle_view($newstate)."<td></tr></table>";
 	echo  ipal_make_instructor_form();
 	echo "<br><br>";
@@ -471,7 +472,7 @@ function ipal_display_instructor_interface($cmid){
 /**
  * Disable the question if the student has already answered it.
  * Which also, confirms the question is in the database for that user.
- * 
+ *
  * @param int $userid
  * @param int $questionid
  * @param int $quizid
@@ -529,7 +530,7 @@ function ipal_check_active_question(){
 /**
  * Find the currrent question id that is active for the ipal that
  * it was requiested from.
- * 
+ *
  * @return int $questionid if found the question, 0 if not
  */
 function ipal_show_current_question_id(){
@@ -548,7 +549,7 @@ function ipal_show_current_question_id(){
  * Modification by Junkin
  * A function to obtain the question type of a given question
  * redundant with function ipal_get_question_type in /mod/ipal/graphics.php
- * 
+ *
  * @param unknown_type $questionid
  * @return string
  */
@@ -583,12 +584,12 @@ function ipal_make_student_form(){
 		//		$disabled=ipal_check_if_answered($USER->id,$myFormArray[0]['id'],$ipal_quiz->quiz_id,$course->id,$ipal->id);
 		echo "<br><br><br><br>";
 		echo "<form class=\"ipalquestion\" action=\"?id=".$_GET['id']."\" method=\"post\">\n";
-		
+
 		//Display question text
 		echo "<fieldset>\n<legend>";
 		echo $myFormArray[0]['question'];
 		echo "</legend>\n";
-		
+
 		if(ipal_get_qtype($questionid) == 'essay'){ // Display text field if essay question
 			echo  "<INPUT TYPE=\"text\" NAME=\"a_text\" >\n<br>";
 			echo  "<INPUT TYPE=hidden NAME=\"answer_id\" value=\"-1\">";
@@ -636,8 +637,8 @@ return md5($result->id.$result->ipal);
 
 /**
  * @param unknown_type $c_num
- * @return string
- */
+* @return string
+*/
 function findInstructor($c_num){
 	global $DB;
 	global $CFG;
@@ -657,7 +658,7 @@ function findInstructor($c_num){
 
 /**
  * insert the student responses into the database
- * 
+ *
  * @param int $questionid
  * @param int $answerid
  * @param int $activequestionid
@@ -755,7 +756,7 @@ function ipal_print_anonymous_message() {
  * Return true there is any records (of answers) in every questions of the IPAL instance.
  * Return false otherwise.
  *
- * @param int $ipalid 
+ * @param int $ipalid
  * @return boolean
  */
 function ipal_check_answered($ipalid) {
@@ -780,7 +781,7 @@ function ipal_get_passcode() {
 
 /**
  * Display question in tempview.php, modified suitable for android apps.
- * 
+ *
  * @param id $userid
  * @param string $passcode
  * @param string $username
@@ -825,7 +826,7 @@ function ipal_tempview_display_question($userid, $passcode, $username) {
 		$myFormArray= ipal_get_questions_student($questionid);
 		//		$disabled=ipal_check_if_answered($USER->id,$myFormArray[0]['id'],$ipal_quiz->quiz_id,$course->id,$ipal->id);
 		echo "<br><br><br><br>";
-		//echo "<p id=\"questiontype\">".ipal_get_qtype($questionid)."<p>";
+		echo "<p id=\"questiontype\">".ipal_get_qtype($questionid)."<p>";
 		echo "<form class=\"ipalquestion\" action=\"?p=".$passcode."&user=".$username."\" method=\"post\">\n";
 
 		//Display question text
@@ -871,7 +872,7 @@ function ipal_tempview_display_question($userid, $passcode, $username) {
 
 /**
  * These function save response to database from the tempview
- * 
+ *
  * @param int $questionid
  * @param int $answerid
  * @param int $activequestionid
@@ -920,6 +921,84 @@ function ipal_tempview_save_response($questionid, $answerid, $activequestionid,$
 		$mybool=$DB->delete_records('ipal_answered', array('user_id'=>$userid, 'question_id'=>$questionid, 'ipal_id'=>$ipal->id ));
 	}
 	$lastinsertid = $DB->insert_record('ipal_answered', $record);
+}
 
+function ipal_send_message_to_device() {
+	global $ipal;
+	global $DB;
+	global $course;
+
+	// Replace with real BROWSER API key from Google APIs
+	$apiKey = "AIzaSyBqWzyeGLGkclAUua6RkbD41M1DCJwCGlo";
+
+	// Replace with real client registration IDs
+	//$registrationIDs = array( "APA91bEjokTRyBRt9GUzihAVhiHVsgxtEFunJi8J_A8zbeLC4Sr5lgLYWnIIa-RyrIN6GvlGPrbpRVjz4_tJc0v5o2QTSk8BljCl5o05euqbc2bQd57CRliaJMxwpHMqJDPvHomUGYRO");
+
+	//Get users in the course, and then find the regIDs in the ipal_mobile table
+	$context = get_context_instance(CONTEXT_COURSE, $course->id);
+	$students = get_role_users(5, $context);
+	$registrationIDs = $DB->get_record('ipal_mobile', array('user_id'=>$students->id));
+
+	// Message to be sent
+	$message = "x";
+
+	// Set POST variables
+	$url = 'https://android.googleapis.com/gcm/send';
+
+	$fields = array(
+			'registration_ids'  => $registrationIDs,
+			'data'              => array( "message" => $message ),
+	);
+
+	$headers = array(
+			'Authorization: key=' . $apiKey,
+			'Content-Type: application/json'
+	);
+
+	// Open connection
+	$ch = curl_init();
+
+	// Set the url, number of POST vars, POST data
+	curl_setopt( $ch, CURLOPT_URL, $url);
+	curl_setopt( $ch, CURLOPT_POST, true );
+	curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers);
+	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+	curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false);
+	curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode( $fields ) );
+
+	// Execute post
+	$result = curl_exec($ch);
+
+	// Close connection
+	curl_close($ch);
+
+	//echo "This is the result:" . $result;
+}
+
+/**
+ * Add or Update (if existed) the regID that is associated with a userid
+ *
+ * @param string $regid
+ * @param int $userid
+ */
+function add_regid($regid, $username) {
+	global $DB;
+	if ($user = $DB->get_record('user', array('username' => $username))) {
+		if ($record = $DB->get_record('ipal_mobile', array('user_id'=>$user->id))) {
+			$record->reg_id = $regid;
+			$record->time_created = time();
+			$DB->update_record('ipal_mobile', $record);
+			return true;
+		}
+		else {
+			$recordnew = new stdClass();
+			$recordnew->id = '';
+			$recordnew->user_id = $user->id;
+			$recordnew->reg_id = $regid;
+			$recordnew->time_created = time();
+			$DB->insert_record('ipal_mobile', $recordnew);
+			return true;
+		}
+	}
 }
 ?>

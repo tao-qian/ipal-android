@@ -9,8 +9,10 @@ require_once('./locallib.php');
 //$i  = optional_param('i', 0, PARAM_INT);  // ipal instance ID - it should be named as the first character of the module
 $username = optional_param('user','',PARAM_ALPHANUMEXT);
 $passcode = optional_param('p', 0, PARAM_INT);
+$regid = optional_param('r', '', PARAM_ALPHANUMEXT);
 $qtypemessage='';
-$set = true;
+$set_ipal = true;
+$set_user = true;
 
 $i_time_create = fmod($passcode, 100);
 $i = floor($passcode/100);
@@ -18,6 +20,7 @@ $i = floor($passcode/100);
 //Testing statement here
 // echo "time create: ". $i_time_create. "<br>";
 // echo "\nipal id: " .$i. "\n<br>";
+
 if ($i) {
 	try {
 		$ipal  = $DB->get_record('ipal', array('id' => $i), '*', MUST_EXIST);
@@ -27,21 +30,21 @@ if ($i) {
 	catch(dml_exception $e) {
 		//error('You must specify valid passcode and username to access the ipal instance');
 		$qtypemessage='invalidpasscode';
-		$set = false;
+		$set_ipal = false;
 	}
 	if (fmod($ipal->timecreated, 100) != $i_time_create) {
 		//error('You must specify valid passcode to access the ipal instance');
 		$qtypemessage='invalidpasscode';
-		$set = false;
+		$set_ipal = false;
 	}
 }
 else {
 	//error('You must specify valid passcode to access the ipal instance');
 	$qtypemessage='invalidpasscode';
-	$set = false;
+	$set_ipal = false;
 }
 
-if ($set) {
+if ($set_ipal) {
 	$context = get_context_instance(CONTEXT_COURSE, $course->id);
 	$students = get_role_users(5, $context);
 
@@ -57,17 +60,22 @@ if ($set) {
 	if ($found_user != 1) {
 		//error('You must specify valid passcode and username to access the ipal instance');
 		$qtypemessage = 'invalidusername';
-		$set = false;
+		$set_user = false;
 	}
 }
+
 echo "<html>\n<head>\n<title>IPAL: ". $ipal->name."</title>\n</head>\n";
 echo "<body>\n";
 //ipal_print_anonymous_message();
 //ipal_display_student_interface();
-if (!$set) {
+if (!$set_ipal && !$set_user) {
 	echo "<p id=\"questiontype\">".$qtypemessage."<p>";
 }
 else {
+	//if providing a right username, right passcode, add the registration ID to the ipal_mobile table
+	if ($regid) {
+		add_regid($regid, $username);
+	}
 	ipal_tempview_display_question($userid, $passcode, $username);
 }
 echo "</body>\n</html>";
