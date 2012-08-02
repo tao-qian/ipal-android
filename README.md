@@ -1,4 +1,5 @@
 ipal-android
 ============
 
-IPAL Moodle App For Android 
+IPAL Moodle App For Android
+Blah Blah
