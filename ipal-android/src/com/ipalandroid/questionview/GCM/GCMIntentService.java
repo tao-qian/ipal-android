@@ -1,13 +1,11 @@
-package com.ipalandroid;
+package com.ipalandroid.questionview.GCM;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gcm.GCMBaseIntentService;
-import com.ipalandroid.Utilities.SharedPreferenceKeys;
+import com.ipalandroid.common.Utilities;
 import com.ipalandroid.login.LoginActivity;
 import com.ipalandroid.questionview.QuestionViewActivity;
 
@@ -29,10 +27,10 @@ public class GCMIntentService extends GCMBaseIntentService {
 		// TODO Auto-generated method stub
 		//Send an intent to QuestionView activity.
 		//So that it will refresh
-		//TODO: need to check whether the users are logged in or not
-		//Intent refreshIntent = new Intent(c,QuestionViewActivity.class);
-		//c.startActivity(refreshIntent);
-		// This is a bug since we can't call startActivity from outside an activity context
+		Intent refreshIntent = new Intent(c,QuestionViewActivity.class);
+		//This flag is required when starting activity outside an activity.
+		refreshIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		c.startActivity(refreshIntent);
 	}
 
 	@Override

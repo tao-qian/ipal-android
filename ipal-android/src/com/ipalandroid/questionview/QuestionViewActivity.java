@@ -1,8 +1,8 @@
 package com.ipalandroid.questionview;
 
 import com.ipalandroid.R;
-import com.ipalandroid.Utilities;
-import com.ipalandroid.Utilities.ConnectionResult;
+import com.ipalandroid.common.Utilities;
+import com.ipalandroid.common.Utilities.ConnectionResult;
 import com.ipalandroid.login.LoginActivity;
 
 import android.app.Activity;
@@ -31,19 +31,22 @@ public class QuestionViewActivity extends Activity {
 	private String CONNECTION_ERROR_MESSAGE;
 	private String IPAL_INFO_INVALID;
 	private String CONNECTING_IPAL_MESSAGE;
-	private static String REFRESHING_IPAL_MESSAGE;
+	private String REFRESHING_IPAL_MESSAGE;
 	
 	//The QuestionFactory instance that is specific to this activity
-	private static QuestionFactory questionFactory; 
+	private QuestionFactory questionFactory; 
 
 	//UI elements
 	Button submitButton;
 	ScrollView questionScrollView;
 	
-	/*private static void refresh() {
+	/**
+	 * Refresh the question
+	 */
+	private void refresh() {
 		QuestionViewCreator refresher = new QuestionViewCreator(REFRESHING_IPAL_MESSAGE);
 		refresher.execute(questionFactory);
-	}*/
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +79,7 @@ public class QuestionViewActivity extends Activity {
 				.setOnClickListener(new OnClickListener() {
 
 					public void onClick(View v) {
-						QuestionViewCreator refresher = new QuestionViewCreator(REFRESHING_IPAL_MESSAGE);
-						refresher.execute(questionFactory);
+						refresh();
 					}
 				});
 	}
@@ -92,8 +94,7 @@ public class QuestionViewActivity extends Activity {
 		//If we need to customize the refreshing,
 		//put the parameters in the intent sent to this activity
 		//and get those parameters here.
-		QuestionViewCreator refresher = new QuestionViewCreator(REFRESHING_IPAL_MESSAGE);
-		refresher.execute(questionFactory);
+		refresh();
 	}
 
 	@Override

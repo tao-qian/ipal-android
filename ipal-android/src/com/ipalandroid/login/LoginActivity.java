@@ -4,12 +4,12 @@ import java.io.IOException;
 
 import org.jsoup.Jsoup;
 
-import com.google.android.gcm.GCMRegistrar;
 import com.ipalandroid.R;
-import com.ipalandroid.Utilities;
-import com.ipalandroid.Utilities.ConnectionResult;
-import com.ipalandroid.Utilities.SharedPreferenceKeys;
+import com.ipalandroid.common.Utilities;
+import com.ipalandroid.common.Utilities.ConnectionResult;
+import com.ipalandroid.common.Utilities.SharedPreferenceKeys;
 import com.ipalandroid.questionview.QuestionViewActivity;
+import com.ipalandroid.questionview.GCM.GCMRegistrationManager;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -19,7 +19,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -142,7 +141,7 @@ public class LoginActivity extends Activity {
 				}
 				
 				//Register when the user have a valid passcode and username
-				Utilities.registerGCM(v.getContext());
+				GCMRegistrationManager.registerGCM(v.getContext());
 				
 				Intent intent = new Intent(LoginActivity.this,
 						QuestionViewActivity.class);

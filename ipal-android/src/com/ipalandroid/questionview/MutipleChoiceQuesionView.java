@@ -18,9 +18,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.ipalandroid.ImageDownloader;
 import com.ipalandroid.R;
-import com.ipalandroid.TouchImageView;
+import com.ipalandroid.common.ImageDownloader;
+import com.ipalandroid.common.TouchImageView;
 
 public class MutipleChoiceQuesionView extends QuestionView {
 

@@ -5,7 +5,8 @@ import java.io.IOException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import com.ipalandroid.Utilities.ConnectionResult;
+import com.ipalandroid.common.Utilities.ConnectionResult;
+
 
 /**
  * This class is responsible for creating different question views.

@@ -50,7 +50,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".GCMIntentService" />
+        <service android:name=".questionview.GCM.GCMIntentService" />
     </application>
 
 </manifest>

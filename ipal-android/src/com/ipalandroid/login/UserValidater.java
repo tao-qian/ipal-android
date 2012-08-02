@@ -6,10 +6,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import com.ipalandroid.common.Utilities;
+import com.ipalandroid.common.Utilities.ConnectionResult;
+
 import android.webkit.URLUtil;
 
-import com.ipalandroid.Utilities;
-import com.ipalandroid.Utilities.ConnectionResult;
 
 /**
  * This class contains all the methods used to validate user info.

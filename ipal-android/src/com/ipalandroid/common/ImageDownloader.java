@@ -1,4 +1,4 @@
-package com.ipalandroid;
+package com.ipalandroid.common;
 
 import java.io.File;
 import java.io.FileInputStream;
