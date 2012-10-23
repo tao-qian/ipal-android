@@ -26,7 +26,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+//Comment for commit.
 /**
  * This activity is responsible for displaying an account setting form and
  * reading user input.
