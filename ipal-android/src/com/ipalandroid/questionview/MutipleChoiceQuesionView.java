@@ -114,7 +114,7 @@ public class MutipleChoiceQuesionView extends QuestionView {
 	@Override
 	public Boolean validateInput() {
 		return true;
-	}
+	} 
 
 	@Override
 	public Boolean sendResult() {

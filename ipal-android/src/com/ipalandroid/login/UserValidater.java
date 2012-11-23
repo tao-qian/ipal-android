@@ -9,6 +9,7 @@ import org.jsoup.nodes.Element;
 import com.ipalandroid.common.Utilities;
 import com.ipalandroid.common.Utilities.ConnectionResult;
 
+import android.util.Log;
 import android.webkit.URLUtil;
 
 
@@ -115,9 +116,14 @@ public class UserValidater {
 	private int connectToMoodle(String loginURL) {
 		try {
 			loginURL = loginURL + UserValidationContract.LOGIN_PAGE_END_URL;
-			Document loginPage = Jsoup.connect(loginURL).get();
+			Document loginPage = Jsoup.connect(loginURL).followRedirects(true).get();
 			Element loginForm = loginPage
 					.getElementById(UserValidationContract.LOGIN_FORM_ID);
+			
+			//Temporary fix for crashing with invalid URL
+			if(loginForm == null)
+				throw new NullPointerException();
+			
 			String loginFormURL = loginForm
 					.attr(UserValidationContract.ACTION_ATTR);
 			Document loggedInPage = Jsoup.connect(loginFormURL)
@@ -155,6 +161,10 @@ public class UserValidater {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return ConnectionResult.CONNECTION_ERROR;
+		}
+		catch(NullPointerException e)
+		{
 			return ConnectionResult.CONNECTION_ERROR;
 		}
 		return ConnectionResult.RESULT_FOUND;
