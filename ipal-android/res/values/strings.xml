@@ -23,5 +23,8 @@
     <string name="ipal_info_invalid_message">Invalid passcode or username</string>
     <string name="connecting_ipal_message">Connecting to the server...</string>
     <string name="refreshing_ipal_message">Retrieveing new questions from the server...</string>
+    <string name="submitting_ipal_message">Submitting</string>
+    <string name="failed_submission_message">Submission failed. Incorrect answer type.</string>
+    <string name="submission_message">Answer submitted successfully.</string>
 
 </resources>

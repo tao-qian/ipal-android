@@ -3,6 +3,7 @@ package com.ipalandroid.questionview;
 import com.ipalandroid.R;
 import com.ipalandroid.common.Utilities;
 import com.ipalandroid.common.Utilities.ConnectionResult;
+import com.ipalandroid.common.Utilities.SubmissionResult;
 import com.ipalandroid.login.LoginActivity;
 
 import android.app.Activity;
@@ -17,6 +18,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -32,6 +34,11 @@ public class QuestionViewActivity extends Activity {
 	private String IPAL_INFO_INVALID;
 	private String CONNECTING_IPAL_MESSAGE;
 	private String REFRESHING_IPAL_MESSAGE;
+	private String SUBMITTING_IPAL_MESSAGE;
+	private String SUBMISSION_MESSAGE;
+	private String FAILED_SUBMISSION_MESSAGE;
+	private int ANSWER_SUBMITTED;
+	private int ANSWER_NOT_SUBMITTED;
 	
 	//The QuestionFactory instance that is specific to this activity
 	private QuestionFactory questionFactory; 
@@ -39,6 +46,7 @@ public class QuestionViewActivity extends Activity {
 	//UI elements
 	Button submitButton;
 	ScrollView questionScrollView;
+	TextView answerStatus;
 	
 	/**
 	 * Refresh the question
@@ -53,6 +61,7 @@ public class QuestionViewActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		getStringResources();
+		getIntResources();
 		setContentView(R.layout.question_view);
 		Utilities.setHeaderContent(findViewById(R.id.header),
 				getString(R.string.question_view_header_text));
@@ -75,13 +84,16 @@ public class QuestionViewActivity extends Activity {
 		 * We will change the implementation here to auto-refreshing or
 		 * server-notified.
 		 */
+		answerStatus = (TextView) findViewById(R.id.answerSubmitted);
 		((Button) findViewById(R.id.refreshButton))
 				.setOnClickListener(new OnClickListener() {
 
 					public void onClick(View v) {
 						refresh();
+						answerStatus.setText("");
 					}
 				});
+		
 	}
 
 	@Override
@@ -120,6 +132,14 @@ public class QuestionViewActivity extends Activity {
 		IPAL_INFO_INVALID = getString(R.string.ipal_info_invalid_message);
 		CONNECTING_IPAL_MESSAGE = getString(R.string.connecting_ipal_message);
 		REFRESHING_IPAL_MESSAGE = getString(R.string.refreshing_ipal_message);
+		SUBMITTING_IPAL_MESSAGE = getString(R.string.submitting_ipal_message);
+		SUBMISSION_MESSAGE = getString(R.string.submission_message);
+		FAILED_SUBMISSION_MESSAGE = getString(R.string.failed_submission_message);
+	}
+	
+	private void getIntResources(){
+		ANSWER_SUBMITTED = SubmissionResult.ANSWER_SUBMITTED;
+		ANSWER_NOT_SUBMITTED = SubmissionResult.ANSWER_NOT_SUBMITTED;
 	}
 	
 	/**
@@ -129,6 +149,64 @@ public class QuestionViewActivity extends Activity {
 		submitButton = (Button) findViewById(R.id.submitButton);
 		questionScrollView = (ScrollView) findViewById(R.id.questionViewScrollView);
 	}
+	
+	
+	private class QuestionViewSubmission extends
+			AsyncTask<QuestionFactory, Void, Integer>{
+		ProgressDialog progressDialog;
+		String dialogMessage;
+		QuestionView questionView;
+		
+		
+		public QuestionViewSubmission(QuestionView questionView, String dialogMessage){
+			this.dialogMessage = dialogMessage;
+			this.questionView = questionView;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			progressDialog = new ProgressDialog(QuestionViewActivity.this);
+			progressDialog.setMessage(dialogMessage);
+			progressDialog.setOnCancelListener(new OnCancelListener() {
+
+				public void onCancel(DialogInterface dialog) {
+					// TODO Auto-generated method stub
+					cancel(true);
+					finish();
+				}
+			});
+			progressDialog.show();
+			
+		}
+		
+		protected Integer doInBackground(QuestionFactory... qFactory) {
+			if(questionView.sendResult())
+				return ANSWER_SUBMITTED;
+			return ANSWER_NOT_SUBMITTED;
+			
+		}
+		
+		protected void onPostExecute(Integer result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			progressDialog.dismiss();
+			if(result == ANSWER_SUBMITTED)
+			{
+				Toast.makeText(QuestionViewActivity.this,
+						SUBMISSION_MESSAGE, Toast.LENGTH_SHORT).show();
+			}
+			else
+			{
+				Toast.makeText(QuestionViewActivity.this,
+						FAILED_SUBMISSION_MESSAGE, Toast.LENGTH_SHORT).show();
+			}
+		}
+		
+		
+		
+	}
+	
 	
 	
 	
@@ -228,7 +306,11 @@ public class QuestionViewActivity extends Activity {
 								Toast.LENGTH_SHORT).show();
 						return;
 					}
-					questionView.sendResult();
+					
+					QuestionViewSubmission submit = new QuestionViewSubmission(questionView, SUBMITTING_IPAL_MESSAGE);
+					submit.execute();
+					//if (questionView.sendResult()) 
+						//answerStatus.setText("Answer Submitted");
 				}
 			});
 		}

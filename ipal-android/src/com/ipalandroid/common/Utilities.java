@@ -42,9 +42,16 @@ public class Utilities {
 	 * This interface stores the identification code returned by a connection.
 	 */
 	public interface ConnectionResult {
+		public final static int INVALID_URL = -2; //Added by Kevin
 		public final static int CONNECTION_ERROR = -1;
 		public final static int RESULT_NOT_FOUND = 0;
 		public final static int RESULT_FOUND = 1;
+	}
+	
+	public interface SubmissionResult{
+		public final static int ANSWER_SUBMITTED = 1;
+		public final static int ANSWER_NOT_SUBMITTED = 0;
+		
 	}
 	
 
