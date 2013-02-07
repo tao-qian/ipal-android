@@ -26,6 +26,7 @@ import android.widget.Toast;
  * send the result to the server.
  * 
  * @author Tao Qian, DePauw Open Source Development Team
+ * @author Kevin Courtade, DePauw Open Source Development Team
  */
 public class QuestionViewActivity extends Activity {
 
@@ -37,6 +38,7 @@ public class QuestionViewActivity extends Activity {
 	private String SUBMITTING_IPAL_MESSAGE;
 	private String SUBMISSION_MESSAGE;
 	private String FAILED_SUBMISSION_MESSAGE;
+	//Integers used in UI
 	private int ANSWER_SUBMITTED;
 	private int ANSWER_NOT_SUBMITTED;
 	
@@ -58,7 +60,6 @@ public class QuestionViewActivity extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		getStringResources();
 		getIntResources();
@@ -98,7 +99,6 @@ public class QuestionViewActivity extends Activity {
 
 	@Override
 	protected void onNewIntent(Intent intent) {
-		// TODO Auto-generated method stub
 		super.onNewIntent(intent);
 		//Refresh the question when a new intent is received.
 		//Here we do not recreate the questionFactory instance,
@@ -111,14 +111,12 @@ public class QuestionViewActivity extends Activity {
 
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
 		//Unregister GCM here
 	}
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		//Register GCM here
 	}
@@ -136,7 +134,9 @@ public class QuestionViewActivity extends Activity {
 		SUBMISSION_MESSAGE = getString(R.string.submission_message);
 		FAILED_SUBMISSION_MESSAGE = getString(R.string.failed_submission_message);
 	}
-	
+	/**
+	 * This method gets the Integer resources used in this activity.
+	 */
 	private void getIntResources(){
 		ANSWER_SUBMITTED = SubmissionResult.ANSWER_SUBMITTED;
 		ANSWER_NOT_SUBMITTED = SubmissionResult.ANSWER_NOT_SUBMITTED;
@@ -150,14 +150,23 @@ public class QuestionViewActivity extends Activity {
 		questionScrollView = (ScrollView) findViewById(R.id.questionViewScrollView);
 	}
 	
-	
+	/**
+	 * AsyncTask class used for submitting answers. Displays a
+	 * submitting text while checking to see if the answer was 
+	 * submitted successfully. If it fails, displays an error
+	 * message.
+	 */
 	private class QuestionViewSubmission extends
 			AsyncTask<QuestionFactory, Void, Integer>{
 		ProgressDialog progressDialog;
 		String dialogMessage;
 		QuestionView questionView;
 		
-		
+		/**
+		 * Constructor.
+		 * @param questionView
+		 * @param dialogMessage
+		 */
 		public QuestionViewSubmission(QuestionView questionView, String dialogMessage){
 			this.dialogMessage = dialogMessage;
 			this.questionView = questionView;
@@ -171,7 +180,6 @@ public class QuestionViewActivity extends Activity {
 			progressDialog.setOnCancelListener(new OnCancelListener() {
 
 				public void onCancel(DialogInterface dialog) {
-					// TODO Auto-generated method stub
 					cancel(true);
 					finish();
 				}
@@ -188,14 +196,15 @@ public class QuestionViewActivity extends Activity {
 		}
 		
 		protected void onPostExecute(Integer result) {
-			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			progressDialog.dismiss();
+			//If answer was submitted, display that it was successful.
 			if(result == ANSWER_SUBMITTED)
 			{
 				Toast.makeText(QuestionViewActivity.this,
 						SUBMISSION_MESSAGE, Toast.LENGTH_SHORT).show();
 			}
+			//If answer wasn't submitted, display that it failed.
 			else
 			{
 				Toast.makeText(QuestionViewActivity.this,
@@ -206,9 +215,7 @@ public class QuestionViewActivity extends Activity {
 		
 		
 	}
-	
-	
-	
+
 	
 	/**
 	 * AsyncTask class used for generating QuestionView Instance. It displays a
@@ -243,7 +250,6 @@ public class QuestionViewActivity extends Activity {
 
 		@Override
 		protected void onPreExecute() {
-			// TODO Auto-generated method stub
 			super.onPreExecute();
 			//Create a progress dialog, used when loading the question
 			progressDialog = new ProgressDialog(QuestionViewActivity.this);
@@ -251,7 +257,6 @@ public class QuestionViewActivity extends Activity {
 			progressDialog.setOnCancelListener(new OnCancelListener() {
 
 				public void onCancel(DialogInterface dialog) {
-					// TODO Auto-generated method stub
 					cancel(true);
 					finish();
 				}
@@ -261,14 +266,12 @@ public class QuestionViewActivity extends Activity {
 
 		@Override
 		protected Integer doInBackground(QuestionFactory... qFactory) {
-			// TODO Auto-generated method stub
 			questionFactory = qFactory[0];
 			return questionFactory.loadQuestionView();
 		}
 
 		@Override
 		protected void onPostExecute(Integer result) {
-			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			progressDialog.dismiss();
 			//If error occurs while getting the question from the server,
@@ -299,7 +302,6 @@ public class QuestionViewActivity extends Activity {
 					questionParams);
 			submitButton.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
 					if (!questionView.validateInput()) {
 						Toast.makeText(QuestionViewActivity.this,
 								getString(R.string.invalid_answer_message),

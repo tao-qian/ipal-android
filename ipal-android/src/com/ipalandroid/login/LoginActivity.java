@@ -21,9 +21,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 //Comment for commit.
@@ -64,11 +66,14 @@ public class LoginActivity extends Activity {
 	private String LOGIN_INFO_INVALID;
 	private String APPLY_BUTTON_APPLY;
 	private String APPLY_BUTTON_CHANGE;
+	private String INVALID_URL_MESSAGE;
 	private String INVALID_USER_MESSAGE;
 	private String INVALID_PASSCODE_FORMAT_MESSAGE;
 	private String CONNECTION_ERROR_MESSAGE;
 	private String CHECKING_USER_MESSAGE;
-
+	private RelativeLayout loginLayout;
+	private InputMethodManager inputManager;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -98,6 +103,21 @@ public class LoginActivity extends Activity {
 		}
 
 		reloadForm(isValid);
+		inputManager = (InputMethodManager) LoginActivity.this.
+				getSystemService(LoginActivity.this.INPUT_METHOD_SERVICE); 
+		loginLayout.setOnClickListener(new OnClickListener(){
+			
+			public void onClick(View v){
+				loginLayout.requestFocus();
+				//InputMethodManager inputManager = (InputMethodManager) LoginActivity.this.
+						//getSystemService(LoginActivity.this.INPUT_METHOD_SERVICE); 
+				inputManager.hideSoftInputFromWindow(
+				        LoginActivity.this.getCurrentFocus().getWindowToken(),
+				        InputMethodManager.HIDE_NOT_ALWAYS); 
+			}
+			
+		});
+		
 
 		applyButton.setOnClickListener(new OnClickListener() {
 
@@ -226,6 +246,7 @@ public class LoginActivity extends Activity {
 		confirmButton = (Button) findViewById(R.id.confirmButton);
 		applyButton = (Button) findViewById(R.id.applyAccountSettingsButton);
 		passcodeEditText = (EditText) findViewById(R.id.passcodeEditText);
+		loginLayout = (RelativeLayout) findViewById(R.id.loginLayout);
 	}
 
 	/**
@@ -236,6 +257,7 @@ public class LoginActivity extends Activity {
 		LOGIN_INFO_INVALID = getString(R.string.login_info_invalid_message);
 		APPLY_BUTTON_APPLY = getString(R.string.apply_button_apply_text);
 		APPLY_BUTTON_CHANGE = getString(R.string.apply_button_change_text);
+		INVALID_URL_MESSAGE = getString(R.string.invalid_url_message);
 		INVALID_USER_MESSAGE = getString(R.string.invalid_account_settings_message);
 		INVALID_PASSCODE_FORMAT_MESSAGE = getString(R.string.invalid_passcode_format_message);
 		CONNECTION_ERROR_MESSAGE = getString(R.string.connection_problem_message);
@@ -295,7 +317,9 @@ public class LoginActivity extends Activity {
 			else if( result == ConnectionResult.RESULT_NOT_FOUND)
 				Toast.makeText(LoginActivity.this, INVALID_USER_MESSAGE,
 						Toast.LENGTH_SHORT).show();
-			else 
+			else if(result == ConnectionResult.INVALID_URL)
+				Toast.makeText(LoginActivity.this, INVALID_URL_MESSAGE, Toast.LENGTH_SHORT).show();
+			else
 				Toast.makeText(LoginActivity.this, CONNECTION_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
 		}
 		

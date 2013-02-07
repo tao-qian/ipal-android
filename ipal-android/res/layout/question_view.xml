@@ -34,6 +34,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Refresh~~" />
+        <TextView 
+            android:id="@+id/answerSubmitted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:text="" />
+            
+            
+ 
     </LinearLayout>
 
 </ScrollView>
