@@ -36,7 +36,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".questionview.QuestionViewActivity" android:launchMode="singleTop">
+        <activity 
+            android:configChanges="orientation|keyboard"
+            android:name=".questionview.QuestionViewActivity" android:launchMode="singleTop">
+        	
         </activity>
 
         <receiver
