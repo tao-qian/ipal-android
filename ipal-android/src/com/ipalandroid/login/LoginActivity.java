@@ -103,14 +103,18 @@ public class LoginActivity extends Activity {
 		}
 
 		reloadForm(isValid);
+		
+		
+		//Creates an input manager. Added by Kevin Courtade
 		inputManager = (InputMethodManager) LoginActivity.this.
 				getSystemService(LoginActivity.this.INPUT_METHOD_SERVICE); 
+		
 		loginLayout.setOnClickListener(new OnClickListener(){
 			
 			public void onClick(View v){
+				//Requests focus from other elements
 				loginLayout.requestFocus();
-				//InputMethodManager inputManager = (InputMethodManager) LoginActivity.this.
-						//getSystemService(LoginActivity.this.INPUT_METHOD_SERVICE); 
+				//Minimizes the virtual keyboard.
 				inputManager.hideSoftInputFromWindow(
 				        LoginActivity.this.getCurrentFocus().getWindowToken(),
 				        InputMethodManager.HIDE_NOT_ALWAYS); 

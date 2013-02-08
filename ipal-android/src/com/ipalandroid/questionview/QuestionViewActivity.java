@@ -11,6 +11,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -95,6 +96,13 @@ public class QuestionViewActivity extends Activity {
 					}
 				});
 		
+	}
+	
+	@Override
+	public void onConfigurationChanged(final Configuration newConfig)
+	{
+	    // Ignore orientation change to keep activity from restarting
+	    super.onConfigurationChanged(newConfig);
 	}
 
 	@Override
