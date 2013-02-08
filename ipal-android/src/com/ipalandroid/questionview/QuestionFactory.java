@@ -82,37 +82,44 @@ public class QuestionFactory {
 		
 		String type = questionPage.select("p[id=questiontype]").text();
 		//Not using a switch statement here because the identifiers are not integers.
-		if(type.equals(QuestionType.ESSAY_QUESTION))
-		{
-			questionView = new EssayQuestionView(questionPage, url, username, passcode);
-			return ConnectionResult.RESULT_FOUND;
-		}
-		else if(type.equals(QuestionType.MULTIPLE_CHOICE_QUESTION))
-		{
-			questionView = new MutipleChoiceQuesionView(questionPage, url, username, passcode);
-			return ConnectionResult.RESULT_FOUND;
-		}
-		else if (type.equals(QuestionType.TRUE_FALSE_QUESTION))
-		{
-			questionView = new MutipleChoiceQuesionView(questionPage, url, username, passcode);
-			return ConnectionResult.RESULT_FOUND;
-		}
-		else if (type.equals(QuestionType.ERROR_INVALID_PASSCODE))
-		{
-			questionView = null;
+		try{
+			if(type.equals(QuestionType.ESSAY_QUESTION))
+			{
+				questionView = new EssayQuestionView(questionPage, url, username, passcode);
+				return ConnectionResult.RESULT_FOUND;
+			}
+			else if(type.equals(QuestionType.MULTIPLE_CHOICE_QUESTION))
+			{
+				questionView = new MutipleChoiceQuesionView(questionPage, url, username, passcode);
+				return ConnectionResult.RESULT_FOUND;
+			}
+			else if (type.equals(QuestionType.TRUE_FALSE_QUESTION))
+			{
+				questionView = new MutipleChoiceQuesionView(questionPage, url, username, passcode);
+				return ConnectionResult.RESULT_FOUND;
+			}
+			else if (type.equals(QuestionType.ERROR_INVALID_PASSCODE))
+			{
+				questionView = null;
+				return ConnectionResult.RESULT_NOT_FOUND;
+			}
+			else if (type.equals(QuestionType.ERROR_INVALID_USERNAME))
+			{
+				questionView = null;
+				return ConnectionResult.RESULT_NOT_FOUND;
+			}
+			else if (type.equals(QuestionType.ERROR_NO_CURRENT_QUESTION))
+			{
+				questionView = null;
+				return ConnectionResult.RESULT_NOT_FOUND;
+			}
 			return ConnectionResult.RESULT_NOT_FOUND;
 		}
-		else if (type.equals(QuestionType.ERROR_INVALID_USERNAME))
+		//TODO What exception was being thrown again?
+		catch(Exception e)
 		{
-			questionView = null;
 			return ConnectionResult.RESULT_NOT_FOUND;
 		}
-		else if (type.equals(QuestionType.ERROR_NO_CURRENT_QUESTION))
-		{
-			questionView = null;
-			return ConnectionResult.RESULT_NOT_FOUND;
-		}
-		return ConnectionResult.RESULT_NOT_FOUND;
 	}
 	
 	/**
