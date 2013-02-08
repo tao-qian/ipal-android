@@ -25,18 +25,6 @@ public class EssayQuestionView extends QuestionView {
 	}
 	@Override
 	public View getQuestionView(Context c) {
-		/*LinearLayout layout = new LinearLayout(c);
-		layout.setOrientation(LinearLayout.VERTICAL);
-		layout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-		TextView questionText = new TextView(c);
-		LayoutParams lparams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		questionText.setLayoutParams(lparams);
-		questionText.setText(qText);
-		questionText.setTextSize(18);
-		layout.addView(questionText);
-		answerField = new EditText(c);
-		layout.addView(answerField);
-		return layout;*/
 		
 		LayoutInflater inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.essay,null);
