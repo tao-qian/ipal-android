@@ -2,6 +2,8 @@ package com.ipalandroid.questionview;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.LinearLayout;
+
 import org.jsoup.nodes.Document;
 
 /**
@@ -66,6 +68,8 @@ public abstract class QuestionView {
 	 * @return true if the result was sent successfully, false otherwise
 	 */
 	public abstract Boolean sendResult();
+	
+	public abstract LinearLayout getLayout();
 	
 	/**
 	 * This method get the IPAL info common to all QuestionViews from the HTML.

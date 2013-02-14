@@ -14,10 +14,13 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,13 +42,19 @@ public class QuestionViewActivity extends Activity {
 	private String SUBMITTING_IPAL_MESSAGE;
 	private String SUBMISSION_MESSAGE;
 	private String FAILED_SUBMISSION_MESSAGE;
+	
 	//Integers used in UI
 	private int ANSWER_SUBMITTED;
 	private int ANSWER_NOT_SUBMITTED;
 	
 	//The QuestionFactory instance that is specific to this activity
 	private QuestionFactory questionFactory; 
+	
+	private InputMethodManager inputManager;
 
+	private LinearLayout layout;
+	private LinearLayout QVLLayout;
+	private ScrollView scrollView;
 	//UI elements
 	Button submitButton;
 	ScrollView questionScrollView;
@@ -154,6 +163,7 @@ public class QuestionViewActivity extends Activity {
 	 * This method initializes all UI elements.
 	 */
 	private void initializeUIElements() {
+		
 		submitButton = (Button) findViewById(R.id.submitButton);
 		questionScrollView = (ScrollView) findViewById(R.id.questionViewScrollView);
 	}
@@ -301,6 +311,7 @@ public class QuestionViewActivity extends Activity {
 			LayoutParams questionParams = new LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 			initializeUIElements();
+			
 			// Remove previous question view if there is one.
 			if (questionScrollView.getChildCount() > 0)
 				questionScrollView.removeAllViews();
@@ -308,6 +319,29 @@ public class QuestionViewActivity extends Activity {
 			questionScrollView.addView(
 					questionView.getQuestionView(QuestionViewActivity.this),
 					questionParams);
+			
+			if(questionView instanceof EssayQuestionView)
+			{
+				QVLLayout = (LinearLayout) findViewById(R.id.QuestionViewLinearLayout);
+				inputManager = (InputMethodManager) QuestionViewActivity.this.
+						getSystemService(QuestionViewActivity.this.INPUT_METHOD_SERVICE); 
+				QVLLayout.setOnClickListener(new OnClickListener(){
+					
+					public void onClick(View v){
+						//Requests focus from other elements
+						QVLLayout.requestFocus();
+						//Minimizes the virtual keyboard.
+						inputManager.hideSoftInputFromWindow(
+						        QuestionViewActivity.this.getCurrentFocus().getWindowToken(),
+						        InputMethodManager.HIDE_NOT_ALWAYS); 
+					}
+					
+				});
+				
+				
+			}
+			
+			
 			submitButton.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					if (!questionView.validateInput()) {
@@ -323,6 +357,10 @@ public class QuestionViewActivity extends Activity {
 						//answerStatus.setText("Answer Submitted");
 				}
 			});
+			
+			
+			
+			
 		}
 	}
 	

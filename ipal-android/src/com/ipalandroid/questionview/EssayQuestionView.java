@@ -17,7 +17,7 @@ import android.widget.TextView;
 public class EssayQuestionView extends QuestionView {
 
 	private EditText answerField;
-
+	private LinearLayout layout;
 
 	public EssayQuestionView(Document questionPage, String url, String username, int passcode) {
 		super(questionPage, url, username, passcode);
@@ -39,12 +39,17 @@ public class EssayQuestionView extends QuestionView {
 		return layout;*/
 		
 		LayoutInflater inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.essay,null);
+		layout = (LinearLayout) inflater.inflate(R.layout.essay,null);
 		answerField = (EditText) layout.findViewById(R.id.answerField);
 		TextView qTextView = (TextView) layout.findViewById(R.id.questionText);
 		qTextView.setText(qText);
 		return layout;
 		  
+	}
+	
+	public LinearLayout getLayout()
+	{
+		return layout;
 	}
 
 	@Override
