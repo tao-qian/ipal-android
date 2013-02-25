@@ -17,7 +17,8 @@
         android:id="@+id/answerField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textMultiLine" >
+        android:inputType="textMultiLine"
+        android:textColor="@color/view_text_color" >
     </EditText>
 
 </LinearLayout>

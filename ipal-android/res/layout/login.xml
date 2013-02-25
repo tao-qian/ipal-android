@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" 
-    android:background="@color/view_background"
     android:id="@+id/loginLayout"
-    android:focusable="true" 
-    android:focusableInTouchMode="true">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/view_background"
+    android:focusable="true"
+    android:focusableInTouchMode="true" >
 
     <include
         android:id="@+id/header"
@@ -18,8 +18,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/header"
-        android:text="" 
-        android:textColor="@color/view_text_color"/>
+        android:text=""
+        android:textColor="@color/view_text_color" />
 
     <TextView
         android:id="@+id/passcodeTextView"
@@ -35,7 +35,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/passcodeTextView"
         android:ems="10"
-        android:inputType="number" >
+        android:inputType="number"
+        android:textColor="@color/view_text_color" >
 
         <requestFocus />
     </EditText>
@@ -63,75 +64,78 @@
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_menu_preferences" />
 
-        
         <ScrollView
-        android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-        <LinearLayout
+            android:id="@+id/content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" 
-            android:textColor="@color/view_text_color">
+            android:layout_height="match_parent" >
 
-            <TextView
-                android:id="@+id/userNameTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/login_username_text" 
-                android:textColor="@color/view_text_color"/>
-
-            <EditText
-                android:id="@+id/userNameEditText"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textNoSuggestions" >
-            </EditText>
+                android:orientation="vertical"
+                android:textColor="@color/view_text_color" >
 
-            <TextView
-                android:id="@+id/passwordTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/login_password_text"
-                android:textColor="@color/view_text_color" />
+                <TextView
+                    android:id="@+id/userNameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/login_username_text"
+                    android:textColor="@color/view_text_color" />
 
-            <EditText
-                android:id="@+id/passwordEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPassword" >
-            </EditText>
+                <EditText
+                    android:id="@+id/userNameEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textNoSuggestions"
+                    android:textColor="@color/view_text_color" >
+                </EditText>
 
-            <TextView
-                android:id="@+id/urlTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/login_url_text"
-                android:textColor="@color/view_text_color" />
+                <TextView
+                    android:id="@+id/passwordTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/login_password_text"
+                    android:textColor="@color/view_text_color" />
 
-            <EditText
-                android:id="@+id/urlEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textUri" />
+                <EditText
+                    android:id="@+id/passwordEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPassword"
+                    android:textColor="@color/view_text_color" >
+                </EditText>
 
-            <CheckBox
-                android:id="@+id/saveInfoCheckBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/login_save_password_text"
-				android:textColor="@color/view_text_color"/>
+                <TextView
+                    android:id="@+id/urlTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/login_url_text"
+                    android:textColor="@color/view_text_color" />
 
-            <Button
-                android:id="@+id/applyAccountSettingsButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="" />
-        </LinearLayout>
+                <EditText
+                    android:id="@+id/urlEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textUri"
+                    android:textColor="@color/view_text_color" />
+
+                <CheckBox
+                    android:id="@+id/saveInfoCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/login_save_password_text"
+                    android:textColor="@color/view_text_color" />
+
+                <Button
+                    android:id="@+id/applyAccountSettingsButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="" />
+            </LinearLayout>
         </ScrollView>
     </SlidingDrawer>
 
