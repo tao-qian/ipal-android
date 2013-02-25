@@ -14,6 +14,14 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+
+/**
+ * This class represents Essay Question View. It creates the view from HTML, 
+ * validates input and sends answers to the server
+ * 
+ * @author Ngoc Nguyen, DePauw Open Source Development Team
+ * 
+ */
 public class EssayQuestionView extends QuestionView {
 
 	private EditText answerField;
@@ -23,6 +31,7 @@ public class EssayQuestionView extends QuestionView {
 		super(questionPage, url, username, passcode);
 		qText = this.questionPage.select("legend").text();
 	}
+	
 	@Override
 	public View getQuestionView(Context c) {
 		

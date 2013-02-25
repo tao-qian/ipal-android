@@ -22,8 +22,23 @@ import com.ipalandroid.R;
 import com.ipalandroid.common.ImageDownloader;
 import com.ipalandroid.common.TouchImageView;
 
+/**
+ * This class represents Multiple Choice Question View. True/False questions 
+ * are treated as Multiple Choice. The class creates the view from HTML, 
+ * validates input and send answers to the server
+ * 
+ * @author Ngoc Nguyen
+ *
+ */
 public class MutipleChoiceQuesionView extends QuestionView {
 
+	/**
+	 * This class represents Choice in Multiple Choice question. Each choice
+	 * has a text and a value. 
+	 * 
+	 * @author Ngoc Nguyen
+	 *
+	 */
 	private class Choice
 	{
 		private String text;
@@ -34,23 +49,35 @@ public class MutipleChoiceQuesionView extends QuestionView {
 			value= cValue;
 		}
 
-		public String getText() {
-			return text;
-		}
-
-		public int getValue() {
-			return value;
-		}
-
+		/**
+		 * @return the text of the current choice
+		 */
+		public String getText() { return text; }
+		
+		/**
+		 * @return the value of the current choice
+		 */
+		public int getValue() { return value; }
 	}
 
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
 	private String currentChoice;
 
+	/** 
+	 * A constructor for the MultipleChoiceQuestionView. It gets the question text,
+	 * populates the choices, prepares Moodle url and username for submission. 
+	 *
+	 * @param questionPage: the JSoup document fetched from the server
+	 * @param url: Moodle URL 
+	 * @param username: Moodle User Name 
+	 * @param passcode: IPAL Passcode
+	 */
 	public MutipleChoiceQuesionView(Document questionPage, String url, String username, int passcode)
 	{
 		super(questionPage, url, username, passcode);
 		questionPage = this.questionPage;
+		
+		//Populates the choices
 		Elements spans = this.questionPage.getElementsByTag("span");
 		for (Element s: spans) {
 			String cText = s.select("label").text();
@@ -60,22 +87,16 @@ public class MutipleChoiceQuesionView extends QuestionView {
 			}
 			
 		}
+		//Set the question Text
 		qText = this.questionPage.select("legend").text();
+		//Set the Image URL if there is one
 		imageURL = questionPage.select("img").attr("src");
-		Log.w("IMAGE URL", imageURL+ "   a a a");
+		//Log.w("IMAGE URL", imageURL+ "   a a a");
 	}
 
 	@Override
 	public View getQuestionView(Context c) {
-		/*LinearLayout layout = new LinearLayout(c);
-		layout.setOrientation(LinearLayout.VERTICAL);
-		layout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-		TextView questionText = new TextView(c);
-		LayoutParams lparams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		questionText.setLayoutParams(lparams);
-		questionText.setText(qText);
-		questionText.setTextSize(18);
-		layout.addView(questionText);*/
+
 		LayoutInflater inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		//ScrollView view = (ScrollView) inflater.inflate(R.layout.multichoice, null);
 		LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.multichoice,null);
@@ -150,6 +171,12 @@ public class MutipleChoiceQuesionView extends QuestionView {
 			}
 		}
 		return -1;
+	}
+
+	@Override
+	public LinearLayout getLayout() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
