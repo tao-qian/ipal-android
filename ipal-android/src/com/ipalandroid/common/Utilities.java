@@ -19,7 +19,7 @@ public class Utilities {
 	/**
 	 * This constant specifies the sender id used to register the phone with GCM (Google Cloud for Messaging) service.
 	 */
-	public final static String SENDER_ID = "462734233257";
+	public final static String SENDER_ID = "42332721478";
 	
 	/**
 	 * These two constants are used as flags to indicate that the format of the

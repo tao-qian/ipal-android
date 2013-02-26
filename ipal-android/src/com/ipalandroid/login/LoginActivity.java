@@ -4,12 +4,12 @@ import java.io.IOException;
 
 import org.jsoup.Jsoup;
 
+import com.ipalandroid.GCMRegistrationManager;
 import com.ipalandroid.R;
 import com.ipalandroid.common.Utilities;
 import com.ipalandroid.common.Utilities.ConnectionResult;
 import com.ipalandroid.common.Utilities.SharedPreferenceKeys;
 import com.ipalandroid.questionview.QuestionViewActivity;
-import com.ipalandroid.questionview.GCM.GCMRegistrationManager;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -164,9 +165,8 @@ public class LoginActivity extends Activity {
 					return;
 				}
 				
-				//Register when the user have a valid passcode and username
+				//Register the device to GCM server when the user have a valid passcode and username.
 				GCMRegistrationManager.registerGCM(v.getContext());
-				
 				Intent intent = new Intent(LoginActivity.this,
 						QuestionViewActivity.class);
 				intent.putExtra(PASSCODE_EXTRA, passcode);
@@ -329,6 +329,14 @@ public class LoginActivity extends Activity {
 		
 	}
 	
+	
+	/**
+	 * This method send the username, passcode and the GCm reg ID to the server. The GCM regId
+	 * is used to send push notifications to the phone. 
+	 * 
+	 * @param regId
+	 * @return
+	 */
 	public static boolean sendToServer(String regId) {
 		try {
 			Jsoup.connect(url+"/mod/ipal/tempview.php")
@@ -336,6 +344,7 @@ public class LoginActivity extends Activity {
 			.data("p", currentPasscode+"")
 			.data("r", regId)
 			.get();
+			Log.w("GCM", "Login Activity: Send ID to server " + regId);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

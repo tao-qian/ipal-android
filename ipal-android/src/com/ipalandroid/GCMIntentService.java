@@ -1,4 +1,4 @@
-package com.ipalandroid.questionview.GCM;
+package com.ipalandroid;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,13 @@ import com.ipalandroid.common.Utilities;
 import com.ipalandroid.login.LoginActivity;
 import com.ipalandroid.questionview.QuestionViewActivity;
 
+/**
+ * This class provides a service to handle GCM callbacks. All GCM-related classes have to be 
+ * in the main package.
+ * 
+ * @author Ngoc Nguyen, DePauw Open Source Development Team
+ *
+ */
 public class GCMIntentService extends GCMBaseIntentService {
 	
 	public GCMIntentService() {
@@ -35,7 +42,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 	@Override
 	protected void onRegistered(Context context, String regId) {
-		//TODO: send the regID to the server
+		//Send the regID to the server, handled by the Login Activity class
 		LoginActivity.sendToServer(regId);
 		
 	}
