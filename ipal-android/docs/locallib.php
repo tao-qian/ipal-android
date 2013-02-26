@@ -922,14 +922,21 @@ function ipal_tempview_save_response($questionid, $answerid, $activequestionid,$
 	}
 	$lastinsertid = $DB->insert_record('ipal_answered', $record);
 }
-
+/**
+ * Send a message contain the string "refresh" to the devices registered with IPAL 
+ * to Google GCM servers. Google Servers will be responsible to send this message to 
+ * the phone.
+ *
+ * @param string $regid
+ * @param int $userid
+ */
 function ipal_send_message_to_device() {
 	global $ipal;
 	global $DB;
 	global $course;
 
-	// Replace with real BROWSER API key from Google APIs
-	$apiKey = "AIzaSyBXg0ASZyFf5HrnQbGqyxu3I0fENLF9tGE";
+	// The BROWSER API key from Google APIs
+	$apiKey = "AIzaSyARBhzl2L5MCV4-_rZNH6nz4xGHvhXpW2E";
 
 	// Replace with real client registration IDs
 	//$registrationIDs = array( "APA91bEjokTRyBRt9GUzihAVhiHVsgxtEFunJi8J_A8zbeLC4Sr5lgLYWnIIa-RyrIN6GvlGPrbpRVjz4_tJc0v5o2QTSk8BljCl5o05euqbc2bQd57CRliaJMxwpHMqJDPvHomUGYRO");
@@ -946,7 +953,7 @@ function ipal_send_message_to_device() {
 		array_push($regIds, $r->reg_id);
 	}
 	// Message to be sent
-	$message = "x";
+	$message = "refresh";
 
 	// Set POST variables
 	$url = 'https://android.googleapis.com/gcm/send';
