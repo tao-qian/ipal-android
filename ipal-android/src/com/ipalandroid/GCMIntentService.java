@@ -24,19 +24,17 @@ public class GCMIntentService extends GCMBaseIntentService {
 	
 	public GCMIntentService() {
         super(Utilities.SENDER_ID);
-        //Log.d("GCMIntentService", senderId);
     }
 	
 	@Override
-	protected void onError(Context arg0, String arg1) {
-		// TODO Auto-generated method stub
-		
+	protected void onError(Context arg0, String arg1) {		
 	}
 
 	@Override
 	protected void onMessage(Context c, Intent arg1) {
 		//PendingIntent refreshIntent = new PendingIntent(c,QuestionViewActivity.class);
 		//TODO: Build a notification when the app is minimized
+		/*
 		Intent notificationIntent = new Intent(c, QuestionViewActivity.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                 Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -55,14 +53,21 @@ public class GCMIntentService extends GCMBaseIntentService {
 		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		Log.w("GCM Testing","Start buidling GCM notification");
 		notificationManager.notify(0, mBuilder.build());
-		
+		*/
 		//Send an intent to QuestionView activity.
 		//So that it will refresh
+		try {
 		Intent refreshIntent = new Intent(c,QuestionViewActivity.class);
 		//This flag is required when starting activity outside an activity.
 		refreshIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		c.startActivity(refreshIntent);
-		
+		}
+		catch (Exception e) {
+			Intent refreshIntent = new Intent(c,LoginActivity.class);
+			//This flag is required when starting activity outside an activity.
+			refreshIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			c.startActivity(refreshIntent);
+		}
 	}
 
 	@Override

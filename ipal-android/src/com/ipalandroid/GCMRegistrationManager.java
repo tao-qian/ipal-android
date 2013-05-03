@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.google.android.gcm.GCMRegistrar;
 import com.ipalandroid.common.Utilities;
+import com.ipalandroid.login.LoginActivity;
 
 /**
  * This class provides helper method to send regId to Moodle server, register
@@ -34,18 +35,14 @@ public class GCMRegistrationManager {
 	 * @param Context c
 	 */
 	public static void registerGCM(Context c) {
-		//unregisterGCM(c);
-		//Setup GCM
 		GCMRegistrar.checkDevice(c);
 		GCMRegistrar.checkManifest(c);
 		String regId = GCMRegistrar.getRegistrationId(c);
-		Log.w("GCM Testing","Login Activity:"+ regId+"a");
-		//Log.w("regID", GCMRegistrar.getRegistrationId(this));
 		if (regId.equals("")) {
 		  GCMRegistrar.register(c, Utilities.SENDER_ID);
-		  Log.w("GCM Testing","Login Activity: When unregistered"+ GCMRegistrar.getRegistrationId(c));
+		  //Log.w("GCM Testing","Login Activity: When unregistered"+ GCMRegistrar.getRegistrationId(c));
 		} else {
-		  Log.v("Login Activity ABCD", "Already registered");
+		  //Log.v("Login Activity ABCD", "Already registered");
 		}
 	}
 	

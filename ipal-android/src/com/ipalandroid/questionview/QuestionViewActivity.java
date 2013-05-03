@@ -1,5 +1,12 @@
 package com.ipalandroid.questionview;
 
+import java.io.IOException;
+
+import org.jsoup.Jsoup;
+
+import com.google.android.gcm.GCMRegistrar;
+import com.ipalandroid.GCMRegistrationManager;
+import com.ipalandroid.MoodleServerIntentService;
 import com.ipalandroid.R;
 import com.ipalandroid.common.Utilities;
 import com.ipalandroid.common.Utilities.ConnectionResult;
@@ -31,6 +38,7 @@ import android.widget.Toast;
  * 
  * @author Tao Qian, DePauw Open Source Development Team
  * @author Kevin Courtade, DePauw Open Source Development Team
+ * @author Ngoc Nguyen, DePauw Open Source Development Team
  */
 public class QuestionViewActivity extends Activity {
 
@@ -60,6 +68,11 @@ public class QuestionViewActivity extends Activity {
 	ScrollView questionScrollView;
 	TextView answerStatus;
 	
+	private String mUrl;
+	private String mUsername;
+	private int mPasscode;
+	//the id of the current question:
+	
 	/**
 	 * Refresh the question
 	 */
@@ -83,13 +96,14 @@ public class QuestionViewActivity extends Activity {
 		String username = getIntent().getStringExtra(
 				LoginActivity.USERNAME_EXTRA);
 		String url = getIntent().getStringExtra(LoginActivity.URL_EXTRA);
+		
+		mUrl = url; mPasscode = passcode; mUsername = username;
 		//Initialize the QuestionFactory
 		questionFactory = new QuestionFactory(url,
 				username, passcode);
 		QuestionViewCreator creator = new QuestionViewCreator(
 				CONNECTING_IPAL_MESSAGE);
 		creator.execute(questionFactory);
-
 		/*
 		 * Here we used the refresh button for testing. It is only for testing!
 		 * We will change the implementation here to auto-refreshing or
@@ -127,15 +141,36 @@ public class QuestionViewActivity extends Activity {
 	}
 
 	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onRestoreInstanceState(savedInstanceState);
+		//removeRegIdFromServer();
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+		//removeRegIdFromServer();
+	}
+
+	@Override
 	protected void onPause() {
+
 		super.onPause();
-		//Unregister GCM here
+		/*
+		 * Every time onPause is called (when the app is not visible), the regId is removed from
+		 * Moodle Server. This ensures that the message is only sent from the server when
+		 * QuestionViewActivity is visible.
+		 */
+		removeRegIdFromServer();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		//Register GCM here
+		//Send the Id to Server when the activity is visible. See onPause() for more detail.
+		sendToServer();
 	}
 
 	
@@ -166,6 +201,39 @@ public class QuestionViewActivity extends Activity {
 		
 		submitButton = (Button) findViewById(R.id.submitButton);
 		questionScrollView = (ScrollView) findViewById(R.id.questionViewScrollView);
+	}
+	
+	/** 
+	 * This method send the RegId with the Moodle server using MoodleServerIntentService
+	 * 
+	 */
+	private void sendToServer() {
+		String regId = GCMRegistrar.getRegistrationId(this);
+		if (!regId.equals("")) {
+			QuestionView qv = questionFactory.getQuestionView();
+			Intent removeIntent = new Intent(this, MoodleServerIntentService.class);
+			removeIntent.putExtra(MoodleServerIntentService.JOB, "send");
+			removeIntent.putExtra(MoodleServerIntentService.URL, mUrl);
+			removeIntent.putExtra(MoodleServerIntentService.PASSCODE, mPasscode+"");
+			removeIntent.putExtra(MoodleServerIntentService.USERNAME, mUsername);
+			removeIntent.putExtra(MoodleServerIntentService.REGID, regId);
+			startService(removeIntent);
+		}
+
+	}
+	
+	/**
+	 *  This method unregister the regId with the Moodle Server using MoodleServerIntentService
+	 *  Note that this is not unregistering with GCM.
+	 */
+	private void removeRegIdFromServer() {
+		//QuestionView qv = questionFactory.getQuestionView();
+		Intent removeIntent = new Intent(this, MoodleServerIntentService.class);
+		removeIntent.putExtra(MoodleServerIntentService.JOB, MoodleServerIntentService.JOB_REMOVE);
+		removeIntent.putExtra(MoodleServerIntentService.URL, mUrl);
+		removeIntent.putExtra(MoodleServerIntentService.PASSCODE, mPasscode+"");
+		removeIntent.putExtra(MoodleServerIntentService.USERNAME, mUsername);
+		startService(removeIntent);
 	}
 	
 	/**
@@ -234,7 +302,6 @@ public class QuestionViewActivity extends Activity {
 		
 	}
 
-	
 	/**
 	 * AsyncTask class used for generating QuestionView Instance. It displays a
 	 * progress dialog while checking at the background. If the loading was
@@ -357,10 +424,6 @@ public class QuestionViewActivity extends Activity {
 						//answerStatus.setText("Answer Submitted");
 				}
 			});
-			
-			
-			
-			
 		}
 	}
 	

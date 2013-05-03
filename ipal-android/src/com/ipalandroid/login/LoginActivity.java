@@ -4,7 +4,9 @@ import java.io.IOException;
 
 import org.jsoup.Jsoup;
 
+import com.google.android.gcm.GCMRegistrar;
 import com.ipalandroid.GCMRegistrationManager;
+import com.ipalandroid.MoodleServerIntentService;
 import com.ipalandroid.R;
 import com.ipalandroid.common.Utilities;
 import com.ipalandroid.common.Utilities.ConnectionResult;
@@ -35,6 +37,7 @@ import android.widget.Toast;
  * reading user input.
  * 
  * @author Tao Qian, DePauw Open Source Development Team
+ * @author Ngoc Nguyen, DePauw Open Source Development Team
  */
 public class LoginActivity extends Activity {
 
@@ -166,7 +169,10 @@ public class LoginActivity extends Activity {
 				}
 				
 				//Register the device to GCM server when the user have a valid passcode and username.
+				//GCMRegistrationManager.unregisterGCM(v.getContext());
 				GCMRegistrationManager.registerGCM(v.getContext());
+				//Don't need to send to Server here. Send it in onResume() of QuestionViewActivity
+				//sendToServer();
 				Intent intent = new Intent(LoginActivity.this,
 						QuestionViewActivity.class);
 				intent.putExtra(PASSCODE_EXTRA, passcode);
@@ -329,22 +335,41 @@ public class LoginActivity extends Activity {
 		
 	}
 	
+	/**
+	 * This method send the username, passcode and the GCm reg ID to the server 
+	 * using MoodleServerIntentService. The GCM regId is used to send push 
+	 * notifications to the phone.
+	 */
+	private void sendToServer() {
+		String regId = GCMRegistrar.getRegistrationId(this);
+		if (!regId.equals("")) {
+			Intent removeIntent = new Intent(this, MoodleServerIntentService.class);
+			removeIntent.putExtra(MoodleServerIntentService.JOB, MoodleServerIntentService.JOB_SEND);
+			removeIntent.putExtra(MoodleServerIntentService.URL, url);
+			removeIntent.putExtra(MoodleServerIntentService.PASSCODE, currentPasscode+"");
+			removeIntent.putExtra(MoodleServerIntentService.USERNAME, username);
+
+			removeIntent.putExtra(MoodleServerIntentService.REGID, regId);
+			startService(removeIntent);
+		}
+	}
 	
 	/**
-	 * This method send the username, passcode and the GCm reg ID to the server. The GCM regId
-	 * is used to send push notifications to the phone. 
+	 * This method send the username, passcode and the GCm reg ID DIRECTLY to the server. It is used by
+	 * The GCMIntentService.
 	 * 
 	 * @param regId
 	 * @return
 	 */
 	public static boolean sendToServer(String regId) {
+		
 		try {
 			Jsoup.connect(url+"/mod/ipal/tempview.php")
 			.data("user", username)
 			.data("p", currentPasscode+"")
 			.data("r", regId)
 			.get();
-			Log.w("GCM", "Login Activity: Send ID to server " + regId);
+			Log.w("LoginActivity", "Send RegId to server for user: " + username);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
