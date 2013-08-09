@@ -1,7 +1,11 @@
 package com.ipalandroid.login;
 
 import java.io.IOException;
+import java.util.Map.Entry;
 
+import org.jsoup.Connection;
+import org.jsoup.Connection.Method;
+import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,7 +13,6 @@ import org.jsoup.nodes.Element;
 import com.ipalandroid.common.Utilities;
 import com.ipalandroid.common.Utilities.ConnectionResult;
 
-import android.util.Log;
 import android.webkit.URLUtil;
 
 
@@ -43,7 +46,7 @@ public class UserValidater {
 		public final static String ACTION_ATTR = "action";
 		public final static String CLASS_ATTR = "class";
 
-		public final static String LOGIN_PAGE_END_URL = "login/index.php";
+		public final static String LOGIN_PAGE_END_URL = "login/index.php/";
 	}
 
 	private String username;
@@ -109,27 +112,42 @@ public class UserValidater {
 	 * This method connects to Moodle to check whether the user name and
 	 * password are valid.
 	 * 
-	 * @param loginURL
+	 * @param moodleURL
 	 *            the URL of the Moodle home page, contains protocol.
 	 * @return result code to indicate whether the connection is successful.
 	 */
-	private int connectToMoodle(String loginURL) {
+	private int connectToMoodle(String moodleURL) {
 		try {
-			loginURL = loginURL + UserValidationContract.LOGIN_PAGE_END_URL;
+			//First get the login form, which contains the destination for the login POST
+			String loginURL = moodleURL + UserValidationContract.LOGIN_PAGE_END_URL;
 			Document loginPage = Jsoup.connect(loginURL).followRedirects(true).get();
 			Element loginForm = loginPage
 					.getElementById(UserValidationContract.LOGIN_FORM_ID);
-			
-			//Temporary fix for crashing with invalid URL
+
 			if(loginForm == null)
-				throw new NullPointerException();
-			
+				return ConnectionResult.INVALID_URL;
+
+			//Get the destination for the login POST
 			String loginFormURL = loginForm
 					.attr(UserValidationContract.ACTION_ATTR);
-			Document loggedInPage = Jsoup.connect(loginFormURL)
+
+			//Login with a POST and save the cookies
+			Response response = Jsoup.connect(loginFormURL)
 					.data(UserValidationContract.LOGIN_USERNAME_NAME, username)
 					.data(UserValidationContract.LOGIN_PASSWORD_NAME, password)
-					.post();
+					.method(Method.POST).execute();
+			
+			//Now go to the Moodle home page with the cookies
+			Connection connection = Jsoup.connect(moodleURL);
+			for (Entry<String, String> cookie : response.cookies().entrySet()) {
+			    connection.cookie(cookie.getKey(), cookie.getValue());
+			}
+			//Required because in Moodle 2.4+,
+			//depending on the global settings, the user may be redirected to
+			//Site, My home or User Preferences.
+			//And we only want to look at the Site page.
+			Document loggedInPage = connection.data("redirect","0").get();
+			
 			String loginInfo;
 			/*
 			 * Here we used the attributes of the body to identify whether the
@@ -140,7 +158,7 @@ public class UserValidater {
 			 * redirected to the login page, which has a body with an id of
 			 * UserValidationContract.LOGIN_INDEX_ID. In the case of an
 			 * unsuccessful login, the class attribute of body will contain the
-			 * string UserValidationContract.NOT_LOGGED_IN_CONTENT.
+			 * string UserValidationContract.NOT_LOGGED_IN_CLASS.
 			 */
 			try {
 				loginInfo = loggedInPage.getElementById(
@@ -159,7 +177,6 @@ public class UserValidater {
 				return ConnectionResult.RESULT_NOT_FOUND;
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return ConnectionResult.CONNECTION_ERROR;
 		}

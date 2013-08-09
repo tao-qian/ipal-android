@@ -1,7 +1,6 @@
 package com.ipalandroid.common;
 
 import com.ipalandroid.R;
-import com.ipalandroid.R.id;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;

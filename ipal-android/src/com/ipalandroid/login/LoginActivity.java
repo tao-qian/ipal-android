@@ -15,6 +15,7 @@ import com.ipalandroid.questionview.QuestionViewActivity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
@@ -127,7 +128,7 @@ public class LoginActivity extends Activity {
 		
 		//Creates an input manager. Added by Kevin Courtade
 		inputManager = (InputMethodManager) LoginActivity.this.
-				getSystemService(LoginActivity.this.INPUT_METHOD_SERVICE); 
+				getSystemService(Context.INPUT_METHOD_SERVICE); 
 		
 		loginLayout.setOnClickListener(new OnClickListener(){
 			
@@ -213,7 +214,6 @@ public class LoginActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		// Store user info on exit.
 		if (!saveInfoCheckBox.isChecked())
 			isValid = false;
@@ -301,7 +301,6 @@ public class LoginActivity extends Activity {
 		
 		@Override
 		protected void onPreExecute() {
-			// TODO Auto-generated method stub
 			super.onPreExecute();
 			progressDialog = new ProgressDialog(LoginActivity.this);
 			progressDialog.setMessage(CHECKING_USER_MESSAGE);
@@ -309,7 +308,6 @@ public class LoginActivity extends Activity {
 			progressDialog.setOnCancelListener(new OnCancelListener() {
 				
 				public void onCancel(DialogInterface dialog) {
-					// TODO Auto-generated method stub
 					dialogCanceled = true;
 				}
 			});
@@ -318,14 +316,12 @@ public class LoginActivity extends Activity {
 
 		@Override
 		protected Integer doInBackground(String... params) {
-			// TODO Auto-generated method stub
 			userValidater = new UserValidater(params[0], params[1],params[2]);
 			return userValidater.validateUser();
 		}
 		
 		@Override
 		protected void onPostExecute(Integer result) {
-			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			if(dialogCanceled)
 				return;
@@ -356,6 +352,7 @@ public class LoginActivity extends Activity {
 	 * using MoodleServerIntentService. The GCM regId is used to send push 
 	 * notifications to the phone.
 	 */
+	@SuppressWarnings("unused")
 	private void sendToServer() {
 		String regId = GCMRegistrar.getRegistrationId(this);
 		if (!regId.equals("")) {

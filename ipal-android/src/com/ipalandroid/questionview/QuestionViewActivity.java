@@ -1,11 +1,6 @@
 package com.ipalandroid.questionview;
 
-import java.io.IOException;
-
-import org.jsoup.Jsoup;
-
 import com.google.android.gcm.GCMRegistrar;
-import com.ipalandroid.GCMRegistrationManager;
 import com.ipalandroid.MoodleServerIntentService;
 import com.ipalandroid.R;
 import com.ipalandroid.common.Utilities;
@@ -15,13 +10,13 @@ import com.ipalandroid.login.LoginActivity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -60,9 +55,7 @@ public class QuestionViewActivity extends Activity {
 	
 	private InputMethodManager inputManager;
 
-	private LinearLayout layout;
 	private LinearLayout QVLLayout;
-	private ScrollView scrollView;
 	//UI elements
 	Button submitButton;
 	ScrollView questionScrollView;
@@ -210,7 +203,6 @@ public class QuestionViewActivity extends Activity {
 	private void sendToServer() {
 		String regId = GCMRegistrar.getRegistrationId(this);
 		if (!regId.equals("")) {
-			QuestionView qv = questionFactory.getQuestionView();
 			Intent removeIntent = new Intent(this, MoodleServerIntentService.class);
 			removeIntent.putExtra(MoodleServerIntentService.JOB, "send");
 			removeIntent.putExtra(MoodleServerIntentService.URL, mUrl);
@@ -391,7 +383,7 @@ public class QuestionViewActivity extends Activity {
 			{
 				QVLLayout = (LinearLayout) findViewById(R.id.QuestionViewLinearLayout);
 				inputManager = (InputMethodManager) QuestionViewActivity.this.
-						getSystemService(QuestionViewActivity.this.INPUT_METHOD_SERVICE); 
+						getSystemService(Context.INPUT_METHOD_SERVICE); 
 				QVLLayout.setOnClickListener(new OnClickListener(){
 					
 					public void onClick(View v){

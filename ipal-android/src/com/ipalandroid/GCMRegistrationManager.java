@@ -3,11 +3,8 @@ package com.ipalandroid;
 import org.jsoup.Jsoup;
 
 import android.content.Context;
-import android.util.Log;
-
 import com.google.android.gcm.GCMRegistrar;
 import com.ipalandroid.common.Utilities;
-import com.ipalandroid.login.LoginActivity;
 
 /**
  * This class provides helper method to send regId to Moodle server, register
