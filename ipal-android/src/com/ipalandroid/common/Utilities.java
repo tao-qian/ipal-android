@@ -31,10 +31,9 @@ public class Utilities {
 	 * This interface stores the keys used to access the preference of this app.
 	 */
 	public interface SharedPreferenceKeys {
-		public final static String NAME = "info";
+		//public final static String NAME = "info";
 		public final static String USERNAME = "username";
 		public final static String URL = "url";
-		public final static String IS_VALID = "isvalid";
 	}
 
 	/**
@@ -74,17 +73,13 @@ public class Utilities {
 	 * 
 	 * @param prefs
 	 *            the shared preference instance used.
-	 * @param isValid
-	 *            be stored with the key IS_VALID.
 	 * @param username
 	 *            to be stored with the key USERNAME.
 	 * @param url
 	 *            to be stored with the key URL.
 	 */
-	public static synchronized void setPreference(SharedPreferences prefs,
-			Boolean isValid, String username, String url) {
+	public static synchronized void setPreference(SharedPreferences prefs,String username, String url) {
 		Editor editor = prefs.edit();
-		editor.putBoolean(SharedPreferenceKeys.IS_VALID, isValid);
 		editor.putString(SharedPreferenceKeys.USERNAME, username);
 		editor.putString(SharedPreferenceKeys.URL, url);
 		editor.commit();

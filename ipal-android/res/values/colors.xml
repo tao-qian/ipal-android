@@ -9,7 +9,7 @@
 	<color name="toast_background">#AA000000</color>
 	<color name ="dialog_text">#C8AF62</color>
 	
-	<color name="view_background">#FFFAF0</color>
+	<color name="view_background">#FFFFFF</color>
 	<color name="view_text_color">#000000</color>
 	<color name="view_text_color_second">#DDDDD0</color>
 	<color name="view_section_header_background">#b86f3e</color>

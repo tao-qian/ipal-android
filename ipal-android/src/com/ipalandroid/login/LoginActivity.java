@@ -14,6 +14,7 @@ import com.ipalandroid.common.Utilities.SharedPreferenceKeys;
 import com.ipalandroid.questionview.QuestionViewActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,15 +23,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 /*
@@ -58,8 +59,6 @@ import android.widget.Toast;
  */
 public class LoginActivity extends Activity {
 
-	//String constant used to replace the real password in the UI.
-	private static final String VALID_PASSWORD = "password";
 	//Keys used to identify extra data passed with intent.
 	public static final String PASSCODE_EXTRA = "passcode_extra";
 	public static final String URL_EXTRA = "url_extral";
@@ -67,44 +66,36 @@ public class LoginActivity extends Activity {
 	//Preference used to store user data.
 	private SharedPreferences prefs;
 	//UI elements
-	private TextView loginInfoTextView;
 	private EditText userNameEditText;
 	private EditText urlEditText;
 	private EditText passwordEditText;
-	private EditText passcodeEditText;
 	private CheckBox saveInfoCheckBox;
 	private Button confirmButton;
-	private Button applyButton;
 	//User input. 
 	private static String url;
 	private static String username;
 	private String password;
-	private Boolean isValid;
 	private UserValidater userValidater;
 	private static int currentPasscode; 
 	//String used in UI
-	private String LOGIN_INFO_VALID;
-	private String LOGIN_INFO_INVALID;
-	private String APPLY_BUTTON_APPLY;
-	private String APPLY_BUTTON_CHANGE;
 	private String INVALID_URL_MESSAGE;
 	private String INVALID_USER_MESSAGE;
 	private String INVALID_PASSCODE_FORMAT_MESSAGE;
 	private String CONNECTION_ERROR_MESSAGE;
 	private String CHECKING_USER_MESSAGE;
-	private RelativeLayout loginLayout;
+	private LinearLayout loginLayout;
 	private InputMethodManager inputManager;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
-		getHistorySettings();
 		initializeUIElements();
 		getStringResources();
 		setUpElements();
+		getHistorySettings();
 		userValidater = null;
-		
 	}
 
 	/**
@@ -117,15 +108,6 @@ public class LoginActivity extends Activity {
 		Utilities.setHeaderContent(findViewById(R.id.header),
 				getString(R.string.login_header_text));
 
-		// If the user name and password pair was already validated.
-		if (isValid) {
-			saveInfoCheckBox.setChecked(true);
-			password = VALID_PASSWORD;
-		}
-
-		reloadForm(isValid);
-		
-		
 		//Creates an input manager. Added by Kevin Courtade
 		inputManager = (InputMethodManager) LoginActivity.this.
 				getSystemService(Context.INPUT_METHOD_SERVICE); 
@@ -143,21 +125,12 @@ public class LoginActivity extends Activity {
 			
 		});
 		
+		
 
-		applyButton.setOnClickListener(new OnClickListener() {
+		confirmButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				// If the user is going to change account settings.
-				if (isValid) {
-					isValid = false;
-					username = "";
-					password = "";
-					reloadForm(isValid);
-					return;
-				}
-
-				// If the user is attempting to validate/save the account
-				// settings.
+				//Validate the login information
 				// Get settings from the UI.
 				username = userNameEditText.getText().toString();
 				password = passwordEditText.getText().toString();
@@ -167,37 +140,6 @@ public class LoginActivity extends Activity {
 				userChecker.execute(username,password,url);
 			}
 		});
-
-		confirmButton.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				// Check whether the user is valid, if not, notify the user.
-				if (!isValid) {
-					Toast.makeText(LoginActivity.this, INVALID_USER_MESSAGE,
-							Toast.LENGTH_SHORT).show();
-					return;
-				}
-				// Start the QuestionViewActivity
-				int passcode = UserValidater.validatePasscode(passcodeEditText.getText().toString());
-				if(passcode<0)
-				{
-					Toast.makeText(getApplicationContext(), INVALID_PASSCODE_FORMAT_MESSAGE, Toast.LENGTH_SHORT).show();
-					return;
-				}
-				
-				//Register the device to GCM server when the user have a valid passcode and username.
-				//GCMRegistrationManager.unregisterGCM(v.getContext());
-				GCMRegistrationManager.registerGCM(v.getContext());
-				//Don't need to send to Server here. Send it in onResume() of QuestionViewActivity
-				//sendToServer();
-				Intent intent = new Intent(LoginActivity.this,
-						QuestionViewActivity.class);
-				intent.putExtra(PASSCODE_EXTRA, passcode);
-				intent.putExtra(USERNAME_EXTRA, username);
-				intent.putExtra(URL_EXTRA, url);
-				startActivity(intent);
-			}
-		});
 	}
 
 	/**
@@ -205,84 +147,37 @@ public class LoginActivity extends Activity {
 	 * settings from the preference.
 	 */
 	private void getHistorySettings() {
-		prefs = getPreferences(MODE_PRIVATE);
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		username = prefs.getString(SharedPreferenceKeys.USERNAME, "");
 		url = prefs.getString(SharedPreferenceKeys.URL, "");
-		isValid = prefs.getBoolean(SharedPreferenceKeys.IS_VALID, false);
-		password = "";
+		userNameEditText.setText(username);
+		urlEditText.setText(url);
 	}
 
 	@Override
-	protected void onDestroy() {
+	protected void onPause() {
 		// Store user info on exit.
-		if (!saveInfoCheckBox.isChecked())
-			isValid = false;
-		Utilities.setPreference(prefs, isValid, username, url);
-		super.onDestroy();
-	}
-
-	/**
-	 * This method load date into the form. It also enable/disable text fields
-	 * depending on whether the user data is valid.
-	 * 
-	 * @param isValid
-	 *            true if the user data is valid. false otherwise.
-	 */
-	private void reloadForm(Boolean isValid) {
-		/**
-		 * Because of a bug in Android,
-		 * we have to use setFocusable in combination with setEnabled
-		 * to disable an EditText.
-		 * However, because of another bug, setFocusable(true) will
-		 * not make a EditText focusable again, we need to use
-		 * setFocusableInTouchMode(true) instead.
-		 */
-		userNameEditText.setEnabled(!isValid);
-		urlEditText.setEnabled(!isValid);
-		passwordEditText.setEnabled(!isValid);
-		if (isValid) {
-			userNameEditText.setFocusable(false);
-			urlEditText.setFocusable(false);
-			passwordEditText.setFocusable(false);
-			applyButton.setText(APPLY_BUTTON_CHANGE);
-			loginInfoTextView.setText(LOGIN_INFO_VALID + username);
-			passcodeEditText.requestFocus();
-		} else {
-			userNameEditText.setFocusableInTouchMode(true);
-			urlEditText.setFocusableInTouchMode(true);
-			passwordEditText.setFocusableInTouchMode(true);
-			userNameEditText.requestFocus();
-			applyButton.setText(APPLY_BUTTON_APPLY);
-			loginInfoTextView.setText(LOGIN_INFO_INVALID);
-		}
-		userNameEditText.setText(username);
-		urlEditText.setText(url);
-		passwordEditText.setText(password);
+		if (saveInfoCheckBox.isChecked())
+			Utilities.setPreference(prefs, username, url);
+		super.onPause();
 	}
 
 	/**
 	 * This method initializes all UI elements.
 	 */
 	private void initializeUIElements() {
-		loginInfoTextView = (TextView) findViewById(R.id.loginInfoTextView);
 		userNameEditText = (EditText) findViewById(R.id.userNameEditText);
 		urlEditText = (EditText) findViewById(R.id.urlEditText);
 		passwordEditText = (EditText) findViewById(R.id.passwordEditText);
 		saveInfoCheckBox = (CheckBox) findViewById(R.id.saveInfoCheckBox);
 		confirmButton = (Button) findViewById(R.id.confirmButton);
-		applyButton = (Button) findViewById(R.id.applyAccountSettingsButton);
-		passcodeEditText = (EditText) findViewById(R.id.passcodeEditText);
-		loginLayout = (RelativeLayout) findViewById(R.id.loginLayout);
+		loginLayout = (LinearLayout) findViewById(R.id.loginLayout);
 	}
 
 	/**
 	 * This method gets the string resources used in this activity.
 	 */
 	private void getStringResources() {
-		LOGIN_INFO_VALID = getString(R.string.login_info_valid_message);
-		LOGIN_INFO_INVALID = getString(R.string.login_info_invalid_message);
-		APPLY_BUTTON_APPLY = getString(R.string.apply_button_apply_text);
-		APPLY_BUTTON_CHANGE = getString(R.string.apply_button_change_text);
 		INVALID_URL_MESSAGE = getString(R.string.invalid_url_message);
 		INVALID_USER_MESSAGE = getString(R.string.invalid_account_settings_message);
 		INVALID_PASSCODE_FORMAT_MESSAGE = getString(R.string.invalid_passcode_format_message);
@@ -308,6 +203,7 @@ public class LoginActivity extends Activity {
 			progressDialog.setOnCancelListener(new OnCancelListener() {
 				
 				public void onCancel(DialogInterface dialog) {
+
 					dialogCanceled = true;
 				}
 			});
@@ -325,17 +221,75 @@ public class LoginActivity extends Activity {
 			super.onPostExecute(result);
 			if(dialogCanceled)
 				return;
-			isValid = false;
+			boolean isValid = false;
 			if(result == ConnectionResult.RESULT_FOUND)
 				isValid = true;
 			progressDialog.dismiss();
-			// If not valid, notify the user.
+			// If valid, show a dialog ask for the passcode
 			if (isValid)
 			{
 				username = userValidater.getUsername();
 				url = userValidater.getURL();
-				reloadForm(isValid);
-			}
+				userNameEditText.setText(username);
+				urlEditText.setText(url);
+				final Context c = LoginActivity.this;
+				AlertDialog.Builder builder = new AlertDialog.Builder(c);
+				// Set an EditText view to get user input 
+				EditText passCodeEditText = new EditText(c);
+				passCodeEditText.setHint(R.string.login_passcode_text);
+				final EditText input = new EditText(c);
+				AlertDialog alert = builder.setView(input).setPositiveButton(R.string.ok,new DialogInterface.OnClickListener() {
+					
+					public void onClick(DialogInterface dialog, int which) {
+						//do nothing
+					}
+				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					
+					public void onClick(DialogInterface dialog, int which) {
+						//do nothing
+					}
+				}).setCancelable(false)
+				.setTitle(R.string.passcode_dialog_title)
+				.create();
+				
+				alert.setOnShowListener(new DialogInterface.OnShowListener() {
+					
+					public void onShow(final DialogInterface dialog) {
+						Button b = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+				        b.setOnClickListener(new View.OnClickListener() {
+
+				            public void onClick(View view) {
+				                //Get the passcode and validate it.
+								int passcode = UserValidater.validatePasscode(input.getText().toString());
+								if(passcode<0)//If passcode is invalid, notify the user without dismissing the dialog
+								{
+									Toast.makeText(getApplicationContext(), INVALID_PASSCODE_FORMAT_MESSAGE, Toast.LENGTH_SHORT).show();
+									return;
+								}
+								//If pass code is valid
+							
+								//Register the device to GCM server when the user have a valid passcode and username.
+								//GCMRegistrationManager.unregisterGCM(v.getContext());
+								GCMRegistrationManager.registerGCM(c);
+								//Don't need to send to Server here. Send it in onResume() of QuestionViewActivity
+								//sendToServer();
+								
+								// Start the QuestionViewActivity
+								Intent intent = new Intent(LoginActivity.this,
+										QuestionViewActivity.class);
+								intent.putExtra(PASSCODE_EXTRA, passcode);
+								intent.putExtra(USERNAME_EXTRA, username);
+								intent.putExtra(URL_EXTRA, url);
+								startActivity(intent);
+								
+				                //Dismiss once everything is OK.
+				                dialog.dismiss();
+				            }
+				        });
+					}
+				});
+				alert.show();
+			}//Notify the user otherwise
 			else if( result == ConnectionResult.RESULT_NOT_FOUND)
 				Toast.makeText(LoginActivity.this, INVALID_USER_MESSAGE,
 						Toast.LENGTH_SHORT).show();
@@ -382,9 +336,8 @@ public class LoginActivity extends Activity {
 			.data("p", currentPasscode+"")
 			.data("r", regId)
 			.get();
-			Log.w("LoginActivity", "Send RegId to server for user: " + username);
+			//Log.w("LoginActivity", "Send RegId to server for user: " + username);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return true;

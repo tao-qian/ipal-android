@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/loginLayout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/view_background"
-    android:focusable="true"
-    android:focusableInTouchMode="true" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
     <include
         android:id="@+id/header"
@@ -13,130 +11,66 @@
         android:layout_height="wrap_content"
         layout="@layout/header" />
 
-    <TextView
-        android:id="@+id/loginInfoTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/header"
-        android:text=""
-        android:textColor="@color/view_text_color" />
-
-    <TextView
-        android:id="@+id/passcodeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/loginInfoTextView"
-        android:text="@string/login_passcode_text"
-        android:textColor="@color/view_text_color" />
-
-    <EditText
-        android:id="@+id/passcodeEditText"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/passcodeTextView"
-        android:ems="10"
-        android:inputType="number"
-        android:textColor="@color/view_text_color" >
-
-        <requestFocus />
-    </EditText>
-
-    <Button
-        android:id="@+id/confirmButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/passcodeEditText"
-        android:layout_centerHorizontal="true"
-        android:text="@string/login_confirm_button_text" />
-
-    <SlidingDrawer
-        android:id="@+id/loginSlidingDrawer"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/confirmButton"
-        android:content="@+id/content"
-        android:handle="@+id/handle"
-        android:orientation="vertical" >
+        android:orientation="horizontal"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp" >
 
-        <ImageView
-            android:id="@+id/handle"
+        <EditText
+            android:id="@+id/userNameEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:hint="@string/login_username_text"
+            android:inputType="textNoSuggestions"
+            android:textColor="@color/view_text_color"
+            android:layout_marginRight="3dp" />
+
+        <EditText
+            android:id="@+id/passwordEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:hint="@string/login_password_text"
+            android:inputType="textPassword"
+            android:layout_marginLeft="3dp" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/urlEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/login_url_text"
+        android:inputType="textUri"
+        android:layout_marginBottom="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginLeft="12dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginRight="18dp"
+        android:layout_marginLeft="18dp" >
+
+        <CheckBox
+            android:id="@+id/saveInfoCheckBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/login_save_password_text" />
+
+        <Button
+            android:id="@+id/confirmButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_preferences" />
+            android:layout_gravity="right"
+            android:layout_weight="0"
+            android:text="@string/login_confirm_button_text" />
+    </LinearLayout>
 
-        <ScrollView
-            android:id="@+id/content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:textColor="@color/view_text_color" >
-
-                <TextView
-                    android:id="@+id/userNameTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/login_username_text"
-                    android:textColor="@color/view_text_color" />
-
-                <EditText
-                    android:id="@+id/userNameEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="textNoSuggestions"
-                    android:textColor="@color/view_text_color" >
-                </EditText>
-
-                <TextView
-                    android:id="@+id/passwordTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/login_password_text"
-                    android:textColor="@color/view_text_color" />
-
-                <EditText
-                    android:id="@+id/passwordEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="textPassword"
-                    android:textColor="@color/view_text_color" >
-                </EditText>
-
-                <TextView
-                    android:id="@+id/urlTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/login_url_text"
-                    android:textColor="@color/view_text_color" />
-
-                <EditText
-                    android:id="@+id/urlEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="textUri"
-                    android:textColor="@color/view_text_color" />
-
-                <CheckBox
-                    android:id="@+id/saveInfoCheckBox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/login_save_password_text"
-                    android:textColor="@color/view_text_color" />
-
-                <Button
-                    android:id="@+id/applyAccountSettingsButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="" />
-            </LinearLayout>
-        </ScrollView>
-    </SlidingDrawer>
-
-</RelativeLayout>
+</LinearLayout>

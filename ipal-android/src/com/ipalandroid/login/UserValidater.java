@@ -123,20 +123,17 @@ public class UserValidater {
 			Document loginPage = Jsoup.connect(loginURL).followRedirects(true).get();
 			Element loginForm = loginPage
 					.getElementById(UserValidationContract.LOGIN_FORM_ID);
-
 			if(loginForm == null)
 				return ConnectionResult.INVALID_URL;
 
 			//Get the destination for the login POST
 			String loginFormURL = loginForm
 					.attr(UserValidationContract.ACTION_ATTR);
-
 			//Login with a POST and save the cookies
 			Response response = Jsoup.connect(loginFormURL)
 					.data(UserValidationContract.LOGIN_USERNAME_NAME, username)
 					.data(UserValidationContract.LOGIN_PASSWORD_NAME, password)
 					.method(Method.POST).execute();
-			
 			//Now go to the Moodle home page with the cookies
 			Connection connection = Jsoup.connect(moodleURL);
 			for (Entry<String, String> cookie : response.cookies().entrySet()) {

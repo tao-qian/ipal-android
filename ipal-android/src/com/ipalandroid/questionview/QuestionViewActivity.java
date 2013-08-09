@@ -18,6 +18,7 @@ import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
@@ -76,6 +77,7 @@ public class QuestionViewActivity extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		getStringResources();
 		getIntResources();
