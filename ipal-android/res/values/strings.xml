@@ -25,5 +25,6 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="passcode_dialog_title">Please enter the IPAL passcode</string>
+    <string name="refresh_button_text">Refresh</string>
 
 </resources>

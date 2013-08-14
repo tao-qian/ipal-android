@@ -1,54 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/view_background"
-    android:focusable="true" 
-    android:focusableInTouchMode="true"
-    android:id="@+id/QuestionScrollView">
-    
-    <LinearLayout
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/header" />
+
+    <FrameLayout
+        android:id="@+id/QuestionViewLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" 
-        android:focusable="true" 
-    	android:focusableInTouchMode="true"
-    	android:id="@+id/QuestionViewLinearLayout">
-
-        <include
-            android:id="@+id/header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/header" />
+        android:focusable="true"
+        android:focusableInTouchMode="true" 
+        android:layout_marginTop="12dp">
 
         <ScrollView
             android:id="@+id/questionViewScrollView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp" >
         </ScrollView>
 
-        <Button
-            android:id="@+id/submitButton"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/submit_button_text" />
+            android:layout_gravity="bottom"
+            android:orientation="vertical"
+            android:background="@color/view_background" >
 
-        <Button
-            android:id="@+id/refreshButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Refresh~~" />
-        <TextView 
-            android:id="@+id/answerSubmitted"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:text="" />
-            
-            
- 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:orientation="horizontal" >
 
-</ScrollView>
+                <Button
+                    android:id="@+id/submitButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="6dp"
+                    android:layout_weight="0.5"
+                    android:text="@string/submit_button_text" />
+
+                <Button
+                    android:id="@+id/refreshButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    android:text="@string/refresh_button_text" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/answerSubmitted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>
