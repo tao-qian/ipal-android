@@ -18,7 +18,7 @@
     <string name="connection_problem_message">Unable to connect to the server, please check Internet settings.</string>
     <string name="ipal_info_invalid_message">Invalid passcode or username</string>
     <string name="connecting_ipal_message">Connecting to the server&#8230;</string>
-    <string name="refreshing_ipal_message">Retrieveing new questions from the server&#8230;</string>
+    <string name="refreshing_ipal_message">Retrieving new questions from the server&#8230;</string>
     <string name="submitting_ipal_message">Submitting</string>
     <string name="failed_submission_message">Submission failed. Incorrect answer type.</string>
     <string name="submission_message">Answer submitted successfully.</string>
