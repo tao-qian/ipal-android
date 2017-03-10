@@ -26,5 +26,7 @@
     <string name="cancel">Cancel</string>
     <string name="passcode_dialog_title">Please enter the IPAL passcode</string>
     <string name="refresh_button_text">Refresh</string>
+    <string name="privacy_notification">IPAL uses Google Cloud Messaging. Please see the privacy statement.</string>
+    <string name="privacy_URL"><a href = "https://sites.google.com/a/eckerd.edu/privacypolicy/">https://sites.google.com/a/eckerd.edu/privacypolicy/</a></string>
 
 </resources>
