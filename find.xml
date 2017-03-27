@@ -1,7 +1,7 @@
 <application>
   <component name="FindSettings">
-    <option name="customScope" value="Project 'ipal-android'" />
-    <option name="defaultScopeName" value="Project 'ipal-android'" />
-    <option name="SEARCH_SCOPE" value="Project 'ipal-android'" />
+    <option name="customScope" value="Project 'mepal-android'" />
+    <option name="defaultScopeName" value="Project 'mepal-android'" />
+    <option name="SEARCH_SCOPE" value="Project 'mepal-android'" />
   </component>
 </application>
