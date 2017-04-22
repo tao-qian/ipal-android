@@ -1,9 +1,9 @@
 <application>
   <component name="FindSettings">
-    <option name="customScope" value="Project 'mepal-android'" />
-    <option name="defaultScopeName" value="Project 'mepal-android'" />
+    <option name="customScope" value="File '[ipalandroid] - ...\ipalandroid\src\main\java\com\ipalandroid\login\LoginActivity.java'" />
+    <option name="defaultScopeName" value="File '[ipalandroid] - ...\ipalandroid\src\main\java\com\ipalandroid\login\LoginActivity.java'" />
     <option name="localCaseSensitive" value="true" />
     <option name="LOCAL_CASE_SENSITIVE_SEARCH" value="true" />
-    <option name="SEARCH_SCOPE" value="Project 'mepal-android'" />
+    <option name="SEARCH_SCOPE" value="File '[ipalandroid] - ...\ipalandroid\src\main\java\com\ipalandroid\login\LoginActivity.java'" />
   </component>
 </application>
