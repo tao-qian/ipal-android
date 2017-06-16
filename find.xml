@@ -1,7 +1,7 @@
 <application>
   <component name="FindSettings">
-    <option name="customScope" value="File '[ipalandroid] - ...\ipalandroid\src\main\java\com\ipalandroid\login\LoginActivity.java'" />
-    <option name="defaultScopeName" value="File '[ipalandroid] - ...\ipalandroid\src\main\java\com\ipalandroid\login\LoginActivity.java'" />
-    <option name="SEARCH_SCOPE" value="File '[ipalandroid] - ...\ipalandroid\src\main\java\com\ipalandroid\login\LoginActivity.java'" />
+    <option name="customScope" value="Project 'FcmWithLog'" />
+    <option name="defaultScopeName" value="Project 'FcmWithLog'" />
+    <option name="SEARCH_SCOPE" value="Project 'FcmWithLog'" />
   </component>
 </application>
