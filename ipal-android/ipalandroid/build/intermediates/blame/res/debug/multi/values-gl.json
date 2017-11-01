@@ -1,0 +1,26 @@
+[
+    {
+        "outputFile": "C:\\Users\\pjunkin_2\\AndroidStudioProjects\\ipalandroidoriginal - Copy\\ipal-android\\ipalandroid\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-gl\\values-gl.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 105,
+                    "endColumn": 251,
+                    "endOffset": 352
+                },
+                "from": {
+                    "file": "C:\\Users\\pjunkin_2\\.android\\build-cache\\8cf58137bceed8ac92eaf5aef46d5a4c4485d1d3\\output\\res\\values-gl\\values.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 331,
+                        "endColumn": 251,
+                        "endOffset": 578
+                    }
+                }
+            }
+        ]
+    }
+]

@@ -1,0 +1,7 @@
+#Mon Jul 31 17:40:57 EDT 2017
+base.0=C\:\\Users\\pjunkin_2\\AndroidStudioProjects\\ipalandroidoriginal - Copy\\ipal-android\\ipalandroid\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run_24db7a232e315fa66f860c4815a1c8f8f8da3b71
+renamed.1=classes.dex
+renamed.0=classes2.dex
+file.1=C\:\\Users\\pjunkin_2\\AndroidStudioProjects\\ipalandroidoriginal - Copy\\ipal-android\\ipalandroid\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_08457a8d5fbd17e6496c49b97a08296963341f89\\classes.dex
+base.1=C\:\\Users\\pjunkin_2\\AndroidStudioProjects\\ipalandroidoriginal - Copy\\ipal-android\\ipalandroid\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_08457a8d5fbd17e6496c49b97a08296963341f89
+file.0=C\:\\Users\\pjunkin_2\\AndroidStudioProjects\\ipalandroidoriginal - Copy\\ipal-android\\ipalandroid\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run_24db7a232e315fa66f860c4815a1c8f8f8da3b71\\classes.dex

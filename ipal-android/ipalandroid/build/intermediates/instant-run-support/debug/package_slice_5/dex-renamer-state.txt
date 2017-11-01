@@ -1,0 +1,4 @@
+#Thu Jul 27 19:48:15 EDT 2017
+base.0=C\:\\Users\\pjunkin_2\\AndroidStudioProjects\\ipalandroidoriginal - Copy\\ipal-android\\ipalandroid\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\5\\slice_5
+renamed.0=classes.dex
+file.0=C\:\\Users\\pjunkin_2\\AndroidStudioProjects\\ipalandroidoriginal - Copy\\ipal-android\\ipalandroid\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\5\\slice_5\\classes.dex

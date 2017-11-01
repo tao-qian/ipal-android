@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "C:\\Users\\pjunkin_2\\AndroidStudioProjects\\ipalandroidoriginal - Copy\\ipal-android\\ipalandroid\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_template_custom_big.xml",
+        "source": "C:\\Users\\pjunkin_2\\.android\\build-cache\\1dd2670a0a97db134a779aca0b563d4e0623a9c1\\output\\res\\layout-v21\\notification_template_custom_big.xml"
+    },
+    {
+        "merged": "C:\\Users\\pjunkin_2\\AndroidStudioProjects\\ipalandroidoriginal - Copy\\ipal-android\\ipalandroid\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_action.xml",
+        "source": "C:\\Users\\pjunkin_2\\.android\\build-cache\\1dd2670a0a97db134a779aca0b563d4e0623a9c1\\output\\res\\layout-v21\\notification_action.xml"
+    },
+    {
+        "merged": "C:\\Users\\pjunkin_2\\AndroidStudioProjects\\ipalandroidoriginal - Copy\\ipal-android\\ipalandroid\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_template_icon_group.xml",
+        "source": "C:\\Users\\pjunkin_2\\.android\\build-cache\\1dd2670a0a97db134a779aca0b563d4e0623a9c1\\output\\res\\layout-v21\\notification_template_icon_group.xml"
+    },
+    {
+        "merged": "C:\\Users\\pjunkin_2\\AndroidStudioProjects\\ipalandroidoriginal - Copy\\ipal-android\\ipalandroid\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_action_tombstone.xml",
+        "source": "C:\\Users\\pjunkin_2\\.android\\build-cache\\1dd2670a0a97db134a779aca0b563d4e0623a9c1\\output\\res\\layout-v21\\notification_action_tombstone.xml"
+    }
+]

@@ -1,0 +1,26 @@
+[
+    {
+        "outputFile": "C:\\Users\\pjunkin_2\\AndroidStudioProjects\\ipalandroidoriginal - Copy\\ipal-android\\ipalandroid\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-ldltr-v21\\values-ldltr-v21.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 112,
+                    "endOffset": 163
+                },
+                "from": {
+                    "file": "C:\\Users\\pjunkin_2\\.android\\build-cache\\1dd2670a0a97db134a779aca0b563d4e0623a9c1\\output\\res\\values-ldltr-v21\\values-ldltr-v21.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
+                        "endColumn": 112,
+                        "endOffset": 163
+                    }
+                }
+            }
+        ]
+    }
+]

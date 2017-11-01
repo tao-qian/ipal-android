@@ -1,0 +1,26 @@
+[
+    {
+        "outputFile": "C:\\Users\\pjunkin_2\\AndroidStudioProjects\\ipalandroidoriginal - Copy\\ipal-android\\ipalandroid\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-kk\\values-kk.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 105,
+                    "endColumn": 243,
+                    "endOffset": 344
+                },
+                "from": {
+                    "file": "C:\\Users\\pjunkin_2\\.android\\build-cache\\8cf58137bceed8ac92eaf5aef46d5a4c4485d1d3\\output\\res\\values-kk\\values.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 331,
+                        "endColumn": 243,
+                        "endOffset": 570
+                    }
+                }
+            }
+        ]
+    }
+]
