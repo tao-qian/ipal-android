@@ -1,5 +1,7 @@
 package com.ipalandroid.questionview;
 
+import android.util.Log;
+
 import java.io.IOException;
 
 import org.jsoup.Jsoup;
@@ -18,7 +20,7 @@ import com.ipalandroid.common.Utilities.ConnectionResult;
  * @author Tao Qian, DePauw Open Source Development Team
  */
 public class QuestionFactory {
-
+	private static String TAG = "QuestionFactory";
 	/**
 	 * This interface stores the constants used to post to tempview.php.
 	 */
@@ -26,6 +28,7 @@ public class QuestionFactory {
 		public final static String URL_SEGMENT = "mod/ipal/tempview.php";
 		public final static String USER = "user";
 		public final static String PASSCODE = "p";
+		public final static String REFRESHED_TOKEN = "r";
 	}
 
 	/**
@@ -45,6 +48,7 @@ public class QuestionFactory {
 	private String url;//URL of the question page
 	private String username;
 	private int passcode;
+	private String refreshedToken;
 	private QuestionView questionView;//The product to be returned.
 	
 	
@@ -53,13 +57,15 @@ public class QuestionFactory {
 	 * Constructor.
 	 * @param url the url of the Moodle page
 	 * @param username the username used
-	 * @param passcode the passcode of the IPAL
+	 * @param passcode the passcode of the ipal
+	 * @param refreshedToken the token of the individual app.
 	 */
-	public QuestionFactory(String url, String username, int passcode)
+	public QuestionFactory(String url, String username, int passcode, String refreshedToken)
 	{
 		this.url = url;
 		this.username = username;
 		this.passcode = passcode;
+		this.refreshedToken = refreshedToken;
 	}
 	
 	/**
@@ -71,9 +77,12 @@ public class QuestionFactory {
 	public int loadQuestionView()
 	{
 		try {
+			Log.d(TAG, "debug79 in QuestionFactory and regid is "+refreshedToken);
+			Log.d(TAG, "debug81 in QuestionFactory and url is "+url+TempViewPostContract.URL_SEGMENT);
 			questionPage = Jsoup.connect(url+TempViewPostContract.URL_SEGMENT)
 					.data(TempViewPostContract.USER, username)
 					.data(TempViewPostContract.PASSCODE, String.valueOf(passcode))
+                    .data(TempViewPostContract.REFRESHED_TOKEN, refreshedToken)
 					.post();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -83,9 +92,17 @@ public class QuestionFactory {
 		String type = questionPage.select("p[id=questiontype]").text();
 		//Not using a switch statement here because the identifiers are not integers.
 		try{
+			Log.d(TAG, "95 and type is " + type);
 			if(type.equals(QuestionType.ESSAY_QUESTION))
 			{
+				Log.d(TAG, "90 in QuestionFactory and is essay question");
+				Log.d(TAG, "91 and legend is " + questionPage.select("legend").text());
+				Log.d(TAG, "92 and url is " + url);
+				Log.d(TAG, "93 and username is " + username);
+				Log.d(TAG, "94 and passcode is " + passcode);
 				questionView = new EssayQuestionView(questionPage, url, username, passcode);
+				Log.d(TAG, "96 after questionView");
+
 				return ConnectionResult.RESULT_FOUND;
 			}
 			else if(type.equals(QuestionType.MULTIPLE_CHOICE_QUESTION))
@@ -98,17 +115,18 @@ public class QuestionFactory {
 				questionView = new MutipleChoiceQuesionView(questionPage, url, username, passcode);
 				return ConnectionResult.RESULT_FOUND;
 			}
+			else if (type.equals(QuestionType.ERROR_NO_CURRENT_QUESTION))
+			{
+				Log.d(TAG, "120 in nocurrentquestion");
+				questionView = new NoQuestion(questionPage, url, username, passcode);
+				return ConnectionResult.RESULT_FOUND;
+			}
 			else if (type.equals(QuestionType.ERROR_INVALID_PASSCODE))
 			{
 				questionView = null;
 				return ConnectionResult.RESULT_NOT_FOUND;
 			}
 			else if (type.equals(QuestionType.ERROR_INVALID_USERNAME))
-			{
-				questionView = null;
-				return ConnectionResult.RESULT_NOT_FOUND;
-			}
-			else if (type.equals(QuestionType.ERROR_NO_CURRENT_QUESTION))
 			{
 				questionView = null;
 				return ConnectionResult.RESULT_NOT_FOUND;

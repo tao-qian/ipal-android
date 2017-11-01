@@ -69,7 +69,7 @@ public class MutipleChoiceQuesionView extends QuestionView {
 	 * @param questionPage: the JSoup document fetched from the server
 	 * @param url: Moodle URL 
 	 * @param username: Moodle User Name 
-	 * @param passcode: IPAL Passcode
+	 * @param passcode: ipal Passcode
 	 */
 	public MutipleChoiceQuesionView(Document questionPage, String url, String username, int passcode)
 	{
@@ -141,7 +141,6 @@ public class MutipleChoiceQuesionView extends QuestionView {
 		//SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
 		int valueToSend = getChoiceValueFromText(currentChoice);
 		if (valueToSend != -1) {
-			//Jsoup example, using post to log into depauw moodle
 			try {
 				Jsoup.connect(url+"/mod/ipal/tempview.php?user="+username+"&p="+passcode)
 				.data("answer_id", valueToSend+"")

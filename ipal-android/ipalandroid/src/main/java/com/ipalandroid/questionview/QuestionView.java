@@ -35,7 +35,7 @@ public abstract class QuestionView {
 	 * @param questionPage the question page HTML used.
 	 * @param url the Moodle URL.
 	 * @param username the username of the user 
-	 * @param passcode the passcode of the IPAL
+	 * @param passcode the passcode of the ipal
 	 */
 	public QuestionView(Document questionPage, String url, String username, int passcode)
 	{
@@ -43,7 +43,7 @@ public abstract class QuestionView {
 		this.url = url;
 		this.username = username;
 		this.passcode = passcode;
-		getIPALInfoFromUI();
+		getipalInfoFromUI();
 	}
 	
 	/**
@@ -72,9 +72,9 @@ public abstract class QuestionView {
 	public abstract LinearLayout getLayout();
 	
 	/**
-	 * This method get the IPAL info common to all QuestionViews from the HTML.
+	 * This method get the ipal info common to all QuestionViews from the HTML.
 	 */
-	private void getIPALInfoFromUI()
+	private void getipalInfoFromUI()
 	{
 		question_id = Integer.parseInt(questionPage.select("input[name=question_id]").attr("value"));
 		active_question_id = Integer.parseInt(questionPage.select("input[name=active_question_id]").attr("value"));

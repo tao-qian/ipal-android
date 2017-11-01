@@ -8,6 +8,7 @@ import org.jsoup.nodes.Document;
 import com.ipalandroid.R;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -23,12 +24,13 @@ import android.widget.TextView;
  * 
  */
 public class EssayQuestionView extends QuestionView {
-
+	private static String TAG = "EssayQuestionView";
 	private EditText answerField;
 	private LinearLayout layout;
 
 	public EssayQuestionView(Document questionPage, String url, String username, int passcode) {
 		super(questionPage, url, username, passcode);
+		Log.d(TAG, "23 in " + TAG);
 		qText = this.questionPage.select("legend").text();
 	}
 	

@@ -17,9 +17,9 @@ public class Utilities {
 	
 	/**
 	 * This constant specifies the sender id used to register the phone with GCM (Google Cloud for Messaging) service.
-	 */
+
 	public final static String SENDER_ID = "42332721478";
-	
+*/
 	/**
 	 * These two constants are used as flags to indicate that the format of the
 	 * user inputed text is wrong.
@@ -31,7 +31,6 @@ public class Utilities {
 	 * This interface stores the keys used to access the preference of this app.
 	 */
 	public interface SharedPreferenceKeys {
-		//public final static String NAME = "info";
 		public final static String USERNAME = "username";
 		public final static String URL = "url";
 	}

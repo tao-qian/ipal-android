@@ -1,12 +1,5 @@
 package com.ipalandroid.login;
 
-import java.io.IOException;
-
-import org.jsoup.Jsoup;
-
-import com.google.android.gcm.GCMRegistrar;
-import com.ipalandroid.GCMRegistrationManager;
-import com.ipalandroid.MoodleServerIntentService;
 import com.ipalandroid.R;
 import com.ipalandroid.common.Utilities;
 import com.ipalandroid.common.Utilities.ConnectionResult;
@@ -36,6 +29,7 @@ import android.widget.Toast;
 
 /*
  * Copyright 2013 DePauw Open Source Development Team
+ * Modified by W. F. Junkin III 2017 to use Firebase Cloud Messaging instead of GCM
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,13 +50,16 @@ import android.widget.Toast;
  * 
  * @author Tao Qian, DePauw Open Source Development Team
  * @author Ngoc Nguyen, DePauw Open Source Development Team
+ * @author W. F. Junkin, Eckerd College
  */
 public class LoginActivity extends Activity {
 
+	static private String TAG = "LoginActivity";
 	//Keys used to identify extra data passed with intent.
 	public static final String PASSCODE_EXTRA = "passcode_extra";
 	public static final String URL_EXTRA = "url_extral";
 	public static final String USERNAME_EXTRA = "username_extra";
+	public static final String REFRESHEDTOKEN_EXTRA = "refreshedtoken_extra";
 	//Preference used to store user data.
 	private SharedPreferences prefs;
 	//UI elements
@@ -76,7 +73,6 @@ public class LoginActivity extends Activity {
 	private static String username;
 	private String password;
 	private UserValidater userValidater;
-	private static int currentPasscode; 
 	//String used in UI
 	private String INVALID_URL_MESSAGE;
 	private String INVALID_USER_MESSAGE;
@@ -266,14 +262,7 @@ public class LoginActivity extends Activity {
 									Toast.makeText(getApplicationContext(), INVALID_PASSCODE_FORMAT_MESSAGE, Toast.LENGTH_SHORT).show();
 									return;
 								}
-								//If pass code is valid
-							
-								//Register the device to GCM server when the user have a valid passcode and username.
-								//GCMRegistrationManager.unregisterGCM(v.getContext());
-								GCMRegistrationManager.registerGCM(c);
-								//Don't need to send to Server here. Send it in onResume() of QuestionViewActivity
-								//sendToServer();
-								
+								//If passcode is valid the token will be refreshed in QuestionViewActivity
 								// Start the QuestionViewActivity
 								Intent intent = new Intent(LoginActivity.this,
 										QuestionViewActivity.class);
@@ -294,52 +283,11 @@ public class LoginActivity extends Activity {
 				Toast.makeText(LoginActivity.this, INVALID_USER_MESSAGE,
 						Toast.LENGTH_SHORT).show();
 			else if(result == ConnectionResult.INVALID_URL)
-				Toast.makeText(LoginActivity.this, INVALID_URL_MESSAGE, Toast.LENGTH_SHORT).show();
+				Toast.makeText(LoginActivity.this, "Invalid URL" + INVALID_URL_MESSAGE, Toast.LENGTH_SHORT).show();
 			else
-				Toast.makeText(LoginActivity.this, CONNECTION_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
+				Toast.makeText(LoginActivity.this, "Connection Error" + CONNECTION_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
 		}
 		
 	}
 	
-	/**
-	 * This method send the username, passcode and the GCm reg ID to the server 
-	 * using MoodleServerIntentService. The GCM regId is used to send push 
-	 * notifications to the phone.
-	 */
-	@SuppressWarnings("unused")
-	private void sendToServer() {
-		String regId = GCMRegistrar.getRegistrationId(this);
-		if (!regId.equals("")) {
-			Intent removeIntent = new Intent(this, MoodleServerIntentService.class);
-			removeIntent.putExtra(MoodleServerIntentService.JOB, MoodleServerIntentService.JOB_SEND);
-			removeIntent.putExtra(MoodleServerIntentService.URL, url);
-			removeIntent.putExtra(MoodleServerIntentService.PASSCODE, currentPasscode+"");
-			removeIntent.putExtra(MoodleServerIntentService.USERNAME, username);
-
-			removeIntent.putExtra(MoodleServerIntentService.REGID, regId);
-			startService(removeIntent);
-		}
-	}
-	
-	/**
-	 * This method send the username, passcode and the GCm reg ID DIRECTLY to the server. It is used by
-	 * The GCMIntentService.
-	 * 
-	 * @param regId
-	 * @return
-	 */
-	public static boolean sendToServer(String regId) {
-		
-		try {
-			Jsoup.connect(url+"/mod/ipal/tempview.php")
-			.data("user", username)
-			.data("p", currentPasscode+"")
-			.data("r", regId)
-			.get();
-			//Log.w("LoginActivity", "Send RegId to server for user: " + username);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return true;
-	}
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">IPAL</string>
+    <string name="app_name">ipal</string>
     <string name="login_header_text">Account Setup</string>
     <string name="login_username_text">Username</string>
     <string name="login_url_text">Moodle URL</string>
@@ -24,9 +24,7 @@
     <string name="submission_message">Answer submitted successfully.</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
-    <string name="passcode_dialog_title">Please enter the IPAL passcode</string>
+    <string name="passcode_dialog_title">Please enter the ipal passcode</string>
     <string name="refresh_button_text">Refresh</string>
-    <string name="privacy_notification">IPAL uses Google Cloud Messaging. Please see the privacy statement.</string>
-    <string name="privacy_URL"><a href = "https://sites.google.com/a/eckerd.edu/privacypolicy/">https://sites.google.com/a/eckerd.edu/privacypolicy/</a></string>
-
+    <string name="no_activequestion_text">There is no active question. Please wait.</string>
 </resources>

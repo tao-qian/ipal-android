@@ -1,7 +1,6 @@
 package com.ipalandroid.questionview;
 
-import com.google.android.gcm.GCMRegistrar;
-import com.ipalandroid.MoodleServerIntentService;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.ipalandroid.R;
 import com.ipalandroid.common.Utilities;
 import com.ipalandroid.common.Utilities.ConnectionResult;
@@ -17,13 +16,14 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,13 +37,13 @@ import android.widget.Toast;
  * @author Ngoc Nguyen, DePauw Open Source Development Team
  */
 public class QuestionViewActivity extends Activity {
-
+	private static String TAG = "QuestionViewActivity";
 	//Strings used in UI
 	private String CONNECTION_ERROR_MESSAGE;
-	private String IPAL_INFO_INVALID;
-	private String CONNECTING_IPAL_MESSAGE;
-	private String REFRESHING_IPAL_MESSAGE;
-	private String SUBMITTING_IPAL_MESSAGE;
+	private String ipal_INFO_INVALID;
+	private String CONNECTING_ipal_MESSAGE;
+	private String REFRESHING_ipal_MESSAGE;
+	private String SUBMITTING_ipal_MESSAGE;
 	private String SUBMISSION_MESSAGE;
 	private String FAILED_SUBMISSION_MESSAGE;
 	
@@ -56,22 +56,23 @@ public class QuestionViewActivity extends Activity {
 	
 	private InputMethodManager inputManager;
 
-	private LinearLayout QVLLayout;
+	private FrameLayout QVLLayout;
 	//UI elements
 	Button submitButton;
 	ScrollView questionScrollView;
 	TextView answerStatus;
-	
+
 	private String mUrl;
 	private String mUsername;
 	private int mPasscode;
+	private String mRegid;
 	//the id of the current question:
-	
+
 	/**
 	 * Refresh the question
 	 */
 	private void refresh() {
-		QuestionViewCreator refresher = new QuestionViewCreator(REFRESHING_IPAL_MESSAGE);
+		QuestionViewCreator refresher = new QuestionViewCreator(REFRESHING_ipal_MESSAGE);
 		refresher.execute(questionFactory);
 	}
 	
@@ -91,13 +92,20 @@ public class QuestionViewActivity extends Activity {
 		String username = getIntent().getStringExtra(
 				LoginActivity.USERNAME_EXTRA);
 		String url = getIntent().getStringExtra(LoginActivity.URL_EXTRA);
-		
-		mUrl = url; mPasscode = passcode; mUsername = username;
+		// Get updated InstanceID token.
+		String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+		Log.d(TAG, "Refreshed token: " + refreshedToken);
+
+		mUrl = url;
+		mPasscode = passcode;
+		mUsername = username;
+		mRegid = refreshedToken;
+		Log.d(TAG, "debug98 in QuestionViewActivity and refreshedToken is "+refreshedToken);
 		//Initialize the QuestionFactory
 		questionFactory = new QuestionFactory(url,
-				username, passcode);
+				username, passcode, refreshedToken);
 		QuestionViewCreator creator = new QuestionViewCreator(
-				CONNECTING_IPAL_MESSAGE);
+				CONNECTING_ipal_MESSAGE);
 		creator.execute(questionFactory);
 		/*
 		 * Here we used the refresh button for testing. It is only for testing!
@@ -158,14 +166,14 @@ public class QuestionViewActivity extends Activity {
 		 * Moodle Server. This ensures that the message is only sent from the server when
 		 * QuestionViewActivity is visible.
 		 */
-		removeRegIdFromServer();
+		//removeRegIdFromServer();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 		//Send the Id to Server when the activity is visible. See onPause() for more detail.
-		sendToServer();
+		//sendToServer();
 	}
 
 	
@@ -174,10 +182,10 @@ public class QuestionViewActivity extends Activity {
 	 */
 	private void getStringResources() {
 		CONNECTION_ERROR_MESSAGE = getString(R.string.connection_problem_message);
-		IPAL_INFO_INVALID = getString(R.string.ipal_info_invalid_message);
-		CONNECTING_IPAL_MESSAGE = getString(R.string.connecting_ipal_message);
-		REFRESHING_IPAL_MESSAGE = getString(R.string.refreshing_ipal_message);
-		SUBMITTING_IPAL_MESSAGE = getString(R.string.submitting_ipal_message);
+		ipal_INFO_INVALID = getString(R.string.ipal_info_invalid_message);
+		CONNECTING_ipal_MESSAGE = getString(R.string.connecting_ipal_message);
+		REFRESHING_ipal_MESSAGE = getString(R.string.refreshing_ipal_message);
+		SUBMITTING_ipal_MESSAGE = getString(R.string.submitting_ipal_message);
 		SUBMISSION_MESSAGE = getString(R.string.submission_message);
 		FAILED_SUBMISSION_MESSAGE = getString(R.string.failed_submission_message);
 	}
@@ -197,39 +205,6 @@ public class QuestionViewActivity extends Activity {
 		submitButton = (Button) findViewById(R.id.submitButton);
 		questionScrollView = (ScrollView) findViewById(R.id.questionViewScrollView);
 	}
-	
-	/** 
-	 * This method send the RegId with the Moodle server using MoodleServerIntentService
-	 * 
-	 */
-	private void sendToServer() {
-		String regId = GCMRegistrar.getRegistrationId(this);
-		if (!regId.equals("")) {
-			Intent removeIntent = new Intent(this, MoodleServerIntentService.class);
-			removeIntent.putExtra(MoodleServerIntentService.JOB, "send");
-			removeIntent.putExtra(MoodleServerIntentService.URL, mUrl);
-			removeIntent.putExtra(MoodleServerIntentService.PASSCODE, mPasscode+"");
-			removeIntent.putExtra(MoodleServerIntentService.USERNAME, mUsername);
-			removeIntent.putExtra(MoodleServerIntentService.REGID, regId);
-			startService(removeIntent);
-		}
-
-	}
-	
-	/**
-	 *  This method unregister the regId with the Moodle Server using MoodleServerIntentService
-	 *  Note that this is not unregistering with GCM.
-	 */
-	private void removeRegIdFromServer() {
-		//QuestionView qv = questionFactory.getQuestionView();
-		Intent removeIntent = new Intent(this, MoodleServerIntentService.class);
-		removeIntent.putExtra(MoodleServerIntentService.JOB, MoodleServerIntentService.JOB_REMOVE);
-		removeIntent.putExtra(MoodleServerIntentService.URL, mUrl);
-		removeIntent.putExtra(MoodleServerIntentService.PASSCODE, mPasscode+"");
-		removeIntent.putExtra(MoodleServerIntentService.USERNAME, mUsername);
-		startService(removeIntent);
-	}
-	
 	/**
 	 * AsyncTask class used for submitting answers. Displays a
 	 * submitting text while checking to see if the answer was 
@@ -357,12 +332,12 @@ public class QuestionViewActivity extends Activity {
 			//display the error message and terminates the activity.
 			if (result == ConnectionResult.CONNECTION_ERROR) {
 				Toast.makeText(QuestionViewActivity.this,
-						CONNECTION_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
+						"debug335 in QVA" + CONNECTION_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
 				finish();
 				return;
 			}
 			if (result == ConnectionResult.RESULT_NOT_FOUND) {
-				Toast.makeText(QuestionViewActivity.this, IPAL_INFO_INVALID,
+				Toast.makeText(QuestionViewActivity.this, ipal_INFO_INVALID,
 						Toast.LENGTH_SHORT).show();
 				finish();
 				return;
@@ -383,9 +358,11 @@ public class QuestionViewActivity extends Activity {
 			
 			if(questionView instanceof EssayQuestionView)
 			{
-				QVLLayout = (LinearLayout) findViewById(R.id.QuestionViewLinearLayout);
+				Log.d(TAG, "387 in QuestionViewActivity");
+				QVLLayout = (FrameLayout) findViewById(R.id.QuestionViewLinearLayout);
+				Log.d(TAG, "389 in QuestionViewActivity");
 				inputManager = (InputMethodManager) QuestionViewActivity.this.
-						getSystemService(Context.INPUT_METHOD_SERVICE); 
+						getSystemService(Context.INPUT_METHOD_SERVICE);
 				QVLLayout.setOnClickListener(new OnClickListener(){
 					
 					public void onClick(View v){
@@ -412,10 +389,8 @@ public class QuestionViewActivity extends Activity {
 						return;
 					}
 					
-					QuestionViewSubmission submit = new QuestionViewSubmission(questionView, SUBMITTING_IPAL_MESSAGE);
+					QuestionViewSubmission submit = new QuestionViewSubmission(questionView, SUBMITTING_ipal_MESSAGE);
 					submit.execute();
-					//if (questionView.sendResult()) 
-						//answerStatus.setText("Answer Submitted");
 				}
 			});
 		}

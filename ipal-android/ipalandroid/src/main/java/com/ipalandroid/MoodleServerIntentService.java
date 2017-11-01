@@ -9,8 +9,8 @@ import android.content.Intent;
 import android.util.Log;
 
 /**
- * This class is responsible sending and removing regId from Moodle Server. regId is used
- * by GCM to send push notifications to the application
+ * This class is responsible sending and removing regId/token from Moodle Server.
+ * token is the regId and comes frm Firebase
  * 
  * @author Ngoc Nguye, DePauw Open Source Development Team
  */

@@ -24,7 +24,7 @@ public class ImageDownloader {
 	private static int CONNECTION_TIMEOUT = 30000;
 	private static int READ_TIMEOUT = 30000;
 	private static String IMAGE_FILE_NAME_PREFIX = "temp_";
-	private static String DIRECTORY_ROOT = "IPAL_Android/temp";
+	private static String DIRECTORY_ROOT = "ipal_Android/temp";
 	private File directory;
 
 	public ImageDownloader(Context mContext) {

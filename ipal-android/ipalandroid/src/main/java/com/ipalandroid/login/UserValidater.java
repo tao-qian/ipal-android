@@ -13,6 +13,7 @@ import org.jsoup.nodes.Element;
 import com.ipalandroid.common.Utilities;
 import com.ipalandroid.common.Utilities.ConnectionResult;
 
+import android.util.Log;
 import android.webkit.URLUtil;
 
 
@@ -22,7 +23,7 @@ import android.webkit.URLUtil;
  * @author Tao Qian, DePauw Open Source Development Team
  */
 public class UserValidater {
-
+	private static String TAG="UserValidater";
 	/**
 	 * This interface stores the constants used to validate user.
 	 */
@@ -45,13 +46,14 @@ public class UserValidater {
 		public final static String ID_ATTR = "id";
 		public final static String ACTION_ATTR = "action";
 		public final static String CLASS_ATTR = "class";
-
+		public final static String LOGIN_IPAL_END_URL = "mod/ipal/ipallogin.php/";
 		public final static String LOGIN_PAGE_END_URL = "login/index.php/";
 	}
 
 	private String username;
 	private String password;
 	private String url;
+	private String endurl; // The string variable that will be added to the basic URL when logging in.
 
 	/**
 	 * Constructor.
@@ -85,6 +87,8 @@ public class UserValidater {
 			return ConnectionResult.RESULT_NOT_FOUND;
 		username = validatedUsername;
 		password = validatedPassword;
+		// Check for new version of IPAL with IPAL login.
+		endurl = UserValidationContract.LOGIN_IPAL_END_URL;
 		// First check with HTTPS protocol.
 		int result = connectToMoodle(protocolURL);
 		// If HTTPS protocol causes connection error, check with HTTP protocol.
@@ -92,20 +96,18 @@ public class UserValidater {
 			protocolURL = validateURL(url, false);
 			result = connectToMoodle(protocolURL);
 		}
+		if (result == ConnectionResult.CONNECTION_ERROR) {
+			endurl = UserValidationContract.LOGIN_PAGE_END_URL;
+			result = connectToMoodle(protocolURL);
+
+			if (result == ConnectionResult.CONNECTION_ERROR) {
+				protocolURL = validateURL(url, false);
+				result = connectToMoodle(protocolURL);
+			}
+			Log.d(TAG, "line 107 and not connected to ipallogin");
+		}
 		url = protocolURL;
 		return result;
-	}
-
-	/**
-	 * Only used for testing IPAL using localhost.
-	 * 
-	 * @return
-	 */
-	public int validateUserLocalHost() {
-		username = "student1";
-		password = "Student#1";
-		url = "http://10.60.5.129/moodle/";
-		return connectToMoodle(url);
 	}
 
 	/**
@@ -119,10 +121,12 @@ public class UserValidater {
 	private int connectToMoodle(String moodleURL) {
 		try {
 			//First get the login form, which contains the destination for the login POST
-			String loginURL = moodleURL + UserValidationContract.LOGIN_PAGE_END_URL;
+			//String loginURL = moodleURL + UserValidationContract.LOGIN_PAGE_END_URL;
+			String loginURL = moodleURL + endurl;
 			Document loginPage = Jsoup.connect(loginURL).followRedirects(true).get();
 			Element loginForm = loginPage
 					.getElementById(UserValidationContract.LOGIN_FORM_ID);
+			Log.d(TAG, "115");
 			if(loginForm == null)
 				return ConnectionResult.INVALID_URL;
 
@@ -130,12 +134,39 @@ public class UserValidater {
 			String loginFormURL = loginForm
 					.attr(UserValidationContract.ACTION_ATTR);
 			//Login with a POST and save the cookies
+			Log.d(TAG, "123 and loginFormURL is "+loginFormURL);
 			Response response = Jsoup.connect(loginFormURL)
 					.data(UserValidationContract.LOGIN_USERNAME_NAME, username)
 					.data(UserValidationContract.LOGIN_PASSWORD_NAME, password)
 					.method(Method.POST).execute();
 			//Now go to the Moodle home page with the cookies
+			String responseString = response.body();
+			Document ipalaccessform = response.parse();
+			Log.d(TAG, "130 and response is "+responseString);
+			Log.d(TAG, "132 and username and password are "+username+" and "+password);
+			Element ipalbodytag = ipalaccessform.getElementById(UserValidationContract.PAGE_SITE_INDEX_ID);
+			Log.d(TAG, "134 and the class is "+ipalbodytag.attr("class"));
+			if(ipalbodytag.attr("class").contains("isloggedin")) {
+				Log.d(TAG, "136 and isloggedin");
+				return ConnectionResult.RESULT_FOUND;
+			}
+			String loginInfo;
+			//loginInfo = document.getElementById(UserValidationContract.PAGE_SITE_INDEX_ID).attr(
+					//UserValidationContract.CLASS_ATTR);
+			Log.d(TAG, "134");
+/**
+
+
+			try {
+				loginInfo = document.getElementById(
+					UserValidationContract.PAGE_SITE_INDEX_ID).attr(
+						UserValidationContract.CLASS_ATTR);
+					Log.d(TAG, "136 and loginInfo is "+loginInfo);
+				} catch (NullPointerException e) {
+			}
+*/
 			Connection connection = Jsoup.connect(moodleURL);
+
 			for (Entry<String, String> cookie : response.cookies().entrySet()) {
 			    connection.cookie(cookie.getKey(), cookie.getValue());
 			}
@@ -144,8 +175,7 @@ public class UserValidater {
 			//Site, My home or User Preferences.
 			//And we only want to look at the Site page.
 			Document loggedInPage = connection.data("redirect","0").get();
-			
-			String loginInfo;
+
 			/*
 			 * Here we used the attributes of the body to identify whether the
 			 * login is successful. If the login is successful, we will be
@@ -161,17 +191,24 @@ public class UserValidater {
 				loginInfo = loggedInPage.getElementById(
 						UserValidationContract.SITE_INDEX_ID).attr(
 						UserValidationContract.CLASS_ATTR);
+				Log.d(TAG, "155 and loginInfo is "+loginInfo);
 			} catch (NullPointerException e) {
 				try {
 					loginInfo = loggedInPage.getElementById(
 							UserValidationContract.PAGE_SITE_INDEX_ID).attr(
 							UserValidationContract.CLASS_ATTR);
+					Log.d(TAG, "161");
 				} catch (NullPointerException e2) {
+					Log.d(TAG, "163");
 					return ConnectionResult.RESULT_NOT_FOUND;
 				}
 			}
 			if (loginInfo.contains(UserValidationContract.NOT_LOGGED_IN_CLASS)) {
+				Log.d(TAG, "168 loginInfo is "+loginInfo);
 				return ConnectionResult.RESULT_NOT_FOUND;
+			} else {
+				// The main page doesn't indicate that the person is logged in. So we check with the ipallogin.php page.
+
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
